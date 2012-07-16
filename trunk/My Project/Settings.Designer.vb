@@ -101,6 +101,18 @@ Namespace My
                 Me("password") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property currentskin() As String
+            Get
+                Return CType(Me("currentskin"),String)
+            End Get
+            Set
+                Me("currentskin") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

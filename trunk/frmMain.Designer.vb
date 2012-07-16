@@ -33,6 +33,7 @@ Partial Class frmMain
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenSkinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.brwFolder = New System.Windows.Forms.FolderBrowserDialog()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -175,13 +176,13 @@ Partial Class frmMain
         'OpenSkinToolStripMenuItem
         '
         Me.OpenSkinToolStripMenuItem.Name = "OpenSkinToolStripMenuItem"
-        Me.OpenSkinToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.OpenSkinToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.OpenSkinToolStripMenuItem.Text = "Open Skin"
         '
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'frmMain
@@ -216,5 +217,6 @@ Partial Class frmMain
     Friend WithEvents txtWindow As RichTextBoxEx.RichTextBoxEx
     Friend WithEvents cmdTestWindow As System.Windows.Forms.Button
     Friend WithEvents SettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents brwFolder As System.Windows.Forms.FolderBrowserDialog
 
 End Class
