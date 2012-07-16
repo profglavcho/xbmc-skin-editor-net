@@ -1,0 +1,85 @@
+<language>
+	<mainform>
+		<connection>
+			<none>Impossible de se connecter à XBMC</none>
+		</connection>
+		<label>
+			<artist>artiste</artist>
+			<title>titre</title>
+			<album>album</album>
+		</label>
+		<playing>
+			<nothing>Aucun media en cours de lecture</nothing>
+			<now>Lecture en cours</now>
+			<paused>En pause</paused>
+		</playing>
+		<dialog>
+			<lastfmLoveTitle>Last.FM Love track</lastfmLoveTitle>
+			<lastfmLove>This will add the currently playing track to your personal 'Loved tracks' on Last.FM.\n\nAre you sure you want to do this?</lastfmLove>
+			<lastfmHateTitle>Last.FM Hate track</lastfmHateTitle>
+			<lastfmHate>This will add the currently playing song to your 'Banned tracks' list.\nThe song will never be played again when listening to Last.FM streamed radio.\n\nAre you sure you want to do this?</lastfmHate>
+			<ipNotConfiguredTitle>No ip address configured</ipNotConfiguredTitle>
+			<ipNotConfigured>The configuration form will allow you to configure XBMControl.</ipNotConfigured>
+			<unableToConnectTitle>Can't connect with XBMC</unableToConnectTitle>
+			<unableToConnect>Please make sure XBMC is running and the ip address is correct.</unableToConnect>
+		</dialog>
+	</mainform>
+	<configuration>
+		<title>Configuration</title>
+		<label>
+			<language>langue</language>
+			<ip>addresse ip</ip>
+			<username>nom d'utilisateur</username>
+			<password>mot de passe</password>
+			<showInTray>Afficher dans le system tray</showInTray>
+			<showInTaskbar>Afficher dans la barre de taches</showInTaskbar>
+			<showNowPlayingBalloonTip>Afficher la bulle d'information 'Lecture en cours'</showNowPlayingBalloonTip>
+			<showPlayStatusWindow>Show play status window</showPlayStatusWindow>
+			<showPlayStatusBalloonTip>Afficher une bulle d'information montrant l'état de lecture</showPlayStatusBalloonTip>
+			<showConnectionStatusBalloonTip>Afficher une bulle d'information montrant l'état de la connexion à XBMC</showConnectionStatusBalloonTip>
+			<runAtStartup>Run at windows startup</runAtStartup>
+			<startMinimized>Start application minimized</startMinimized>
+			<connectionTimeout>Connexion timeout</connectionTimeout>
+      <showConfigurationAtStart>Show this screen at startup</showConfigurationAtStart>
+    </label>
+		<language>
+			<noLanguages>Aucun fichier de langue trouvé</noLanguages>
+		</language>
+		<ipAddress>
+			<required>Une adresse IP valide est obligatoire</required>
+			<invalid>Adresse ip invalide</invalid>
+			<proceedMessage>Etes vous sur de vouloir continuer?</proceedMessage>
+		</ipAddress>
+	</configuration>
+	<contextMenu>
+		<controls>
+			<title>Controles</title>
+			<previous>Précédent</previous>
+			<play>Lire</play>
+			<pause>Pauzeren</pause>
+			<stop>Stop</stop>
+			<next>Suivant</next>
+			<mute>Mute</mute>
+		</controls>
+		<xbmc>
+			<title>XBMC</title>
+			<sendMediaUrl>Send media url</sendMediaUrl>
+			<showScreenshot>Show screenshot</showScreenshot>
+			<reboot>Reboot Computer</reboot>
+			<restart>Restart XBMC</restart>
+			<shutdown>Shutdown</shutdown>
+		</xbmc>
+		<saveMedia>Save media</saveMedia>
+		<show>Afficher</show>
+		<hide>Cacher</hide>
+		<configure>Configurer</configure>
+		<exit>Quitter</exit>
+	</contextMenu>
+	<global>
+		<appName>XBMControl</appName>
+		<button>
+			<confirm>OK</confirm>
+			<cancel>Annuler</cancel>
+		</button>
+	</global>
+</language>
