@@ -46,10 +46,17 @@ Public Class frmMain
         SetXbmcCommunicator()
     End Sub
 #End Region
-    Private Sub SetXbmcCommunicator()
-        xbmccommunicator.SetIp("192.168.0.109")
+    Public Sub SetXbmcCommunicator()
+        Dim ip As String = My.Settings.ip
+        If My.Settings.port.Length > 0 Then
+            ip = ip + ":" + My.Settings.port
+        End If
+
+        xbmccommunicator.SetIp(ip)
+
         xbmccommunicator.SetConnectionTimeout(3000)
-        xbmccommunicator.SetCredentials("xbmc", "xbmc")
+        xbmccommunicator.SetCredentials(My.Settings.username, My.Settings.password)
+
 
     End Sub
     Private Sub ExHandling(ByVal msg As String)
@@ -226,13 +233,24 @@ Public Class frmMain
     End Sub
 
     Private Sub cmdTestWindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdTestWindow.Click
+
         If currentskin_file.windowid.ToString.Length > 0 Then
             Dim strmwriter As IO.StreamWriter = currentskin_file.Xml_File.CreateText()
             For Each lne As String In txtWindow.Lines
                 strmwriter.WriteLine(lne)
             Next
             strmwriter.Close()
-            xbmccommunicator.Controls.ActivateWindow(currentskin_file.windowid.ToString)
+            xbmccommunicator.Status.Refresh()
+            If xbmccommunicator.Status.IsConnected() = True Then
+                xbmccommunicator.Controls.ActivateWindow(currentskin_file.windowid.ToString)
+            Else
+                MsgBox("xbmc is not open or the settings to control xbmc are not correct")
+            End If
+
         End If
+    End Sub
+
+    Private Sub SettingsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SettingsToolStripMenuItem.Click
+        frmSettings.Show()
     End Sub
 End Class
