@@ -33,6 +33,8 @@ Partial Class frmSettings
         Me.txtPort = New System.Windows.Forms.TextBox()
         Me.txtPassword = New System.Windows.Forms.TextBox()
         Me.txtUsername = New System.Windows.Forms.TextBox()
+        Me.cmdChangeSkin = New System.Windows.Forms.Button()
+        Me.txtSkinPath = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'cmdSave
@@ -52,6 +54,10 @@ Partial Class frmSettings
         Me.cmdCancel.TabIndex = 1
         Me.cmdCancel.Text = "Cancel"
         Me.cmdCancel.UseVisualStyleBackColor = True
+        '
+        'brwFolder
+        '
+        Me.brwFolder.Description = "Choose the skin folder"
         '
         'lblIp
         '
@@ -117,11 +123,29 @@ Partial Class frmSettings
         Me.txtUsername.Size = New System.Drawing.Size(108, 20)
         Me.txtUsername.TabIndex = 9
         '
+        'cmdChangeSkin
+        '
+        Me.cmdChangeSkin.Location = New System.Drawing.Point(20, 125)
+        Me.cmdChangeSkin.Name = "cmdChangeSkin"
+        Me.cmdChangeSkin.Size = New System.Drawing.Size(75, 23)
+        Me.cmdChangeSkin.TabIndex = 10
+        Me.cmdChangeSkin.Text = "Choose Skin"
+        Me.cmdChangeSkin.UseVisualStyleBackColor = True
+        '
+        'txtSkinPath
+        '
+        Me.txtSkinPath.Location = New System.Drawing.Point(121, 127)
+        Me.txtSkinPath.Name = "txtSkinPath"
+        Me.txtSkinPath.Size = New System.Drawing.Size(488, 20)
+        Me.txtSkinPath.TabIndex = 11
+        '
         'frmSettings
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(636, 467)
+        Me.Controls.Add(Me.txtSkinPath)
+        Me.Controls.Add(Me.cmdChangeSkin)
         Me.Controls.Add(Me.txtUsername)
         Me.Controls.Add(Me.txtPassword)
         Me.Controls.Add(Me.txtPort)
@@ -149,4 +173,6 @@ Partial Class frmSettings
     Friend WithEvents txtPort As System.Windows.Forms.TextBox
     Friend WithEvents txtPassword As System.Windows.Forms.TextBox
     Friend WithEvents txtUsername As System.Windows.Forms.TextBox
+    Friend WithEvents cmdChangeSkin As System.Windows.Forms.Button
+    Friend WithEvents txtSkinPath As System.Windows.Forms.TextBox
 End Class

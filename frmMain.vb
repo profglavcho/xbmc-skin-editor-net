@@ -23,6 +23,13 @@ Public Class frmMain
             cmbWindow.Items.Add(fle)
 
         Next
+        Dim dir As New IO.DirectoryInfo(skinpath)
+        Me.Text = "Xbmc Skin editor Current skin is : " + dir.Name
+        cmbWindow.SelectedIndex = 0
+        control_startline = 0
+        control_endline = 0
+        control_tabulation = ""
+        changedavalue = False
     End Sub
 
     Private Sub LoadWindow(ByVal name As String)
@@ -37,12 +44,35 @@ Public Class frmMain
 #End Region
 #Region "Forms handles"
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        LoadSkin("C:\Users\ben\AppData\Roaming\XBMC\addons\skin.pm3-hd")
-        cmbWindow.SelectedIndex = 0
-        control_startline = 0
-        control_endline = 0
-        control_tabulation = ""
-        changedavalue = False
+        If My.Settings.currentskin.Length = 0 Then
+            brwFolder.Description = "Select the directory of the skin you want to edit"
+            Dim appData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData)
+            brwFolder.SelectedPath = appData
+            If IO.Directory.Exists(appData + "\xbmc") Then
+                brwFolder.SelectedPath = appData + "\xbmc"
+            End If
+            If IO.Directory.Exists(brwFolder.SelectedPath + "\addons") Then
+                brwFolder.SelectedPath = brwFolder.SelectedPath + "\addons"
+                Dim dir As New IO.DirectoryInfo(brwFolder.SelectedPath)
+                For Each dr As IO.DirectoryInfo In dir.GetDirectories()
+                    If dr.Name.Contains("skin.") Then
+                        brwFolder.SelectedPath = dr.FullName
+                        Exit For
+                    End If
+                Next
+            End If
+
+
+            If brwFolder.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                My.Settings.currentskin = brwFolder.SelectedPath
+                My.Settings.Save()
+            Else
+                Me.Close()
+            End If
+
+        End If
+        LoadSkin(My.Settings.currentskin)
+        
         SetXbmcCommunicator()
     End Sub
 #End Region
