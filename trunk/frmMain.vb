@@ -64,10 +64,10 @@ Public Class frmMain
         Dim includearray As New ArrayList()
         propGridControl.ItemSet.Clear()
         propGridControl.Refresh()
+        propGridControl.PropertySort = PropertySort.NoSort
         For Each ctr As control_attributes In ctrl.attributes
             If ctr.show_in_property = True Then
-                index = propGridControl.Item.Add(ctr.name, ctr.value, False, type, "value blablabla", True)
-
+                index = propGridControl.Item.Add(ctr.name, ctr.value, False, type, ctr.description, True)
                 If ctr.choices > -1 Then
                     Select Case ctr.choices
                         Case ChoiceType.ControlId
@@ -86,7 +86,6 @@ Public Class frmMain
 
                 End If
             End If
-            'propGridControl.ItemSet(0).Add(
         Next
         propGridControl.Refresh()
     End Sub
@@ -179,15 +178,12 @@ Public Class frmMain
                     End If
                 Next
             End If
-
-
             If brwFolder.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 My.Settings.currentskin = brwFolder.SelectedPath
                 My.Settings.Save()
             Else
                 Me.Close()
             End If
-
         End If
         LoadSkin(My.Settings.currentskin)
 
