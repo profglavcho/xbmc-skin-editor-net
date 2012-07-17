@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "XbmcSkinEditor", "XbmcSkinEditor.vbproj", "{38DA0BBB-8C56-483F-B78B-1F3F8A0A7251}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PropertyGridEx", "..\PropertyGridEx\PropertyGridEx.vbproj", "{B0BB47F2-21C4-41FC-B6E6-40757ADFC4A1}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PropertyGridEx", "PropertyGridEx\PropertyGridEx.vbproj", "{B0BB47F2-21C4-41FC-B6E6-40757ADFC4A1}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "RichTextBoxEx", "..\RichTextBoxEx\RichTextBoxEx.vbproj", "{89FE2C8A-CF7A-49D6-B649-89E6A72F77C3}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "RichTextBoxEx", "RichTextBoxEx\RichTextBoxEx.vbproj", "{89FE2C8A-CF7A-49D6-B649-89E6A72F77C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
