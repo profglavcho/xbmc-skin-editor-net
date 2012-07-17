@@ -157,11 +157,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PropertyGridEx\PropertyGridEx.vbproj">
+    <ProjectReference Include="PropertyGridEx\PropertyGridEx.vbproj">
       <Project>{B0BB47F2-21C4-41FC-B6E6-40757ADFC4A1}</Project>
       <Name>PropertyGridEx</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RichTextBoxEx\RichTextBoxEx.vbproj">
+    <ProjectReference Include="RichTextBoxEx\RichTextBoxEx.vbproj">
       <Project>{89FE2C8A-CF7A-49D6-B649-89E6A72F77C3}</Project>
       <Name>RichTextBoxEx</Name>
     </ProjectReference>

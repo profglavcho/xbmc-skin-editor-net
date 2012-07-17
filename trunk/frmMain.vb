@@ -104,24 +104,6 @@ Public Class frmMain
             currentskin_file.ListControlIds.Add(mtch.Groups(1).Value)
         Next
 
-
-        'Dim index As Integer = 0
-        'For Each ctrl As Controls.default_control In currentskin_file.GetControls()
-
-        '    'propGridControl.Item(index).IsBrowsable = True
-
-        '    For Each ctr As Controls.control_value In ctrl.controls
-        '        index = propGridControl.Item.Add(ctr.name, ctr.value, False, ctrl.type, "value blablabla", True)
-
-        '        'propGridControl.ItemSet(0).Add(
-        '    Next
-
-        '    propGridControl.Refresh()
-
-        '    'propGuiObject.DataBindings.Add(ctrl.GetBinding())
-        'Next
-        'propGridControl.Refresh()
-
     End Sub
 
     Function GetControlAttribute(ByVal attrib As List(Of control_attributes), ByVal value As String) As String
@@ -137,14 +119,14 @@ Public Class frmMain
     Private Sub SetControl(ByVal ctrl As xml_control)
         Dim index As Integer = 0
         Dim type As String = GetControlAttribute(ctrl.attributes, "type")
-        Dim id As String = GetControlAttribute(ctrl.attributes, "id")
+
         Dim choicearray As New ArrayList()
         Dim includearray As New ArrayList()
         propGridControl.ItemSet.Clear()
         propGridControl.Refresh()
         For Each ctr As control_attributes In ctrl.attributes
             If ctr.show_in_property = True Then
-                index = propGridControl.Item.Add(ctr.name, ctr.value, False, type + " id=" + id, "value blablabla", True)
+                index = propGridControl.Item.Add(ctr.name, ctr.value, False, type, "value blablabla", True)
 
                 If ctr.choices > -1 Then
                     Select Case ctr.choices

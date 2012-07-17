@@ -59,7 +59,7 @@ Public Class xml_control
     Private Sub SetType(ByVal type As String)
         InsertAttributes("type", type, False)
         InsertAttributes("description", "")
-        InsertAttributes("id", "", False)
+        InsertAttributes("id", "")
         InsertAttributes("posx", "")
         InsertAttributes("posy", "")
         InsertAttributes("width", "")
@@ -94,7 +94,7 @@ Public Class xml_control
         SetType(attrib.value)
         attrib.name = "id"
         attrib.value = StringHelper.RegEx.GetMatch("id=""([^""]+)", str_xml)
-        InsertAttributes("id", attrib.value, False)
+        InsertAttributes("id", attrib.value)
 
         attributes.Add(attrib)
         Dim matchs As System.Text.RegularExpressions.MatchCollection
