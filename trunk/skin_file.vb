@@ -57,6 +57,7 @@ Public Class xml_control
 
     
     Private Sub SetType(ByVal type As String)
+        'Specific to every control
         InsertAttributes("type", type, False)
         InsertAttributes("description", "")
         InsertAttributes("id", "")
@@ -76,13 +77,156 @@ Public Class xml_control
         InsertAttributes("enable", "")
         InsertAttributes("pulseonselect", "")
         InsertAttributes("pulseonselect", "")
+        'Specific to type
         Select Case type
-            Case "button"
-
             Case "label"
                 InsertAttributes("align", "")
-            Case Else
-
+                InsertAttributes("aligny", "")
+                InsertAttributes("scroll", "")
+                InsertAttributes("label", "")
+                InsertAttributes("info", "")
+                InsertAttributes("number", "")
+                InsertAttributes("angle", "")
+                InsertAttributes("haspath", "")
+                InsertAttributes("font", "")
+                InsertAttributes("textcolor", "")
+                InsertAttributes("shadowcolor", "")
+                InsertAttributes("wrapmultiline", "")
+                InsertAttributes("scrollspeed", "")
+                InsertAttributes("scrollsuffix", "")
+            Case "fadelabel"
+                InsertAttributes("scroll", "")
+                InsertAttributes("scrollout", "")
+                InsertAttributes("pauseatend", "")
+                InsertAttributes("label", "")
+                'InsertAttributes("info As List(Of String)
+                InsertAttributes("font", "")
+                InsertAttributes("textcolor", "")
+                InsertAttributes("textoffsetx", "")
+            Case "button"
+                InsertAttributes("texturefocus", "")
+                InsertAttributes("texturenofocus", "")
+                InsertAttributes("label", "")
+                InsertAttributes("font", "")
+                InsertAttributes("textcolor", "")
+                InsertAttributes("disabledcolor", "")
+                InsertAttributes("align", "")
+                InsertAttributes("aligny", "")
+                InsertAttributes("textoffsetx", "")
+                InsertAttributes("textoffsety", "")
+                InsertAttributes("onclick", "")
+                InsertAttributes("onfocus", "")
+            Case "multiselect"
+                InsertAttributes("texturefocus", "")
+                InsertAttributes("texturenofocus", "")
+                InsertAttributes("label", "")
+                InsertAttributes("font", "")
+                InsertAttributes("textcolor", "")
+                InsertAttributes("disabledcolor", "")
+                InsertAttributes("aligny", "")
+                InsertAttributes("textoffsetx", "")
+                InsertAttributes("textoffsety", "")
+            Case "image"
+                InsertAttributes("fadetime", "")
+                'public texture border="5" flipy="true" flipx="false"","")
+                'public bordertexture border="5"","")
+                InsertAttributes("bordersize", "")
+                InsertAttributes("info", "")
+                InsertAttributes("aspectratio", "")
+            Case "multiimage"
+                InsertAttributes("imagepath", "")
+                InsertAttributes("info", "")
+                InsertAttributes("timeperimage", "")
+                InsertAttributes("fadetime", "")
+                InsertAttributes("pauseatend", "")
+                InsertAttributes("randomize", "")
+                'public loop","")
+                InsertAttributes("aspectratio", "")
+            Case "radiobutton"
+                InsertAttributes("texturefocus", "")
+                InsertAttributes("texturenofocus", "")
+                InsertAttributes("textureradioon", "")
+                InsertAttributes("textureradiooff", "")
+                InsertAttributes("selected", "")
+                InsertAttributes("onclick", "")
+                InsertAttributes("label", "")
+                InsertAttributes("font", "")
+                InsertAttributes("textcolor", "")
+                InsertAttributes("disabledcolor", "")
+                InsertAttributes("align", "")
+                InsertAttributes("aligny", "")
+                InsertAttributes("textoffsetx", "")
+                InsertAttributes("textoffsety", "")
+            Case "selectbutton"
+                InsertAttributes("texturefocus", "")
+                InsertAttributes("texturenofocus", "")
+                InsertAttributes("texturebg", "")
+                InsertAttributes("textureleft", "")
+                InsertAttributes("textureleftfocus", "")
+                InsertAttributes("textureright", "")
+                InsertAttributes("texturerightfocus", "")
+                InsertAttributes("label", "")
+                InsertAttributes("font", "")
+                InsertAttributes("textcolor", "")
+                InsertAttributes("disabledcolor", "")
+                InsertAttributes("align", "")
+                InsertAttributes("alignY", "")
+                InsertAttributes("textoffsetx", "")
+                InsertAttributes("textoffsety", "")
+            Case "togglebutton"
+                InsertAttributes("texturefocus", "")
+                InsertAttributes("texturenofocus", "")
+                InsertAttributes("alttexturefocus", "")
+                InsertAttributes("alttexturenofocus", "")
+                InsertAttributes("usealttexture", "")
+                InsertAttributes("label", "")
+                InsertAttributes("altlabel", "")
+                InsertAttributes("font", "")
+                InsertAttributes("textcolor", "")
+                InsertAttributes("disabledcolor", "")
+                InsertAttributes("align", "")
+                InsertAttributes("aligny", "")
+                InsertAttributes("textoffsetx", "")
+                InsertAttributes("textoffsety", "")
+                InsertAttributes("onclick", "")
+                InsertAttributes("onfocus", "")
+            Case "buttonscrollers"
+                InsertAttributes("texturefocus", "")
+                InsertAttributes("texturenofocus", "")
+                InsertAttributes("font", "")
+                InsertAttributes("textcolor", "")
+                InsertAttributes("align", "")
+                InsertAttributes("aligny", "")
+                InsertAttributes("textoffsetx", "")
+                InsertAttributes("textoffsety", "")
+                InsertAttributes("numbuttons", "")
+                InsertAttributes("buttongap", "")
+                InsertAttributes("orientation", "")
+                InsertAttributes("defaultbutton", "")
+                InsertAttributes("movement", "")
+                InsertAttributes("alpha", "")
+                InsertAttributes("wraparound", "")
+                InsertAttributes("smoothscrolling", "")
+                'InsertAttributes("buttons As List(Of button)
+            Case "buttonsblock"
+            Case "spin"
+            Case "settingsspin"
+            Case "slider"
+            Case "listcontainer"
+            Case "wraplistcontainer"
+            Case "fixedlistcontainer"
+            Case "panelcontainer"
+            Case "progress"
+            Case "textbox"
+            Case "rssfeed"
+            Case "visualisation"
+            Case "video"
+            Case "mover"
+            Case "resize"
+            Case "edit"
+            Case "console"
+            Case "checkmark"
+            Case "extendedlist"
         End Select
     End Sub
 
@@ -100,14 +244,9 @@ Public Class xml_control
         Dim matchs As System.Text.RegularExpressions.MatchCollection
         matchs = StringHelper.RegEx.GetGroups("<([^>]+)>([^<]+)</", str_xml)
 
-
         For Each mtch As System.Text.RegularExpressions.Match In matchs
-
             InsertAttributes(mtch.Groups(1).Value, mtch.Groups(2).Value)
-            Debug.Print(mtch.Groups(1).Value)
-
-
-
+            'Debug.Print(mtch.Groups(1).Value)
         Next
     End Sub
 
