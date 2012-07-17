@@ -27,13 +27,15 @@ Partial Class frmMain
         Me.cmdTestWindow = New System.Windows.Forms.Button()
         Me.cmbWindow = New System.Windows.Forms.ComboBox()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
-        Me.txtWindow = New RichTextBoxEx.RichTextBoxEx()
-        Me.propGridControl = New PropertyGridEx.PropertyGridEx()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenSkinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.brwFolder = New System.Windows.Forms.FolderBrowserDialog()
+        Me.txtWindow = New RichTextBoxEx.RichTextBoxEx()
+        Me.propGridControl = New PropertyGridEx.PropertyGridEx()
+        Me.cmdSave = New System.Windows.Forms.Button()
+        Me.cmdReload = New System.Windows.Forms.Button()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -53,6 +55,8 @@ Partial Class frmMain
         '
         'SplitContainer1.Panel1
         '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.cmdReload)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.cmdSave)
         Me.SplitContainer1.Panel1.Controls.Add(Me.cmdTestWindow)
         Me.SplitContainer1.Panel1.Controls.Add(Me.cmbWindow)
         '
@@ -60,12 +64,12 @@ Partial Class frmMain
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer2)
         Me.SplitContainer1.Size = New System.Drawing.Size(1300, 623)
-        Me.SplitContainer1.SplitterDistance = 40
+        Me.SplitContainer1.SplitterDistance = 28
         Me.SplitContainer1.TabIndex = 2
         '
         'cmdTestWindow
         '
-        Me.cmdTestWindow.Location = New System.Drawing.Point(12, 14)
+        Me.cmdTestWindow.Location = New System.Drawing.Point(3, 3)
         Me.cmdTestWindow.Name = "cmdTestWindow"
         Me.cmdTestWindow.Size = New System.Drawing.Size(96, 23)
         Me.cmdTestWindow.TabIndex = 1
@@ -95,17 +99,45 @@ Partial Class frmMain
         'SplitContainer2.Panel2
         '
         Me.SplitContainer2.Panel2.Controls.Add(Me.propGridControl)
-        Me.SplitContainer2.Size = New System.Drawing.Size(1300, 579)
+        Me.SplitContainer2.Size = New System.Drawing.Size(1300, 591)
         Me.SplitContainer2.SplitterDistance = 987
         Me.SplitContainer2.SplitterWidth = 6
         Me.SplitContainer2.TabIndex = 5
+        '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(1300, 24)
+        Me.MenuStrip1.TabIndex = 3
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'FileToolStripMenuItem
+        '
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenSkinToolStripMenuItem, Me.SettingsToolStripMenuItem})
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(35, 20)
+        Me.FileToolStripMenuItem.Text = "File"
+        '
+        'OpenSkinToolStripMenuItem
+        '
+        Me.OpenSkinToolStripMenuItem.Name = "OpenSkinToolStripMenuItem"
+        Me.OpenSkinToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
+        Me.OpenSkinToolStripMenuItem.Text = "Open Skin"
+        '
+        'SettingsToolStripMenuItem
+        '
+        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
+        Me.SettingsToolStripMenuItem.Text = "Settings"
         '
         'txtWindow
         '
         Me.txtWindow.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtWindow.Location = New System.Drawing.Point(0, 0)
         Me.txtWindow.Name = "txtWindow"
-        Me.txtWindow.Size = New System.Drawing.Size(987, 579)
+        Me.txtWindow.Size = New System.Drawing.Size(987, 591)
         Me.txtWindow.TabIndex = 0
         Me.txtWindow.Text = ""
         '
@@ -137,7 +169,7 @@ Partial Class frmMain
         Me.propGridControl.Name = "propGridControl"
         Me.propGridControl.SelectedObject = CType(resources.GetObject("propGridControl.SelectedObject"), Object)
         Me.propGridControl.ShowCustomProperties = True
-        Me.propGridControl.Size = New System.Drawing.Size(307, 579)
+        Me.propGridControl.Size = New System.Drawing.Size(307, 591)
         Me.propGridControl.TabIndex = 5
         '
         '
@@ -157,33 +189,23 @@ Partial Class frmMain
         Me.propGridControl.ToolStrip.TabStop = True
         Me.propGridControl.ToolStrip.Text = "PropertyGridToolBar"
         '
-        'MenuStrip1
+        'cmdSave
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(1300, 24)
-        Me.MenuStrip1.TabIndex = 3
-        Me.MenuStrip1.Text = "MenuStrip1"
+        Me.cmdSave.Location = New System.Drawing.Point(105, 3)
+        Me.cmdSave.Name = "cmdSave"
+        Me.cmdSave.Size = New System.Drawing.Size(96, 23)
+        Me.cmdSave.TabIndex = 2
+        Me.cmdSave.Text = "Save"
+        Me.cmdSave.UseVisualStyleBackColor = True
         '
-        'FileToolStripMenuItem
+        'cmdReload
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OpenSkinToolStripMenuItem, Me.SettingsToolStripMenuItem})
-        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(35, 20)
-        Me.FileToolStripMenuItem.Text = "File"
-        '
-        'OpenSkinToolStripMenuItem
-        '
-        Me.OpenSkinToolStripMenuItem.Name = "OpenSkinToolStripMenuItem"
-        Me.OpenSkinToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
-        Me.OpenSkinToolStripMenuItem.Text = "Open Skin"
-        '
-        'SettingsToolStripMenuItem
-        '
-        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(122, 22)
-        Me.SettingsToolStripMenuItem.Text = "Settings"
+        Me.cmdReload.Location = New System.Drawing.Point(207, 3)
+        Me.cmdReload.Name = "cmdReload"
+        Me.cmdReload.Size = New System.Drawing.Size(96, 23)
+        Me.cmdReload.TabIndex = 3
+        Me.cmdReload.Text = "Reload"
+        Me.cmdReload.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -218,5 +240,7 @@ Partial Class frmMain
     Friend WithEvents cmdTestWindow As System.Windows.Forms.Button
     Friend WithEvents SettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents brwFolder As System.Windows.Forms.FolderBrowserDialog
+    Friend WithEvents cmdSave As System.Windows.Forms.Button
+    Friend WithEvents cmdReload As System.Windows.Forms.Button
 
 End Class
