@@ -2,6 +2,7 @@
 Enum ChoiceType
     ControlId = 0
     Include = 1
+    Texture = 2
 End Enum
 
 Public Structure control_attributes
@@ -46,6 +47,9 @@ Public Class xml_control
         End If
         If attrib.Contains("include") Then
             choices = ChoiceType.Include
+        End If
+        If attrib.Contains("texture") Then
+            choices = ChoiceType.Texture
         End If
         Dim ctrl As New control_attributes
         ctrl.name = attrib
@@ -269,6 +273,7 @@ Public Class skin_file
     Public allowoverlay As String
     Public views As List(Of Integer)
     Public ListControlIds As New ArrayList
+
 
     Public Sub New(ByVal path As String)
 

@@ -68,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="controls.vb" />
+    <Compile Include="frmCreateSkin.Designer.vb">
+      <DependentUpon>frmCreateSkin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCreateSkin.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmMain.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +127,9 @@
     <Compile Include="Xbmc\XBMC.Video.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="frmCreateSkin.resx">
+      <DependentUpon>frmCreateSkin.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.vb</DependentUpon>
     </EmbeddedResource>
@@ -141,7 +150,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Xbmc\App.config" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -626,6 +635,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Xbmc\Resources\background_controls1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="log\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

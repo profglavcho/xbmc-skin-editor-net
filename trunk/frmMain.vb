@@ -14,6 +14,10 @@ Public Class frmMain
     Private Sub OpenSkinToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OpenSkinToolStripMenuItem.Click
         frmOpenSkin.ShowDialog()
     End Sub
+    'create skin
+    Private Sub CreateSkinToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CreateSkinToolStripMenuItem.Click
+        frmCreateSkin.ShowDialog()
+    End Sub
 
     Private Sub cmdTestWindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdTestWindow.Click
 
@@ -287,4 +291,5 @@ Public Class frmMain
     End Sub
 #End Region
 
+    
 End Class
