@@ -9,7 +9,7 @@ Public Structure control_attributes
     Dim value As String
     Dim show_in_property As Boolean
     Dim choices As Integer
-
+    Dim description As String
 End Structure
 
 Public Class default_control
@@ -32,11 +32,12 @@ Public Class xml_control
         Return attrib.name.Equals(find_attrib)
     End Function
 
-    Private Sub InsertAttributes(ByVal attrib As String, ByVal value As String, Optional ByVal showinprop As Boolean = True, Optional ByVal choices As Integer = -1)
+    Private Sub InsertAttributes(ByVal attrib As String, ByVal value As String, Optional ByVal description As String = "", Optional ByVal showinprop As Boolean = True, Optional ByVal choices As Integer = -1)
         find_attrib = attrib
         Dim indx As Integer = attributes.FindIndex(AddressOf FindAttributes)
         If indx > -1 Then
-
+            description = attributes(indx).description
+            showinprop = attributes(indx).show_in_property
             attributes.RemoveAt(indx)
         End If
 
@@ -51,49 +52,54 @@ Public Class xml_control
         ctrl.value = value
         ctrl.show_in_property = showinprop
         ctrl.choices = choices
+        ctrl.description = description
+        If indx > -1 Then
+            attributes.Insert(indx, ctrl)
+        Else
+            attributes.Add(ctrl)
+        End If
 
-        attributes.Add(ctrl)
+
     End Sub
 
     
     Private Sub SetType(ByVal type As String)
         'Specific to every control
-        InsertAttributes("type", type, False)
-        InsertAttributes("description", "")
-        InsertAttributes("id", "")
-        InsertAttributes("posx", "")
-        InsertAttributes("posy", "")
-        InsertAttributes("width", "")
-        InsertAttributes("height", "")
-        InsertAttributes("visible", "")
-        InsertAttributes("animation", "")
-        InsertAttributes("camera", "")
-        InsertAttributes("colordiffuse", "")
-        InsertAttributes("onup", "", True, ChoiceType.ControlId)
-        InsertAttributes("ondown", "", True, ChoiceType.ControlId)
-        InsertAttributes("onleft", "", True, ChoiceType.ControlId)
-        InsertAttributes("onright", "", True, ChoiceType.ControlId)
-        InsertAttributes("hitrect", "")
-        InsertAttributes("enable", "")
-        InsertAttributes("pulseonselect", "")
-        InsertAttributes("pulseonselect", "")
+        InsertAttributes("type", type, "The type of control.", False)
+        InsertAttributes("description", "", "")
+        InsertAttributes("id", "", "Specifies the control's id. The value this takes depends on the control type, and the window that you are using the control on. There are special control id's that must be present in each window. Any other controls that the skinner adds can be any id they like. Any controls that the skinner specifies content needs not have an id unless it's needed for animation purposes. For instance, most image and label controls don't need an id if the skinner specifies they're content.")
+        InsertAttributes("posx", "", "Specifies where the left edge of the control should be drawn, relative to it's parent's left edge. If an ""r"" is included (eg 180r) then the measurement is taken from the parent's right edge (in the left direction). ")
+        InsertAttributes("posy", "", "Specifies where the top edge of the control should be drawn, relative to it's parent's top edge. If an ""r"" is included (eg 180r) then the measurement is taken from the parent's bottom edge (in the up direction). ")
+        InsertAttributes("width", "", "Specifies the width that should be used to draw the control. ")
+        InsertAttributes("height", "", "Specifies the height that should be used to draw the control. ")
+        InsertAttributes("visible", "", "Specifies a condition as to when this control will be visible. Can be true, false, or a condition. See Conditional Visibility for more information. Defaults to true. ")
+        InsertAttributes("animation", "", "	Specifies the animation to be run when the control enters a particular state. See Animating your skin for more information.")
+        InsertAttributes("camera", "", "Specifies the location (relative to the parent's coordinates) of the camera. Useful for the 3D animations such as rotatey. Format is <camera x=""20"" y=""30"" />")
+        InsertAttributes("colordiffuse", "", "This specifies the color to be used for the texture basis. It's in hex AARRGGBB format. If you define <colordiffuse>FFFF00FF</colordiffuse> (magenta), the image will be given a magenta tint when rendered. Defaults to FFFFFFFF (no tint). You can also specify this as a name from the colour theme. ")
+        InsertAttributes("onup", "", "Specifies the <id> of the control that should be moved to when the user moves up off this control. Can point to a control group (which remembers previous focused items).", True, ChoiceType.ControlId)
+        InsertAttributes("ondown", "", "Specifies the <id> of the control that should be moved to when the user moves down off this control. Can point to a control group (which remembers previous focused items).", True, ChoiceType.ControlId)
+        InsertAttributes("onleft", "", "Specifies the <id> of the control that should be moved to when the user moves left off this control. Can point to a control group (which remembers previous focused items).", True, ChoiceType.ControlId)
+        InsertAttributes("onright", "", "Specifies the <id> of the control that should be moved to when the user moves right off this control. Can point to a control group (which remembers previous focused items).", True, ChoiceType.ControlId)
+        InsertAttributes("hitrect", "", "Specifies the location and size of the ""focus area"" of this control (relative to the parent's coordinates) used by the mouse cursor. Format is <hitrect x=""20"" y=""30"" w=""50"" h=""10"" />")
+        InsertAttributes("enable", "", "Specifies a condition as to when this control will be enabled. Can be true, false, or a condition. See Conditional Visibility for more information. Defaults to true.")
+        InsertAttributes("pulseonselect", "", "This specifies whether or not a button type will ""pulse"" when it has focus. This is done by varying the alpha channel of the button. Defaults to true.")
         'Specific to type
         Select Case type
             Case "label"
-                InsertAttributes("align", "")
-                InsertAttributes("aligny", "")
-                InsertAttributes("scroll", "")
-                InsertAttributes("label", "")
-                InsertAttributes("info", "")
-                InsertAttributes("number", "")
-                InsertAttributes("angle", "")
-                InsertAttributes("haspath", "")
-                InsertAttributes("font", "")
-                InsertAttributes("textcolor", "")
-                InsertAttributes("shadowcolor", "")
-                InsertAttributes("wrapmultiline", "")
-                InsertAttributes("scrollspeed", "")
-                InsertAttributes("scrollsuffix", "")
+                InsertAttributes("align", "", "Can be left, right, or center. Aligns the text within the given label <width>. Defaults to left")
+                InsertAttributes("aligny", "", "Can be top or center. Aligns the text within its given label <height>. Defaults to top")
+                InsertAttributes("scroll", "", "When true, the text will scroll if longer than the label's <width>. If false, the text will be truncated. Defaults to false.")
+                InsertAttributes("label", "", "Specifies the text which should be drawn. You should specify an entry from the strings.xml here (either the XBMC strings.xml or your skin's strings.xml file), however you may also hardcode a piece of text also if you wish, though ofcourse it will not be localisable. You can use the full label formatting syntax and you may also specify more than one piece of information here by using the $INFO and $LOCALIZE formats.")
+                InsertAttributes("info", "", "Specifies the information that should be presented. XBMC will auto-fill in this info in place of the <label>.")
+                InsertAttributes("number", "", "Specifies a number that should be presented. This is just here to allow a skinner to use a number rather than a text label (as any number given to <label> will be used to lookup in strings.xml) ")
+                InsertAttributes("angle", "", "The angle the text should be rendered at, in degrees. A value of 0 is horizontal. ")
+                InsertAttributes("haspath", "", "Specifies whether or not this label is filled with a path. Long paths are shortened by compressing the file path while keeping the actual filename full length. ")
+                InsertAttributes("font", "", "Specifies the font to use from the font.xml file. ")
+                InsertAttributes("textcolor", "", "Specifies the color the text should be, in hex AARRGGBB format, or a name from the colour theme.")
+                InsertAttributes("shadowcolor", "", "Specifies the color of the drop shadow on the text, in AARRGGBB format, or a name from the colour theme.")
+                InsertAttributes("wrapmultiline", "", "If true, any text that doesn't fit on one line will be wrapped onto multiple lines.")
+                InsertAttributes("scrollspeed", "", "Scroll speed of text in pixels per second. Defaults to 60. ")
+                InsertAttributes("scrollsuffix", "", "Specifies the suffix used in scrolling labels. Defaults to "" | "". ")
             Case "fadelabel"
                 InsertAttributes("scroll", "")
                 InsertAttributes("scrollout", "")
@@ -110,7 +116,7 @@ Public Class xml_control
                 InsertAttributes("font", "")
                 InsertAttributes("textcolor", "")
                 InsertAttributes("disabledcolor", "")
-                InsertAttributes("align", "")
+                InsertAttributes("align", "", "Can be left, right, or center. Aligns the text within the given label <width>. Defaults to left")
                 InsertAttributes("aligny", "")
                 InsertAttributes("textoffsetx", "")
                 InsertAttributes("textoffsety", "")
@@ -153,7 +159,7 @@ Public Class xml_control
                 InsertAttributes("font", "")
                 InsertAttributes("textcolor", "")
                 InsertAttributes("disabledcolor", "")
-                InsertAttributes("align", "")
+                InsertAttributes("align", "", "Can be left, right, or center. Aligns the text within the given label <width>. Defaults to left")
                 InsertAttributes("aligny", "")
                 InsertAttributes("textoffsetx", "")
                 InsertAttributes("textoffsety", "")
@@ -169,7 +175,7 @@ Public Class xml_control
                 InsertAttributes("font", "")
                 InsertAttributes("textcolor", "")
                 InsertAttributes("disabledcolor", "")
-                InsertAttributes("align", "")
+                InsertAttributes("align", "", "Can be left, right, or center. Aligns the text within the given label <width>. Defaults to left")
                 InsertAttributes("alignY", "")
                 InsertAttributes("textoffsetx", "")
                 InsertAttributes("textoffsety", "")
@@ -184,7 +190,7 @@ Public Class xml_control
                 InsertAttributes("font", "")
                 InsertAttributes("textcolor", "")
                 InsertAttributes("disabledcolor", "")
-                InsertAttributes("align", "")
+                InsertAttributes("align", "", "Can be left, right, or center. Aligns the text within the given label <width>. Defaults to left")
                 InsertAttributes("aligny", "")
                 InsertAttributes("textoffsetx", "")
                 InsertAttributes("textoffsety", "")
@@ -195,7 +201,7 @@ Public Class xml_control
                 InsertAttributes("texturenofocus", "")
                 InsertAttributes("font", "")
                 InsertAttributes("textcolor", "")
-                InsertAttributes("align", "")
+                InsertAttributes("align", "", "Can be left, right, or center. Aligns the text within the given label <width>. Defaults to left")
                 InsertAttributes("aligny", "")
                 InsertAttributes("textoffsetx", "")
                 InsertAttributes("textoffsety", "")
@@ -267,7 +273,7 @@ Public Class skin_file
     Public Sub New(ByVal path As String)
 
         Xml_File = New IO.FileInfo(path)
-        LoadWindow()
+
 
     End Sub
 
@@ -312,38 +318,6 @@ Public Class skin_file
         For Each node As Xml.XmlNode In xmlnode.ChildNodes
 
         Next
-    End Sub
-
-    Private Sub LoadWindow()
-        Try
-
-
-            Dim xml As New Xml.XmlDocument
-            Dim xmlnode As Xml.XmlNode
-            xml.Load(Xml_File.FullName)
-
-            Dim button As New Controls.label
-            xmlnode = xml.FirstChild
-            windowid = xmlnode.Attributes("id").Value
-            Dim done As Boolean = False
-            For Each node As Xml.XmlNode In xmlnode.ChildNodes
-                If node.Name.Equals("defaultcontrol") Then
-                    LoadDefaultControl(node)
-                ElseIf node.Name.Equals("allowoverlay") Then
-                    LoadAllowOverlay(node)
-                ElseIf node.Name.Equals("views") Then
-                    LoadViews(node)
-                ElseIf node.Name.Equals("controls") Then
-                    LoadControls(node)
-                End If
-            Next
-            'done = True
-
-            ctrls.Add(button)
-            'Debug.Print(button.type)
-        Catch ex As Exception
-
-        End Try
     End Sub
 
 
