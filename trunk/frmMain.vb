@@ -64,7 +64,7 @@ Public Class frmMain
         Dim includearray As New ArrayList()
         propGridControl.ItemSet.Clear()
         propGridControl.Refresh()
-        propGridControl.PropertySort = PropertySort.NoSort
+        'propGridControl.PropertySort = PropertySort.Categorized
         For Each ctr As control_attributes In ctrl.attributes
             If ctr.show_in_property = True Then
                 index = propGridControl.Item.Add(ctr.name, ctr.value, False, type, ctr.description, True)
@@ -263,9 +263,8 @@ Public Class frmMain
 
         For Each lne As String In txtWindow.Lines
             addedline = lne
-
-            If control_startline < lineindex And control_endline > lineindex Then
-                If lne.Contains(e.ChangedItem.Label) Then
+            If control_startline <= lineindex And control_endline > lineindex Then
+                If lne.Contains("""" + e.ChangedItem.Label + """") Or lne.Contains("<" + e.ChangedItem.Label) Then
                     addedline = lne.Replace(e.OldValue, e.ChangedItem.Value)
                     insertLine = False
                 End If
@@ -274,8 +273,12 @@ Public Class frmMain
             lineindex += 1
         Next
         If insertLine Then
-            newText.Insert(control_endline, control_tabulation + "<" + e.ChangedItem.Label + ">" + e.ChangedItem.Value.ToString + "</" + e.ChangedItem.Label + ">")
-            control_endline += 1
+            If e.ChangedItem.Label.Equals("id") Then
+                newText(control_startline) = newText(control_startline).Replace(">", " id=""" + e.ChangedItem.Value + """>")
+            Else
+                newText.Insert(control_endline, control_tabulation + "<" + e.ChangedItem.Label + ">" + e.ChangedItem.Value.ToString + "</" + e.ChangedItem.Label + ">")
+                control_endline += 1
+            End If
         End If
         changedavalue = True
         txtWindow.Text = ConvertListToString(newText)

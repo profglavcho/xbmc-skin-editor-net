@@ -24,18 +24,18 @@ Partial Class frmMain
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.cmdReload = New System.Windows.Forms.Button()
+        Me.cmdSave = New System.Windows.Forms.Button()
         Me.cmdTestWindow = New System.Windows.Forms.Button()
         Me.cmbWindow = New System.Windows.Forms.ComboBox()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.propGridControl = New PropertyGridEx.PropertyGridEx()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenSkinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.brwFolder = New System.Windows.Forms.FolderBrowserDialog()
         Me.txtWindow = New RichTextBoxEx.RichTextBoxEx()
-        Me.propGridControl = New PropertyGridEx.PropertyGridEx()
-        Me.cmdSave = New System.Windows.Forms.Button()
-        Me.cmdReload = New System.Windows.Forms.Button()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -66,6 +66,24 @@ Partial Class frmMain
         Me.SplitContainer1.Size = New System.Drawing.Size(1300, 623)
         Me.SplitContainer1.SplitterDistance = 28
         Me.SplitContainer1.TabIndex = 2
+        '
+        'cmdReload
+        '
+        Me.cmdReload.Location = New System.Drawing.Point(207, 3)
+        Me.cmdReload.Name = "cmdReload"
+        Me.cmdReload.Size = New System.Drawing.Size(96, 23)
+        Me.cmdReload.TabIndex = 3
+        Me.cmdReload.Text = "Reload"
+        Me.cmdReload.UseVisualStyleBackColor = True
+        '
+        'cmdSave
+        '
+        Me.cmdSave.Location = New System.Drawing.Point(105, 3)
+        Me.cmdSave.Name = "cmdSave"
+        Me.cmdSave.Size = New System.Drawing.Size(96, 23)
+        Me.cmdSave.TabIndex = 2
+        Me.cmdSave.Text = "Save"
+        Me.cmdSave.UseVisualStyleBackColor = True
         '
         'cmdTestWindow
         '
@@ -104,6 +122,55 @@ Partial Class frmMain
         Me.SplitContainer2.SplitterWidth = 6
         Me.SplitContainer2.TabIndex = 5
         '
+        'propGridControl
+        '
+        '
+        '
+        '
+        Me.propGridControl.DocCommentDescription.AccessibleName = ""
+        Me.propGridControl.DocCommentDescription.AutoEllipsis = True
+        Me.propGridControl.DocCommentDescription.Cursor = System.Windows.Forms.Cursors.Default
+        Me.propGridControl.DocCommentDescription.Location = New System.Drawing.Point(3, 18)
+        Me.propGridControl.DocCommentDescription.Name = ""
+        Me.propGridControl.DocCommentDescription.Size = New System.Drawing.Size(301, 37)
+        Me.propGridControl.DocCommentDescription.TabIndex = 1
+        Me.propGridControl.DocCommentImage = Nothing
+        '
+        '
+        '
+        Me.propGridControl.DocCommentTitle.Cursor = System.Windows.Forms.Cursors.Default
+        Me.propGridControl.DocCommentTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
+        Me.propGridControl.DocCommentTitle.Location = New System.Drawing.Point(3, 3)
+        Me.propGridControl.DocCommentTitle.Name = ""
+        Me.propGridControl.DocCommentTitle.Size = New System.Drawing.Size(301, 15)
+        Me.propGridControl.DocCommentTitle.TabIndex = 0
+        Me.propGridControl.DocCommentTitle.UseMnemonic = False
+        Me.propGridControl.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.propGridControl.Location = New System.Drawing.Point(0, 0)
+        Me.propGridControl.Name = "propGridControl"
+        Me.propGridControl.PropertySort = System.Windows.Forms.PropertySort.Categorized
+        Me.propGridControl.SelectedObject = CType(resources.GetObject("propGridControl.SelectedObject"), Object)
+        Me.propGridControl.ShowCustomProperties = True
+        Me.propGridControl.Size = New System.Drawing.Size(307, 591)
+        Me.propGridControl.TabIndex = 5
+        '
+        '
+        '
+        Me.propGridControl.ToolStrip.AccessibleName = "ToolBar"
+        Me.propGridControl.ToolStrip.AccessibleRole = System.Windows.Forms.AccessibleRole.ToolBar
+        Me.propGridControl.ToolStrip.AllowMerge = False
+        Me.propGridControl.ToolStrip.AutoSize = False
+        Me.propGridControl.ToolStrip.CanOverflow = False
+        Me.propGridControl.ToolStrip.Dock = System.Windows.Forms.DockStyle.None
+        Me.propGridControl.ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.propGridControl.ToolStrip.Location = New System.Drawing.Point(0, 1)
+        Me.propGridControl.ToolStrip.Name = ""
+        Me.propGridControl.ToolStrip.Padding = New System.Windows.Forms.Padding(2, 0, 1, 0)
+        Me.propGridControl.ToolStrip.Size = New System.Drawing.Size(307, 25)
+        Me.propGridControl.ToolStrip.TabIndex = 1
+        Me.propGridControl.ToolStrip.TabStop = True
+        Me.propGridControl.ToolStrip.Text = "PropertyGridToolBar"
+        '
         'MenuStrip1
         '
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem})
@@ -140,72 +207,6 @@ Partial Class frmMain
         Me.txtWindow.Size = New System.Drawing.Size(987, 591)
         Me.txtWindow.TabIndex = 0
         Me.txtWindow.Text = ""
-        '
-        'propGridControl
-        '
-        '
-        '
-        '
-        Me.propGridControl.DocCommentDescription.AccessibleName = ""
-        Me.propGridControl.DocCommentDescription.AutoEllipsis = True
-        Me.propGridControl.DocCommentDescription.Cursor = System.Windows.Forms.Cursors.Default
-        Me.propGridControl.DocCommentDescription.Location = New System.Drawing.Point(3, 18)
-        Me.propGridControl.DocCommentDescription.Name = ""
-        Me.propGridControl.DocCommentDescription.Size = New System.Drawing.Size(301, 37)
-        Me.propGridControl.DocCommentDescription.TabIndex = 1
-        Me.propGridControl.DocCommentImage = Nothing
-        '
-        '
-        '
-        Me.propGridControl.DocCommentTitle.Cursor = System.Windows.Forms.Cursors.Default
-        Me.propGridControl.DocCommentTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
-        Me.propGridControl.DocCommentTitle.Location = New System.Drawing.Point(3, 3)
-        Me.propGridControl.DocCommentTitle.Name = ""
-        Me.propGridControl.DocCommentTitle.Size = New System.Drawing.Size(301, 15)
-        Me.propGridControl.DocCommentTitle.TabIndex = 0
-        Me.propGridControl.DocCommentTitle.UseMnemonic = False
-        Me.propGridControl.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.propGridControl.Location = New System.Drawing.Point(0, 0)
-        Me.propGridControl.Name = "propGridControl"
-        Me.propGridControl.SelectedObject = CType(resources.GetObject("propGridControl.SelectedObject"), Object)
-        Me.propGridControl.ShowCustomProperties = True
-        Me.propGridControl.Size = New System.Drawing.Size(307, 591)
-        Me.propGridControl.TabIndex = 5
-        '
-        '
-        '
-        Me.propGridControl.ToolStrip.AccessibleName = "ToolBar"
-        Me.propGridControl.ToolStrip.AccessibleRole = System.Windows.Forms.AccessibleRole.ToolBar
-        Me.propGridControl.ToolStrip.AllowMerge = False
-        Me.propGridControl.ToolStrip.AutoSize = False
-        Me.propGridControl.ToolStrip.CanOverflow = False
-        Me.propGridControl.ToolStrip.Dock = System.Windows.Forms.DockStyle.None
-        Me.propGridControl.ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.propGridControl.ToolStrip.Location = New System.Drawing.Point(0, 1)
-        Me.propGridControl.ToolStrip.Name = ""
-        Me.propGridControl.ToolStrip.Padding = New System.Windows.Forms.Padding(2, 0, 1, 0)
-        Me.propGridControl.ToolStrip.Size = New System.Drawing.Size(307, 25)
-        Me.propGridControl.ToolStrip.TabIndex = 1
-        Me.propGridControl.ToolStrip.TabStop = True
-        Me.propGridControl.ToolStrip.Text = "PropertyGridToolBar"
-        '
-        'cmdSave
-        '
-        Me.cmdSave.Location = New System.Drawing.Point(105, 3)
-        Me.cmdSave.Name = "cmdSave"
-        Me.cmdSave.Size = New System.Drawing.Size(96, 23)
-        Me.cmdSave.TabIndex = 2
-        Me.cmdSave.Text = "Save"
-        Me.cmdSave.UseVisualStyleBackColor = True
-        '
-        'cmdReload
-        '
-        Me.cmdReload.Location = New System.Drawing.Point(207, 3)
-        Me.cmdReload.Name = "cmdReload"
-        Me.cmdReload.Size = New System.Drawing.Size(96, 23)
-        Me.cmdReload.TabIndex = 3
-        Me.cmdReload.Text = "Reload"
-        Me.cmdReload.UseVisualStyleBackColor = True
         '
         'frmMain
         '
