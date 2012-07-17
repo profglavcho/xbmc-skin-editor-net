@@ -65,15 +65,23 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="doubletextbox.Designer.vb">
+      <DependentUpon>doubletextbox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="doubletextbox.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
     </Compile>
-    <Compile Include="UserControl1.vb">
+    <Compile Include="RichTextBoxEx.vb">
       <SubType>Component</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="UserControl1.Designer.vb">
-      <DependentUpon>UserControl1.vb</DependentUpon>
+    <Compile Include="RichTextBoxEx.Designer.vb">
+      <DependentUpon>RichTextBoxEx.vb</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
@@ -86,16 +94,32 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="TextButton.Designer.vb">
+      <DependentUpon>TextButton.vb</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="TextButton.vb">
+      <SubType>UserControl</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="doubletextbox.resx">
+      <DependentUpon>doubletextbox.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControl1.resx">
-      <DependentUpon>UserControl1.vb</DependentUpon>
+    <EmbeddedResource Include="RichTextBoxEx.resx">
+      <DependentUpon>RichTextBoxEx.vb</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextButton.resx">
+      <DependentUpon>TextButton.vb</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -117,24 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="propGridControl.SelectedObject" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAEVQcm9wZXJ0eUdyaWRFeCwgVmVyc2lvbj0xLjAuMC4wLCBDdWx0
-        dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGwFAQAAACdQcm9wZXJ0eUdyaWRFeC5DdXN0b21Q
-        cm9wZXJ0eUNvbGxlY3Rpb24CAAAADU9uQ2hhbmdlRXZlbnQTQ29sbGVjdGlvbkJhc2UrbGlzdAQDPFBy
-        b3BlcnR5R3JpZEV4LkN1c3RvbVByb3BlcnR5Q29sbGVjdGlvbitPbkNoYW5nZUV2ZW50SGFuZGxlcgIA
-        AAAcU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdAIAAAAKCQMAAAAEAwAAABxTeXN0ZW0uQ29sbGVj
-        dGlvbnMuQXJyYXlMaXN0AwAAAAZfaXRlbXMFX3NpemUIX3ZlcnNpb24FAAAICAkEAAAAAAAAAAAAAAAQ
-        BAAAAAAAAAAL
-</value>
-  </data>
-  <metadata name="MenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="brwFolder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>125, 17</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>52</value>
-  </metadata>
 </root>

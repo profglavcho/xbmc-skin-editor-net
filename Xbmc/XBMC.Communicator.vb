@@ -170,7 +170,9 @@ Namespace XBMC
 
             Dim sw As StreamWriter = Nothing
             Dim [error] As String = Nothing
-
+            If IO.Directory.Exists("log") = False Then
+                IO.Directory.CreateDirectory("log")
+            End If
             Try
                 sw = New StreamWriter(logFile, True)
                 sw.WriteLine(DateTime.Now & " : " & message)
