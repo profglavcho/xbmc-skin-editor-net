@@ -33,10 +33,12 @@ Partial Class frmMain
         Me.propGridControl = New PropertyGridEx.PropertyGridEx()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CreateSkinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenSkinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.brwFolder = New System.Windows.Forms.FolderBrowserDialog()
-        Me.CreateSkinToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.WindowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MediaPreviewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
@@ -183,7 +185,7 @@ Partial Class frmMain
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.WindowToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(1300, 24)
@@ -197,23 +199,36 @@ Partial Class frmMain
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(35, 20)
         Me.FileToolStripMenuItem.Text = "File"
         '
+        'CreateSkinToolStripMenuItem
+        '
+        Me.CreateSkinToolStripMenuItem.Name = "CreateSkinToolStripMenuItem"
+        Me.CreateSkinToolStripMenuItem.Size = New System.Drawing.Size(128, 22)
+        Me.CreateSkinToolStripMenuItem.Text = "Create skin"
+        '
         'OpenSkinToolStripMenuItem
         '
         Me.OpenSkinToolStripMenuItem.Name = "OpenSkinToolStripMenuItem"
-        Me.OpenSkinToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.OpenSkinToolStripMenuItem.Size = New System.Drawing.Size(128, 22)
         Me.OpenSkinToolStripMenuItem.Text = "Open Skin"
         '
         'SettingsToolStripMenuItem
         '
         Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
-        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(128, 22)
         Me.SettingsToolStripMenuItem.Text = "Settings"
         '
-        'CreateSkinToolStripMenuItem
+        'WindowToolStripMenuItem
         '
-        Me.CreateSkinToolStripMenuItem.Name = "CreateSkinToolStripMenuItem"
-        Me.CreateSkinToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.CreateSkinToolStripMenuItem.Text = "Create skin"
+        Me.WindowToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MediaPreviewToolStripMenuItem})
+        Me.WindowToolStripMenuItem.Name = "WindowToolStripMenuItem"
+        Me.WindowToolStripMenuItem.Size = New System.Drawing.Size(57, 20)
+        Me.WindowToolStripMenuItem.Text = "Window"
+        '
+        'MediaPreviewToolStripMenuItem
+        '
+        Me.MediaPreviewToolStripMenuItem.Name = "MediaPreviewToolStripMenuItem"
+        Me.MediaPreviewToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.MediaPreviewToolStripMenuItem.Text = "Media Preview"
         '
         'frmMain
         '
@@ -251,5 +266,7 @@ Partial Class frmMain
     Friend WithEvents cmdSave As System.Windows.Forms.Button
     Friend WithEvents cmdReload As System.Windows.Forms.Button
     Friend WithEvents CreateSkinToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents WindowToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MediaPreviewToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

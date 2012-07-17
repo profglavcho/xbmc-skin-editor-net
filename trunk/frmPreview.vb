@@ -1,6 +1,11 @@
 ﻿Public Class frmPreview
 
-    Public Sub LoadWindow(ByVal path As String)
+    Public Sub LoadImage(ByVal image As String)
+        If IO.File.Exists(image) Then
+            PictureBox1.Load(image)
+
+
+        End If
 
     End Sub
 

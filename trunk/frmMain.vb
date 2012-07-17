@@ -5,9 +5,11 @@ Public Class frmMain
     Const debugex As Integer = 0
     Dim currentskin As skin
     Dim currentskin_file As skin_file
+    Dim skindir As IO.DirectoryInfo
     Dim control_startline, control_endline As Integer
     Dim control_tabulation As String
     Dim changedavalue As Boolean
+    Dim texturearray As New ArrayList
 #End Region
 #Region "menus"
     'open skin
@@ -66,6 +68,7 @@ Public Class frmMain
 
         Dim choicearray As New ArrayList()
         Dim includearray As New ArrayList()
+        Dim textarray As New ArrayList()
         propGridControl.ItemSet.Clear()
         propGridControl.Refresh()
         'propGridControl.PropertySort = PropertySort.Categorized
@@ -84,7 +87,11 @@ Public Class frmMain
                                 includearray.AddRange(currentskin.GetIncludes().ToArray())
                             End If
                             propGridControl.Item(index).Choices = New PropertyGridEx.CustomChoices(includearray, True)
-                        Case Else
+                        Case ChoiceType.Texture
+                            If textarray.count = 0 Then
+                                textarray.AddRange(texturearray.ToArray())
+                            End If
+                            propGridControl.Item(index).Choices = New PropertyGridEx.CustomChoices(textarray, True)
 
                     End Select
 
@@ -106,6 +113,24 @@ Public Class frmMain
         Return retstring
     End Function
 
+    Private Sub LoadTexture(ByVal dir As IO.DirectoryInfo)
+        texturearray.Clear()
+        skindir = dir
+        Dim mediadir As IO.DirectoryInfo
+        Dim texture As String
+        If (IO.Directory.Exists(dir.FullName + "\media")) Then
+            mediadir = New IO.DirectoryInfo(dir.FullName + "\media")
+            For Each fle As IO.FileInfo In mediadir.GetFiles("*.png", System.IO.SearchOption.AllDirectories)
+
+                texture = fle.FullName.Replace(mediadir.FullName + "\", "")
+                texturearray.Add(texture)
+            Next
+
+
+        End If
+
+
+    End Sub
     Public Sub LoadSkin(ByVal skinpath As String)
         cmbWindow.Items.Clear()
         currentskin = New skin(skinpath)
@@ -121,6 +146,7 @@ Public Class frmMain
         control_endline = 0
         control_tabulation = ""
         changedavalue = False
+        LoadTexture(dir)
     End Sub
 
     Function SaveFile() As Boolean
@@ -287,9 +313,28 @@ Public Class frmMain
         changedavalue = True
         txtWindow.Text = ConvertListToString(newText)
 
+        'load image
+        If frmPreview.Visible = True And e.ChangedItem.Label.Contains("texture") Then
+
+            frmPreview.LoadImage(skindir.FullName + "\media\" + e.ChangedItem.Value)
+        End If
 
     End Sub
 #End Region
 
     
+    Private Sub MediaPreviewToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MediaPreviewToolStripMenuItem.Click
+        frmPreview.Show()
+    End Sub
+
+    Private Sub propGridControl_SelectedGridItemChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.SelectedGridItemChangedEventArgs) Handles propGridControl.SelectedGridItemChanged
+        If e.NewSelection.Label.Contains("texture") = False Then Exit Sub
+        If e.NewSelection.Value.ToString().Length = 0 Then Exit Sub
+        If frmPreview.Visible Then
+
+            frmPreview.LoadImage(skindir.FullName + "\media\" + e.NewSelection.Value)
+
+        End If
+
+    End Sub
 End Class
