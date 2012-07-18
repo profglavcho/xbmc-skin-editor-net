@@ -10,6 +10,8 @@ Public Class frmMain
     Dim control_tabulation As String
     Dim changedavalue As Boolean
     Dim texturearray As New ArrayList
+    Dim modified_font As System.Drawing.Font
+    Dim modified_line As New List(Of String)
 #End Region
 #Region "menus"
     'open skin
@@ -134,7 +136,7 @@ Public Class frmMain
     Public Sub LoadSkin(ByVal skinpath As String)
         cmbWindow.Items.Clear()
         currentskin = New skin(skinpath)
-        For Each fle As String In currentskin.GetWindows("720p")
+        For Each fle As String In currentskin.GetWindows()
 
             cmbWindow.Items.Add(fle)
 
@@ -218,8 +220,11 @@ Public Class frmMain
         LoadSkin(My.Settings.currentskin)
 
         SetXbmcCommunicator()
+        Dim sze As Single = txtWindow.Font.Size
+        modified_font = New System.Drawing.Font("Microsoft Sans Serif", sze, System.Drawing.FontStyle.Bold)
     End Sub
 #End Region
+
 #Region "Control Handles"
     Private Sub cmbWindow_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbWindow.SelectedIndexChanged
         LoadWindowNamed(cmbWindow.Text)
@@ -262,14 +267,6 @@ Public Class frmMain
 
                 ResultString = ConvertListToString(SubjectLines)
 
-                'Try
-                '    ResultString = Regex.Match(SubjectString, "(<control.+?</control>)", RegexOptions.Singleline Or RegexOptions.IgnoreCase).Groups(1).Value
-                'Catch ex As ArgumentException
-                '    'Syntax error in the regular expression
-                '    ExHandling(ex.Message)
-                '    Exit Sub
-                'End Try
-
             End If
             If control_endline > 0 Then Exit For
 
@@ -296,26 +293,39 @@ Public Class frmMain
             If control_startline <= lineindex And control_endline > lineindex Then
                 If lne.Contains("""" + e.ChangedItem.Label + """") Or lne.Contains("<" + e.ChangedItem.Label) Then
                     addedline = lne.Replace(e.OldValue, e.ChangedItem.Value)
+                    modified_line.Add(addedline)
                     insertLine = False
                 End If
             End If
             newText.Add(addedline)
             lineindex += 1
         Next
+
         If insertLine Then
             If e.ChangedItem.Label.Equals("id") Then
                 newText(control_startline) = newText(control_startline).Replace(">", " id=""" + e.ChangedItem.Value + """>")
+                modified_line.Add(newText(control_startline))
             Else
                 newText.Insert(control_endline, control_tabulation + "<" + e.ChangedItem.Label + ">" + e.ChangedItem.Value.ToString + "</" + e.ChangedItem.Label + ">")
+                modified_line.Add(newText(control_endline))
                 control_endline += 1
             End If
         End If
+
         changedavalue = True
         txtWindow.Text = ConvertListToString(newText)
+        For Each lne As String In modified_line
+            Dim res As Integer = txtWindow.Find(lne)
+            If res > -1 Then
+                txtWindow.SelectionStart = res
+                txtWindow.SelectionLength = lne.Length
+                txtWindow.SelectionFont = modified_font
+            End If
+        Next
+
 
         'load image
         If frmPreview.Visible = True And e.ChangedItem.Label.Contains("texture") Then
-
             frmPreview.LoadImage(skindir.FullName + "\media\" + e.ChangedItem.Value)
         End If
 
