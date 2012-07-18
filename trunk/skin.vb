@@ -48,6 +48,7 @@ Public Class skin
     Dim Resolutions As List(Of skin_resolution)
     Dim cur_res As skin_resolution
     Dim includes As New List(Of String)
+    Dim str_current_resolution As String
     Private Sub LoadResolution(ByVal respath As String)
         Dim res As New skin_resolution(respath)
         For Each file As String In IO.Directory.GetFiles(respath, "*.xml")
@@ -65,11 +66,11 @@ Public Class skin
         Return GetWindow
     End Function
 
-    Function GetWindows(ByVal str_res As String) As List(Of String)
+    Function GetWindows() As List(Of String)
 
         Dim thelist As New List(Of String)
         For Each res As skin_resolution In Resolutions
-            If res.Resolution_Name.Contains(str_res) Then
+            If res.Resolution_Name.Contains(str_current_resolution) Then
                 cur_res = res
                 thelist = res.GetWindows()
             End If
@@ -94,8 +95,20 @@ Public Class skin
 
     Public Sub New(ByVal skinpath As String)
         Resolutions = New List(Of skin_resolution)
+        Dim addon As New IO.FileInfo(skinpath + "\addon.xml")
+        Dim reader As IO.StreamReader = addon.OpenText()
+        Dim search As String = reader.ReadToEnd()
+        Dim result As String = ""
+        result = StringHelper.RegEx.GetMatch("<res[^>]+folder=""([^""]+)""", search)
+        If result.Length = 0 Then
+            result = StringHelper.RegEx.GetMatch("defaultresolution=""([^""]+)""", search)
+        End If
+        If result.Length = 0 Then
+            MsgBox("ERROR getting resolution folder")
+        End If
         For Each path As String In IO.Directory.GetDirectories(skinpath)
-            If path.Contains("720p") Then
+            If path.Contains(result) Then
+                str_current_resolution = result
                 LoadResolution(path)
             End If
         Next
