@@ -11,7 +11,7 @@
 
         For Each Dir As IO.DirectoryInfo In addonFolder.GetDirectories()
 
-            If Dir.Name.Contains("skin.") Then
+            If Dir.Name.StartsWith("skin.") Then
                 'its a skin so add it
                 'TODO
                 'don't get the name of the folder but load it from the addon.xml
