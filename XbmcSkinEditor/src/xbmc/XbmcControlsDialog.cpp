@@ -131,10 +131,6 @@ BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, 
       case CBN_SELENDOK:
         OnListSelectionChanged();
         return 0;
-
-      case CBN_DBLCLK:
-        OnListDoubleClicked();
-        return 0;
       }
     }
     else if ( (HWND)lp == m_pDuoTextBox.getHSelf())
@@ -251,11 +247,6 @@ void CXbmcControlsDialog::OnListSelectionChanged()
   printf("onlistselection");
   IsLoadingControls = false;
   //draw items
-}
-
-
-void CXbmcControlsDialog::OnListDoubleClicked()
-{
 }
 
 void CXbmcControlsDialog::OnNotepadChange()
