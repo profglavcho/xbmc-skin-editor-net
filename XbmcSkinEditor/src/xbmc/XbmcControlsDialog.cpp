@@ -60,43 +60,43 @@ CXbmcControlsDialog::~CXbmcControlsDialog()
 
 void CXbmcControlsDialog::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
 {
-	DockingDlgInterface::init( g_hInstance, g_NppData._nppHandle );
-	IController::Init( pNewModel, pClipboardProxy, pSettings );
-	DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
+  DockingDlgInterface::init( g_hInstance, g_NppData._nppHandle );
+  IController::Init( pNewModel, pClipboardProxy, pSettings );
+  DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
 
-	MultiClipOLEDataObject::CreateDataObject( &pDataObject );
-	MultiClipOLEDropSource::CreateDropSource( &pDropSource );
+  MultiClipOLEDataObject::CreateDataObject( &pDataObject );
+  MultiClipOLEDropSource::CreateDropSource( &pDropSource );
 }
 
 
 void CXbmcControlsDialog::Shutdown()
 {
-	pDataObject->Release();
-	pDropSource->Release();
+  pDataObject->Release();
+  pDropSource->Release();
 }
 
 
 void CXbmcControlsDialog::ShowDialog( bool Show )
 {
-	if ( !isCreated() )
-	{
-		create( &TBData );
+  if ( !isCreated() )
+  {
+    create( &TBData );
 
-		// define the default docking behaviour
-		if ( !NLGetText( g_hInstance, g_NppData._nppHandle, TEXT("Xbmc Controls"), TBData.pszName, MAX_PATH) )
-		{
-			lstrcpy( TBData.pszName, TEXT("Xbmc Controls") );
-		}
-		TBData.uMask			= DWS_DF_CONT_LEFT | DWS_ICONTAB;
-		TBData.hIconTab		= (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MULTICLIPBOARD), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
-		TBData.pszModuleName	= getPluginFileName();
-		TBData.dlgID			= MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX;
-		::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
-	}
+    // define the default docking behaviour
+    if ( !NLGetText( g_hInstance, g_NppData._nppHandle, TEXT("Xbmc Controls"), TBData.pszName, MAX_PATH) )
+    {
+      lstrcpy( TBData.pszName, TEXT("Xbmc Controls") );
+    }
+    TBData.uMask      = DWS_DF_CONT_LEFT | DWS_ICONTAB;
+    TBData.hIconTab    = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MULTICLIPBOARD), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
+    TBData.pszModuleName  = getPluginFileName();
+    TBData.dlgID      = MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX;
+    ::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
+  }
 
-	display( Show );
-	IsShown = Show;
-	ShowXbmcControls();
+  display( Show );
+  IsShown = Show;
+  ShowXbmcControls();
 }
 
 
@@ -106,37 +106,37 @@ void CXbmcControlsDialog::ShowDialog( bool Show )
 BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp )
 {
 
-	switch ( msg )
-	{
-	case WM_INITDIALOG:
-		InitialiseDialog();
-		break;
+  switch ( msg )
+  {
+  case WM_INITDIALOG:
+    InitialiseDialog();
+    break;
 
-	case WM_SIZE:
-	case WM_MOVE:
-		{
-			RECT rc;
-			getClientRect(rc);
+  case WM_SIZE:
+  case WM_MOVE:
+    {
+      RECT rc;
+      getClientRect(rc);
       m_pComboBox.Resize(rc);
       m_pDuoTextBox.Resize(rc);
-			//MultiClipViewerPanel.reSizeTo(rc);
-			break;
-		}
+      //MultiClipViewerPanel.reSizeTo(rc);
+      break;
+    }
 
-	case WM_COMMAND:
-		if ( (HWND)lp == m_pComboBox.getHSelf() )
-		{
-			switch ( HIWORD(wp) )
-			{
-			case CBN_SELENDOK:
-				OnListSelectionChanged();
-				return 0;
+  case WM_COMMAND:
+    if ( (HWND)lp == m_pComboBox.getHSelf() )
+    {
+      switch ( HIWORD(wp) )
+      {
+      case CBN_SELENDOK:
+        OnListSelectionChanged();
+        return 0;
 
-			case CBN_DBLCLK:
-				OnListDoubleClicked();
-				return 0;
-			}
-		}
+      case CBN_DBLCLK:
+        OnListDoubleClicked();
+        return 0;
+      }
+    }
     else if ( (HWND)lp == m_pDuoTextBox.getHSelf())
     {
       switch ( HIWORD(wp) )
@@ -150,51 +150,51 @@ BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, 
       
       }
     }
-		break;
+    break;
 
-	case WM_NOTIFY:
-		{
-			LPNMHDR nmhdr = (LPNMHDR) lp;
-			if ( nmhdr->hwndFrom == _hParent )
-			{
-				switch ( LOWORD( nmhdr->code ) )
-				{
-				case DMN_FLOAT:
-				case DMN_DOCK:
-					{
-						if ( LOWORD( nmhdr->code ) == DMN_FLOAT )
-						{
-							_isFloating = true;
-						}
-						else
-						{
-							_isFloating = false;
-							_iDockedPos = HIWORD( nmhdr->code );
-						}
-						break;
-					}
-				default:
-					// Parse all other notifications to docking dialog interface
-					return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
-				}
-			}
-			else
-			{
-				// Parse all other notifications to docking dialog interface
-				return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
-			}
-			break;
-		}
-	case WM_DESTROY:
-		// Destroy icon of tab
-		::DestroyIcon( TBData.hIconTab );
-		break;
+  case WM_NOTIFY:
+    {
+      LPNMHDR nmhdr = (LPNMHDR) lp;
+      if ( nmhdr->hwndFrom == _hParent )
+      {
+        switch ( LOWORD( nmhdr->code ) )
+        {
+        case DMN_FLOAT:
+        case DMN_DOCK:
+          {
+            if ( LOWORD( nmhdr->code ) == DMN_FLOAT )
+            {
+              _isFloating = true;
+            }
+            else
+            {
+              _isFloating = false;
+              _iDockedPos = HIWORD( nmhdr->code );
+            }
+            break;
+          }
+        default:
+          // Parse all other notifications to docking dialog interface
+          return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+        }
+      }
+      else
+      {
+        // Parse all other notifications to docking dialog interface
+        return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+      }
+      break;
+    }
+  case WM_DESTROY:
+    // Destroy icon of tab
+    ::DestroyIcon( TBData.hIconTab );
+    break;
 
-	default:
-		return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
-	}
+  default:
+    return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+  }
 
-	return FALSE;
+  return FALSE;
 }
 
 
@@ -210,16 +210,16 @@ void CXbmcControlsDialog::InitialiseDialog()
 void CXbmcControlsDialog::OnModelModified()
 {
   
-	ShowXbmcControls();
+  ShowXbmcControls();
 }
 
 
 void CXbmcControlsDialog::ShowXbmcControls()
 {
-	if ( !IsShown )
-		return;
+  if ( !IsShown )
+    return;
   
-	  std::vector<CStdString> thelist = m_pXbmcControlsFactory->GetControlsList();
+    std::vector<CStdString> thelist = m_pXbmcControlsFactory->GetControlsList();
   m_pComboBox.ClearAll();
   for( std::vector<CStdString>::iterator it = thelist.begin(); it != thelist.end(); it++)
   {
@@ -261,7 +261,7 @@ void CXbmcControlsDialog::OnListDoubleClicked()
 void CXbmcControlsDialog::OnNotepadChange()
 {
   if ( !IsShown )
-		return;
+    return;
   int cur = g_Scintilla.getCurrentLine();
   if (cur != m_pCurrentLine)
     m_pCurrentLine = cur;
@@ -396,39 +396,39 @@ void CXbmcControlsDialog::PasteSelectedItem()
 
 void CXbmcControlsDialog::PasteAllItems()
 {
-	
+  
 }
 
 
 void CXbmcControlsDialog::DeleteSelectedItem()
 {
-	
+  
 }
 
 
 void CXbmcControlsDialog::DeleteAllItems()
 {
-	
+  
 }
 
 
 void CXbmcControlsDialog::CopySelectedItemToClipboard()
 {
-	
+  
 }
 
 
 void CXbmcControlsDialog::OnObserverAdded( LoonySettingsManager * SettingsManager )
 {
-	SettingsObserver::OnObserverAdded( SettingsManager );
+  SettingsObserver::OnObserverAdded( SettingsManager );
   // Add default settings if it doesn't exists
 }
 
 
 void CXbmcControlsDialog::OnSettingsChanged( const stringType & GroupName, const stringType & SettingName )
 {
-	if ( GroupName != SETTINGS_GROUP_XBMC )
-	{
-		return;
-	}
+  if ( GroupName != SETTINGS_GROUP_XBMC )
+  {
+    return;
+  }
 }

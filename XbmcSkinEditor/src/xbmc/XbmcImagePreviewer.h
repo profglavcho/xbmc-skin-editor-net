@@ -27,44 +27,44 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 // ID for dockable window
-#define	MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0
+#define  MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0
 
 
 class XbmcImagePreviewer : public DockingDlgInterface, public IController
 {
 public:
-	XbmcImagePreviewer();
-	~XbmcImagePreviewer();
-	// Not inherited from DockingDlgInterface
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
-	virtual void Shutdown();
-	// Inherited from DockingDlgInterface
-	virtual void destroy() {}
+  XbmcImagePreviewer();
+  ~XbmcImagePreviewer();
+  // Not inherited from DockingDlgInterface
+  virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+  virtual void Shutdown();
+  // Inherited from DockingDlgInterface
+  virtual void destroy() {}
 
-	void ShowDialog( bool Show = TRUE );
+  void ShowDialog( bool Show = TRUE );
 
-	virtual void OnModelModified();
+  virtual void OnModelModified();
   void UpdateImage();
 protected:
-	// Overload DockingDlgInterface's dialog procedure
-	virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );
+  // Overload DockingDlgInterface's dialog procedure
+  virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );
 
-	// Initialise dialog here
-	void InitialiseDialog();
+  // Initialise dialog here
+  void InitialiseDialog();
 
 private:
   int m_pCurrentLine;
-	tTbData TBData;
-	bool IsShown;
+  tTbData TBData;
+  bool IsShown;
   bool IsLoading;
   FCObjImage m_pPicture;
   std::wstring m_pCurrentFile;
 
-	void ShowImage();
-	void ClearWindow();
+  void ShowImage();
+  void ClearWindow();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
-	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
+  virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+  virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 };
 
 

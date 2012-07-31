@@ -30,40 +30,40 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class SelectedTextAutoCopier : public IController, public ClipboardListener, public MVCTimer, public CyclicPasteListener
 {
 public:
-	SelectedTextAutoCopier();
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+  SelectedTextAutoCopier();
+  virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
 
-	bool IsSelectionOverlapping( const int CurrSelStart, const int CurrSelEnd );
+  bool IsSelectionOverlapping( const int CurrSelStart, const int CurrSelEnd );
 
-	// ClipboardListener interface
-	virtual void OnNewClipboardText( const TextItem & textItem );
-	virtual void OnTextPasted();
+  // ClipboardListener interface
+  virtual void OnNewClipboardText( const TextItem & textItem );
+  virtual void OnTextPasted();
 
-	// Timer Interface
-	virtual void OnTimer();
+  // Timer Interface
+  virtual void OnTimer();
 
-	// CyclicPasteListener interface
-	virtual void OnCyclicPasteBegin();
-	virtual void OnCyclicPasteEnd();
+  // CyclicPasteListener interface
+  virtual void OnCyclicPasteBegin();
+  virtual void OnCyclicPasteEnd();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
-	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
+  virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+  virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 private:
-	// Buffer for System clipboard before the current selection was made, restore when pasting over current text selection
-	TextItem SystemClipboardBackup;
-	// Last timer tick's selected text, used for updating the correct entry in clipboard buffer when current selection changes
-	TextItem PreviousSelectionText;
-	// Start and end of last selected text position
-	int PrevSelStart, PrevSelEnd;
-	// Whether this feature is enabled;
-	bool IsEnableAutoCopy;
-	// Whether cyclic paste is currently active
-	bool IsCyclicPasteActive;
+  // Buffer for System clipboard before the current selection was made, restore when pasting over current text selection
+  TextItem SystemClipboardBackup;
+  // Last timer tick's selected text, used for updating the correct entry in clipboard buffer when current selection changes
+  TextItem PreviousSelectionText;
+  // Start and end of last selected text position
+  int PrevSelStart, PrevSelEnd;
+  // Whether this feature is enabled;
+  bool IsEnableAutoCopy;
+  // Whether cyclic paste is currently active
+  bool IsCyclicPasteActive;
 
-	// Call these functions to enable/disable autocopy
-	void EnableAutoCopy();
-	void DisableAutoCopy();
+  // Call these functions to enable/disable autocopy
+  void EnableAutoCopy();
+  void DisableAutoCopy();
 };
 
 

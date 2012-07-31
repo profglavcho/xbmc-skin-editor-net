@@ -30,10 +30,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 class CDuoTextBoxContainer : public Window
 {
 public:
-	CDuoTextBoxContainer();
+  CDuoTextBoxContainer();
 
-	virtual void init(HINSTANCE hInst, HWND parent);
-	virtual void destroy() {}
+  virtual void init(HINSTANCE hInst, HWND parent);
+  virtual void destroy() {}
   virtual void Resize(RECT rc);
   virtual void AddAttribute(CStdString name, CStdString value);
   virtual RECT GetContainerRect();
@@ -46,21 +46,21 @@ private :
   void ResetScrollbar();
   void SetupScrollbar();
   std::vector<CDuoTextBox*> m_pDuoTextBox;
-	HCURSOR hSplitterCursorUpDown;
-	HBRUSH hSplitterBrush;
-	HPEN hSplitterPen;
+  HCURSOR hSplitterCursorUpDown;
+  HBRUSH hSplitterBrush;
+  HPEN hSplitterPen;
   int m_pBottomPosition;
   int  m_nVertInc,m_nVscrollMax,m_nVscrollPos;
   CRect m_ClientRect;
 
-	// For passing through drag list box messages
-	UINT DragListMessage;
+  // For passing through drag list box messages
+  UINT DragListMessage;
 
   int OnScroll(WPARAM wParam);
 
-	LRESULT CALLBACK DuoTextBoxProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  LRESULT CALLBACK DuoTextBoxProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 
-	static LRESULT CALLBACK StaticDuoTextBoxPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  static LRESULT CALLBACK StaticDuoTextBoxPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 };
 
 #endif //SPLITTER_PANEL_H

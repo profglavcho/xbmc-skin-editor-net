@@ -24,22 +24,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 #ifdef UNICODE
-	typedef std::wstring stringType;
-	typedef wchar_t TCHAR;
+  typedef std::wstring stringType;
+  typedef wchar_t TCHAR;
 #else
-	typedef std::string stringType;
-	typedef char TCHAR;
+  typedef std::string stringType;
+  typedef char TCHAR;
 #endif //UNICODE
 
 
 #ifndef TEXT
-	#ifdef UNICODE
-		#define __TEXT(quote) L##quote
-	#else
-		#define __TEXT(quote) ##quote
-	#endif //UNICODE
-	#define TEXT(quote) __TEXT(quote)
-#endif	// TEXT
+  #ifdef UNICODE
+    #define __TEXT(quote) L##quote
+  #else
+    #define __TEXT(quote) ##quote
+  #endif //UNICODE
+  #define TEXT(quote) __TEXT(quote)
+#endif  // TEXT
 
 
-#endif	// MULTI_CLIPBOARD_STRING_TYPE
+#endif  // MULTI_CLIPBOARD_STRING_TYPE

@@ -32,58 +32,58 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class ControlListItem : public TextItem
 {
 public:
-	ControlListItem();
-	ControlListItem( const TextItem & textItem );
-	bool operator==( const TextItem & rhs ) const;
+  ControlListItem();
+  ControlListItem( const TextItem & textItem );
+  bool operator==( const TextItem & rhs ) const;
 
-	void UpdateColumnText();
+  void UpdateColumnText();
 };
 
 
 class ControlsList : public IModel
 {
 public:
-	ControlsList();
+  ControlsList();
 
-	bool AddText( const TextItem & textItem );
-	void RemoveText( const unsigned int index );
-	void RemoveAllTexts();
-	const ControlListItem & GetText( const unsigned int index );
-	const ControlListItem & PasteText( const unsigned int index );	// Returns text at index, and also move it to the front of the list
-	bool EditText( const int index, const std::wstring & newText );
-	bool ModifyTextItem( const TextItem & fromTextItem, const TextItem & toTextItem );
-	void SetTextNewIndex( const unsigned int index, const unsigned int newIndex );
+  bool AddText( const TextItem & textItem );
+  void RemoveText( const unsigned int index );
+  void RemoveAllTexts();
+  const ControlListItem & GetText( const unsigned int index );
+  const ControlListItem & PasteText( const unsigned int index );  // Returns text at index, and also move it to the front of the list
+  bool EditText( const int index, const std::wstring & newText );
+  bool ModifyTextItem( const TextItem & fromTextItem, const TextItem & toTextItem );
+  void SetTextNewIndex( const unsigned int index, const unsigned int newIndex );
 
-	bool IsTextAvailable( const std::wstring & text ) const;
-	int GetTextItemIndex( const TextItem & text ) const;
-	unsigned int GetNumText() const;
+  bool IsTextAvailable( const std::wstring & text ) const;
+  int GetTextItemIndex( const TextItem & text ) const;
+  unsigned int GetNumText() const;
 
-	const unsigned int GetMaxListSize() const { return MaxListSize; }
-	void SetMaxListSize( const int NewSize );
+  const unsigned int GetMaxListSize() const { return MaxListSize; }
+  void SetMaxListSize( const int NewSize );
 
-	void SaveClipboardSession();
-	void LoadControls();
+  void SaveClipboardSession();
+  void LoadControls();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
-	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
+  virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+  virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 private:
-	typedef std::list< ControlListItem > TextListType;
-	typedef TextListType::iterator TextListIterator;
-	typedef TextListType::const_iterator ConstTextListIterator;
-	typedef TextListType::const_reverse_iterator ConstReverseTextListIterator;
-	TextListType textList;
+  typedef std::list< ControlListItem > TextListType;
+  typedef TextListType::iterator TextListIterator;
+  typedef TextListType::const_iterator ConstTextListIterator;
+  typedef TextListType::const_reverse_iterator ConstReverseTextListIterator;
+  TextListType textList;
 
-	// Empty struct to return when text invalid index is requested
-	ControlListItem NullStruct;
+  // Empty struct to return when text invalid index is requested
+  ControlListItem NullStruct;
 
-	// The max number of entry in text list
-	unsigned int MaxListSize;
+  // The max number of entry in text list
+  unsigned int MaxListSize;
 
-	// Whether to save clipboard item to disk for next session
-	bool bSaveClipboardSession;
+  // Whether to save clipboard item to disk for next session
+  bool bSaveClipboardSession;
 
-	TextListType::iterator GetIterAtIndex( const unsigned int index );
+  TextListType::iterator GetIterAtIndex( const unsigned int index );
 };
 
 

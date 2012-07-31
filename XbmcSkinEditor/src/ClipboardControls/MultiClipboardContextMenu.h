@@ -38,18 +38,18 @@ http://www.mvps.org/user32/rc/FakeMenu.zip
 class MultiClipboardContextMenu : public Window
 {
 public:
-	virtual void init( HINSTANCE hInst, HWND parent );
-	virtual void destroy();
-	virtual void ShowContextMenu( int x, int y );
+  virtual void init( HINSTANCE hInst, HWND parent );
+  virtual void destroy();
+  virtual void ShowContextMenu( int x, int y );
 
-	virtual void AddItem( std::wstring item );
+  virtual void AddItem( std::wstring item );
 
 private:
-	HFONT hNewFont;
+  HFONT hNewFont;
 
-	LRESULT CALLBACK ContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  LRESULT CALLBACK ContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 
-	static LRESULT CALLBACK StaticContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  static LRESULT CALLBACK StaticContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 };
 
 

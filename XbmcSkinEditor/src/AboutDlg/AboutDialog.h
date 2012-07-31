@@ -33,33 +33,33 @@ class AboutDialog : public StaticDialog
 {
 
 public:
-	AboutDialog() : StaticDialog() {};
+  AboutDialog() : StaticDialog() {};
 
     void Init( HINSTANCE hInst, NppData nppData )
-	{
-		_nppData = nppData;
-		Window::init(hInst, nppData._nppHandle);
-	};
+  {
+    _nppData = nppData;
+    Window::init(hInst, nppData._nppHandle);
+  };
 
-   	void doDialog();
+     void doDialog();
 
     virtual void destroy() {
         _emailLink.destroy();
-		_urlNppPlugins.destroy();
+    _urlNppPlugins.destroy();
     };
 
 
 protected :
-	virtual BOOL CALLBACK run_dlgProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  virtual BOOL CALLBACK run_dlgProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 
 private:
-	// Handles
-	NppData			_nppData;
-    HWND			_HSource;
+  // Handles
+  NppData      _nppData;
+    HWND      _HSource;
 
-	// for eMail
-    URLCtrl			_emailLink;
-	URLCtrl			_urlNppPlugins;
+  // for eMail
+    URLCtrl      _emailLink;
+  URLCtrl      _urlNppPlugins;
 };
 
 

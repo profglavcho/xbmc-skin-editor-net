@@ -26,44 +26,44 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 enum ESplitterPanelOrientation
 {
-	ESPO_VERTICAL,
-	ESPO_HORIZONTAL
+  ESPO_VERTICAL,
+  ESPO_HORIZONTAL
 };
 
 class SplitterPanel : public Window
 {
 public:
-	SplitterPanel();
+  SplitterPanel();
 
-	virtual void init(HINSTANCE hInst, HWND parent);
-	virtual void destroy() {}
+  virtual void init(HINSTANCE hInst, HWND parent);
+  virtual void destroy() {}
 
-	virtual ESplitterPanelOrientation GetSplitterPanelOrientation() { return Orientation; }
-	virtual void SetSplitterPanelOrientation( ESplitterPanelOrientation NewOrientation );
-	Window * pChildWin1;
-	Window * pChildWin2;
+  virtual ESplitterPanelOrientation GetSplitterPanelOrientation() { return Orientation; }
+  virtual void SetSplitterPanelOrientation( ESplitterPanelOrientation NewOrientation );
+  Window * pChildWin1;
+  Window * pChildWin2;
 
 private :
-	ESplitterPanelOrientation Orientation;
-	FLOAT SplitterBarPositionPercent;
-	INT SplitterBarThickness;
-	BOOL IsDraggingSplitter;
-	HCURSOR hSplitterCursorUpDown;
-	HCURSOR hSplitterCursorLeftRight;
-	HBRUSH hSplitterBrush;
-	HPEN hSplitterPen;
-	// For passing through drag list box messages
-	UINT DragListMessage;
+  ESplitterPanelOrientation Orientation;
+  FLOAT SplitterBarPositionPercent;
+  INT SplitterBarThickness;
+  BOOL IsDraggingSplitter;
+  HCURSOR hSplitterCursorUpDown;
+  HCURSOR hSplitterCursorLeftRight;
+  HBRUSH hSplitterBrush;
+  HPEN hSplitterPen;
+  // For passing through drag list box messages
+  UINT DragListMessage;
 
-	void GetSplitterBarRect( RECT &SplitterPosRect );
-	void GetPanel1Rect( RECT &Panel1Rect );
-	void GetPanel2Rect( RECT &Panel2Rect );
-	void ResizeChildren();
-	void SetCurrentCursor();
+  void GetSplitterBarRect( RECT &SplitterPosRect );
+  void GetPanel1Rect( RECT &Panel1Rect );
+  void GetPanel2Rect( RECT &Panel2Rect );
+  void ResizeChildren();
+  void SetCurrentCursor();
 
-	LRESULT CALLBACK SplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  LRESULT CALLBACK SplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 
-	static LRESULT CALLBACK StaticSplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  static LRESULT CALLBACK StaticSplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 };
 
 #endif //SPLITTER_PANEL_H

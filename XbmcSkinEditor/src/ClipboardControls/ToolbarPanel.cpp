@@ -36,191 +36,191 @@ ToolbarPanel::ToolbarPanel()
 
 void ToolbarPanel::init( HINSTANCE hInst, HWND parent )
 {
-	Window::init( hInst, parent );
+  Window::init( hInst, parent );
 
-	WNDCLASS wndclass;
-	ZeroMemory( &wndclass, sizeof(WNDCLASS) );
-	wndclass.style = CS_HREDRAW | CS_VREDRAW;
-	wndclass.lpfnWndProc = StaticToolbarPanelProc;
-	wndclass.hInstance = _hInst;
-	wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
-	wndclass.hbrBackground = (HBRUSH) (COLOR_WINDOW+1);
-	wndclass.lpszClassName = TOOLBAR_PANEL_CLASS_NAME;
+  WNDCLASS wndclass;
+  ZeroMemory( &wndclass, sizeof(WNDCLASS) );
+  wndclass.style = CS_HREDRAW | CS_VREDRAW;
+  wndclass.lpfnWndProc = StaticToolbarPanelProc;
+  wndclass.hInstance = _hInst;
+  wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
+  wndclass.hbrBackground = (HBRUSH) (COLOR_WINDOW+1);
+  wndclass.lpszClassName = TOOLBAR_PANEL_CLASS_NAME;
 
-	if ( !::RegisterClass( &wndclass ) )
-	{
-		DWORD dwErr = GetLastError();
-		// Check if class is already registered, if not then we have some other errors
-		if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
-		{
-			TCHAR errText[512] = TEXT("");
-			wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TOOLBAR_PANEL_CLASS_NAME, dwErr );
-			::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
-			return;
-		}
-	}
+  if ( !::RegisterClass( &wndclass ) )
+  {
+    DWORD dwErr = GetLastError();
+    // Check if class is already registered, if not then we have some other errors
+    if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
+    {
+      TCHAR errText[512] = TEXT("");
+      wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TOOLBAR_PANEL_CLASS_NAME, dwErr );
+      ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+      return;
+    }
+  }
 
-	_hSelf = CreateWindow( TOOLBAR_PANEL_CLASS_NAME, 0, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, _hParent, 0, _hInst, 0 );
-	if ( !_hSelf )
-	{
-		DWORD dwErr = GetLastError();
-		TCHAR errText[512] = TEXT("");
-		wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TOOLBAR_PANEL_CLASS_NAME, dwErr );
-		::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
-		return;
-	}
+  _hSelf = CreateWindow( TOOLBAR_PANEL_CLASS_NAME, 0, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, _hParent, 0, _hInst, 0 );
+  if ( !_hSelf )
+  {
+    DWORD dwErr = GetLastError();
+    TCHAR errText[512] = TEXT("");
+    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TOOLBAR_PANEL_CLASS_NAME, dwErr );
+    ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+    return;
+  }
 
-	// associate the URL structure with the static control
-	::SetWindowLongPtr( _hSelf, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this) );
+  // associate the URL structure with the static control
+  ::SetWindowLongPtr( _hSelf, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this) );
 
-	hChildWindowPen = ::CreatePen( PS_SOLID, 0, RGB(130,135,144) );
-	//hChildWindowPen = ::CreatePen( PS_SOLID, 0, ::GetSysColor(COLOR_WINDOWFRAME) );
+  hChildWindowPen = ::CreatePen( PS_SOLID, 0, RGB(130,135,144) );
+  //hChildWindowPen = ::CreatePen( PS_SOLID, 0, ::GetSysColor(COLOR_WINDOWFRAME) );
 
-	DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
+  DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
 }
 
 void ToolbarPanel::SetToolbar( ToolBar * pNewToolBar )
 {
-	pToolbar = pNewToolBar;
-	Rebar.init( _hInst, _hSelf );
-	//Rebar.display();
-	pToolbar->addToRebar( &Rebar );
+  pToolbar = pNewToolBar;
+  Rebar.init( _hInst, _hSelf );
+  //Rebar.display();
+  pToolbar->addToRebar( &Rebar );
 }
 
 
 void ToolbarPanel::SetChildWindow( Window * pNewChildWin )
 {
-	pChildWin = pNewChildWin;
+  pChildWin = pNewChildWin;
 }
 
 
 Window * ToolbarPanel::GetChildWindow()
 {
-	return pChildWin;
+  return pChildWin;
 }
 
 
 void ToolbarPanel::GetPanelRect( RECT &PanelRect )
 {
-	getClientRect( PanelRect );
+  getClientRect( PanelRect );
 }
 
 
 void ToolbarPanel::GetToolbarRect( RECT &ToolbarRect )
 {
-	if ( pToolbar )
-	{
-		GetPanelRect( ToolbarRect );
-		if ( ToolbarRect.bottom - ToolbarRect.top > 26 )
-		{
-			ToolbarRect.bottom = ToolbarRect.top + 26;
-		}
-	}
-	else
-	{
-		::ZeroMemory( &ToolbarRect, sizeof( RECT) );
-	}
+  if ( pToolbar )
+  {
+    GetPanelRect( ToolbarRect );
+    if ( ToolbarRect.bottom - ToolbarRect.top > 26 )
+    {
+      ToolbarRect.bottom = ToolbarRect.top + 26;
+    }
+  }
+  else
+  {
+    ::ZeroMemory( &ToolbarRect, sizeof( RECT) );
+  }
 }
 
 
 void ToolbarPanel::GetChildWinRect( RECT &ChildWinRect )
 {
-	GetPanelRect( ChildWinRect );
-	if ( pToolbar )
-	{
-		ChildWinRect.top += 24;
-	}
+  GetPanelRect( ChildWinRect );
+  if ( pToolbar )
+  {
+    ChildWinRect.top += 24;
+  }
 }
 
 
 void ToolbarPanel::ResizeChildren()
 {
-	if ( pToolbar )
-	{
-		RECT ToolbarRect;
-		GetToolbarRect( ToolbarRect );
-		pToolbar->reSizeTo( ToolbarRect );
-		Rebar.reSizeTo( ToolbarRect );
-	}
-	if ( pChildWin )
-	{
-		RECT ChildWinRect;
-		GetChildWinRect( ChildWinRect );
-		// Shrink child region by one pixel to allow for drawing the border around it
-		ChildWinRect.left += 1;
-		ChildWinRect.right -= 1;
-		ChildWinRect.top += 1;
-		ChildWinRect.bottom -= 1;
-		pChildWin->reSizeTo( ChildWinRect );
-	}
+  if ( pToolbar )
+  {
+    RECT ToolbarRect;
+    GetToolbarRect( ToolbarRect );
+    pToolbar->reSizeTo( ToolbarRect );
+    Rebar.reSizeTo( ToolbarRect );
+  }
+  if ( pChildWin )
+  {
+    RECT ChildWinRect;
+    GetChildWinRect( ChildWinRect );
+    // Shrink child region by one pixel to allow for drawing the border around it
+    ChildWinRect.left += 1;
+    ChildWinRect.right -= 1;
+    ChildWinRect.top += 1;
+    ChildWinRect.bottom -= 1;
+    pChildWin->reSizeTo( ChildWinRect );
+  }
 }
 
 
 LRESULT ToolbarPanel::ToolbarPanelProc( HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam )
 {
-	if ( Message == DragListMessage )
-	{
-		// Being a container window which doesn't care about child window control notifications,
-		// forward the child window controls' notifications to the parent window for processing
-		return ::SendMessage( _hParent, Message, wParam, lParam );
-	}
+  if ( Message == DragListMessage )
+  {
+    // Being a container window which doesn't care about child window control notifications,
+    // forward the child window controls' notifications to the parent window for processing
+    return ::SendMessage( _hParent, Message, wParam, lParam );
+  }
 
-	switch ( Message )
-	{
-	case WM_MOVE:
-	case WM_SIZE:
-		ResizeChildren();
-		return 0;
+  switch ( Message )
+  {
+  case WM_MOVE:
+  case WM_SIZE:
+    ResizeChildren();
+    return 0;
 
-	case WM_COMMAND:
-	case WM_NOTIFY:
-		// Being a container window which doesn't care about child window control notifications,
-		// forward the child window controls' notifications to the parent window for processing
-		return ::SendMessage( _hParent, Message, wParam, lParam );
+  case WM_COMMAND:
+  case WM_NOTIFY:
+    // Being a container window which doesn't care about child window control notifications,
+    // forward the child window controls' notifications to the parent window for processing
+    return ::SendMessage( _hParent, Message, wParam, lParam );
 
-	case WM_PAINT:
-		{
-			HDC hdc;
-			PAINTSTRUCT ps;
-			HBRUSH hOldBrush;
-			HPEN hOldPen;
-			RECT ChildRect;
+  case WM_PAINT:
+    {
+      HDC hdc;
+      PAINTSTRUCT ps;
+      HBRUSH hOldBrush;
+      HPEN hOldPen;
+      RECT ChildRect;
 
-			GetChildWinRect( ChildRect );
+      GetChildWinRect( ChildRect );
 
-			hdc = ::BeginPaint( _hSelf, &ps );
+      hdc = ::BeginPaint( _hSelf, &ps );
 
-			hOldBrush = (HBRUSH)::SelectObject( hdc, ::GetStockObject( NULL_BRUSH ) );
-			hOldPen = (HPEN)::SelectObject( hdc, hChildWindowPen );
-			Rectangle( hdc, ChildRect.left, ChildRect.top, ChildRect.right, ChildRect.bottom );
+      hOldBrush = (HBRUSH)::SelectObject( hdc, ::GetStockObject( NULL_BRUSH ) );
+      hOldPen = (HPEN)::SelectObject( hdc, hChildWindowPen );
+      Rectangle( hdc, ChildRect.left, ChildRect.top, ChildRect.right, ChildRect.bottom );
 
-			// clean up
-			::SelectObject( hdc, hOldBrush );
-			::SelectObject( hdc, hOldPen );
+      // clean up
+      ::SelectObject( hdc, hOldBrush );
+      ::SelectObject( hdc, hOldPen );
 
-			::EndPaint( _hSelf, &ps );
+      ::EndPaint( _hSelf, &ps );
 
-			if ( pToolbar )
-			{
-				pToolbar->redraw();
-			}
-			return 0;
-		}
+      if ( pToolbar )
+      {
+        pToolbar->redraw();
+      }
+      return 0;
+    }
 
-	case WM_DESTROY:
-		::DeletePen( hChildWindowPen );
-		return 0;
-	}
-	return ::DefWindowProc( hwnd, Message, wParam, lParam );
+  case WM_DESTROY:
+    ::DeletePen( hChildWindowPen );
+    return 0;
+  }
+  return ::DefWindowProc( hwnd, Message, wParam, lParam );
 }
 
 
 LRESULT CALLBACK ToolbarPanel::StaticToolbarPanelProc( HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam )
 {
-	ToolbarPanel * pToolbarPanel = reinterpret_cast<ToolbarPanel *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
-	if ( !pToolbarPanel )
-	{
-		return ::DefWindowProc( hwnd, Message, wParam, lParam );
-	}
-	return pToolbarPanel->ToolbarPanelProc( hwnd, Message, wParam, lParam );
+  ToolbarPanel * pToolbarPanel = reinterpret_cast<ToolbarPanel *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
+  if ( !pToolbarPanel )
+  {
+    return ::DefWindowProc( hwnd, Message, wParam, lParam );
+  }
+  return pToolbarPanel->ToolbarPanelProc( hwnd, Message, wParam, lParam );
 }

@@ -29,41 +29,41 @@ void AboutDialog::doDialog()
     if (!isCreated())
         create(IDD_ABOUT_DLG);
 
-	goToCenter();
+  goToCenter();
 }
 
 
 BOOL CALLBACK AboutDialog::run_dlgProc( HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam )
 {
-	switch (Message)
-	{
+  switch (Message)
+  {
         case WM_INITDIALOG:
-		{
+    {
             _emailLink.init( _hInst, _hSelf );
             _emailLink.create( ::GetDlgItem(_hSelf, IDC_EMAIL_LINK), TEXT("mailto:curtis_20_b@hotmail.com") );
 
             _urlNppPlugins.init( _hInst, _hSelf );
             _urlNppPlugins.create( ::GetDlgItem(_hSelf, IDC_NPP_PLUGINS_URL), TEXT("http://www.xbmc.org") );
 
-			// Change language
-			NLChangeDialog( _hInst, _nppData._nppHandle, _hSelf, TEXT("About") );
+      // Change language
+      NLChangeDialog( _hInst, _nppData._nppHandle, _hSelf, TEXT("About") );
 
-			return TRUE;
-		}
-		case WM_COMMAND:
-		{
-			switch (wParam)
-			{
-				case IDOK:
-				case IDCANCEL:
-					display(FALSE);
-					return TRUE;
+      return TRUE;
+    }
+    case WM_COMMAND:
+    {
+      switch (wParam)
+      {
+        case IDOK:
+        case IDCANCEL:
+          display(FALSE);
+          return TRUE;
 
-				default :
-					break;
-			}
-		}
-	}
-	return FALSE;
+        default :
+          break;
+      }
+    }
+  }
+  return FALSE;
 }
 

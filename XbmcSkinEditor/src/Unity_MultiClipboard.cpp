@@ -78,16 +78,16 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 #include "SciSubClassWrp.h"
 #include "StaticDialog.h"
 #include "SysMsg.h"
-	// Get rid of ugly compiler warning in SysMsg.h/cpp:
-	//   "The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name"
-	#ifdef generic_stricmp
-		#undef generic_stricmp
-		#ifdef UNICODE
-			#define generic_stricmp _wcsicmp
-		#else
-			#define generic_stricmp _stricmp
-		#endif
-	#endif
+  // Get rid of ugly compiler warning in SysMsg.h/cpp:
+  //   "The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name"
+  #ifdef generic_stricmp
+    #undef generic_stricmp
+    #ifdef UNICODE
+      #define generic_stricmp _wcsicmp
+    #else
+      #define generic_stricmp _stricmp
+    #endif
+  #endif
 #include "ToolBar.h"
 #include "URLCtrl.h"
 #include "Window.h"
@@ -124,7 +124,7 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 // ClipboardSettings headers
 #include "MultiClipboardSettingsDialog.h"
 
-#endif	// UNITY_BUILD_SINGLE_INCLUDE
+#endif  // UNITY_BUILD_SINGLE_INCLUDE
 
 
 // AboutDlg
@@ -163,4 +163,4 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 #include "MultiClipboard.cpp"
 #include "MultiClipboardProxy.cpp"
 
-#endif	// UNITY_BUILD_MULTICLIPBOARD
+#endif  // UNITY_BUILD_MULTICLIPBOARD

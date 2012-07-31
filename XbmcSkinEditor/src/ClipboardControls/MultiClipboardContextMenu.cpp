@@ -33,59 +33,59 @@ http://www.mvps.org/user32/rc/FakeMenu.zip
 
 void MultiClipboardContextMenu::init( HINSTANCE hInst, HWND parent )
 {
-	hNewFont = 0;
+  hNewFont = 0;
 
-	Window::init( hInst, parent );
+  Window::init( hInst, parent );
 
-	WNDCLASS wndclass;
-	ZeroMemory( &wndclass, sizeof(WNDCLASS) );
-	wndclass.lpfnWndProc = StaticContextMenuProc;
-	wndclass.hInstance = hInst;
-	wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
-	wndclass.hbrBackground = (HBRUSH) (COLOR_WINDOW+1);
-	wndclass.lpszClassName = CONTEXT_MENU_CLASS_NAME;
+  WNDCLASS wndclass;
+  ZeroMemory( &wndclass, sizeof(WNDCLASS) );
+  wndclass.lpfnWndProc = StaticContextMenuProc;
+  wndclass.hInstance = hInst;
+  wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
+  wndclass.hbrBackground = (HBRUSH) (COLOR_WINDOW+1);
+  wndclass.lpszClassName = CONTEXT_MENU_CLASS_NAME;
 
-	if ( !::RegisterClass( &wndclass ) )
-	{
-		DWORD dwErr = GetLastError();
-		// Check if class is already registered, if not then we have some other errors
-		if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
-		{
-			TCHAR errText[512] = TEXT("");
-			wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), CONTEXT_MENU_CLASS_NAME, dwErr );
-			::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
-			return;
-		}
-	}
+  if ( !::RegisterClass( &wndclass ) )
+  {
+    DWORD dwErr = GetLastError();
+    // Check if class is already registered, if not then we have some other errors
+    if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
+    {
+      TCHAR errText[512] = TEXT("");
+      wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), CONTEXT_MENU_CLASS_NAME, dwErr );
+      ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+      return;
+    }
+  }
 
-	_hSelf = CreateWindow( TEXT("MultiClipboardContextMenu"), NULL,
-		WS_CHILD | WS_VISIBLE | WS_BORDER ,
-		0, 0, 1, 1, parent, 0, hInst, NULL );
+  _hSelf = CreateWindow( TEXT("MultiClipboardContextMenu"), NULL,
+    WS_CHILD | WS_VISIBLE | WS_BORDER ,
+    0, 0, 1, 1, parent, 0, hInst, NULL );
 
-	if ( !_hSelf )
-	{
-		return;
-	}
+  if ( !_hSelf )
+  {
+    return;
+  }
 
-	hNewFont = (HFONT)::SendMessage( _hSelf, WM_GETFONT, 0, 0 );
-	if ( hNewFont == NULL )
-	{
-		hNewFont = (HFONT)::GetStockObject( SYSTEM_FONT );
-	}
-	LOGFONT lf;
-	::GetObject( hNewFont, sizeof( lf ), &lf );
-	lf.lfHeight = 16;
-	lf.lfWidth = 0;
-	lf.lfWeight = FW_NORMAL;
-	lstrcpy( lf.lfFaceName, TEXT("Courier New") );
-	hNewFont = ::CreateFontIndirect( &lf );
-	::SendMessage( _hSelf, WM_SETFONT, (WPARAM)hNewFont, 1 );
+  hNewFont = (HFONT)::SendMessage( _hSelf, WM_GETFONT, 0, 0 );
+  if ( hNewFont == NULL )
+  {
+    hNewFont = (HFONT)::GetStockObject( SYSTEM_FONT );
+  }
+  LOGFONT lf;
+  ::GetObject( hNewFont, sizeof( lf ), &lf );
+  lf.lfHeight = 16;
+  lf.lfWidth = 0;
+  lf.lfWeight = FW_NORMAL;
+  lstrcpy( lf.lfFaceName, TEXT("Courier New") );
+  hNewFont = ::CreateFontIndirect( &lf );
+  ::SendMessage( _hSelf, WM_SETFONT, (WPARAM)hNewFont, 1 );
 }
 
 
 void MultiClipboardContextMenu::destroy()
 {
-	::DeleteObject( hNewFont );
+  ::DeleteObject( hNewFont );
 }
 
 
@@ -101,16 +101,16 @@ void MultiClipboardContextMenu::AddItem( std::wstring item )
 
 LRESULT CALLBACK MultiClipboardContextMenu::ContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	return ::DefWindowProc( hwnd, message, wParam, lParam );
+  return ::DefWindowProc( hwnd, message, wParam, lParam );
 }
 
 
 LRESULT CALLBACK MultiClipboardContextMenu::StaticContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	MultiClipboardContextMenu * pContextMenu = reinterpret_cast<MultiClipboardContextMenu *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
-	if ( !pContextMenu )
-	{
-		return ::DefWindowProc( hwnd, message, wParam, lParam );
-	}
-	return pContextMenu->ContextMenuProc( hwnd, message, wParam, lParam );
+  MultiClipboardContextMenu * pContextMenu = reinterpret_cast<MultiClipboardContextMenu *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
+  if ( !pContextMenu )
+  {
+    return ::DefWindowProc( hwnd, message, wParam, lParam );
+  }
+  return pContextMenu->ContextMenuProc( hwnd, message, wParam, lParam );
 }

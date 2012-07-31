@@ -25,40 +25,40 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 void IModel::AddController( IController * pController )
 {
-	ControllersList::iterator iter = FindController( pController );
-	if ( iter != Controllers.end() )
-	{
-		return;
-	}
+  ControllersList::iterator iter = FindController( pController );
+  if ( iter != Controllers.end() )
+  {
+    return;
+  }
 
-	Controllers.push_back( pController );
-	pController->SetModel( this );
+  Controllers.push_back( pController );
+  pController->SetModel( this );
 }
 
 
 void IModel::RemoveController( IController * pController )
 {
-	ControllersList::iterator iter = FindController( pController );
-	if ( iter == Controllers.end() )
-	{
-		return;
-	}
+  ControllersList::iterator iter = FindController( pController );
+  if ( iter == Controllers.end() )
+  {
+    return;
+  }
 
-	Controllers.erase( iter );
-	pController->SetModel( 0 );
+  Controllers.erase( iter );
+  pController->SetModel( 0 );
 }
 
 
 void IModel::NotifyControllers()
 {
-	for ( ControllersList::iterator iter = Controllers.begin(); iter != Controllers.end(); ++iter )
-	{
-		(*iter)->OnModelModified();
-	}
+  for ( ControllersList::iterator iter = Controllers.begin(); iter != Controllers.end(); ++iter )
+  {
+    (*iter)->OnModelModified();
+  }
 }
 
 
 IModel::ControllersList::iterator IModel::FindController( IController * pController )
 {
-	return std::find( Controllers.begin(), Controllers.end(), pController );
+  return std::find( Controllers.begin(), Controllers.end(), pController );
 }

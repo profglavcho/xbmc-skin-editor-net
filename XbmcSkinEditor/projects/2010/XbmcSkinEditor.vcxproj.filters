@@ -91,9 +91,6 @@
     <ClCompile Include="..\..\src\xbmc\XbmcImagePreviewer.cpp">
       <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\xbmc\PictureCtrl.cpp">
-      <Filter>Source Files\Xbmc</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\xbmc\PJAImage.cpp">
       <Filter>Source Files\Xbmc</Filter>
     </ClCompile>
@@ -242,9 +239,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\xbmc\XbmcImagePreviewer.h">
       <Filter>Source Files\Xbmc\Dialog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\PictureCtrl.h">
-      <Filter>Source Files\Xbmc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\MultiClipboard.h">
       <Filter>Header Files</Filter>

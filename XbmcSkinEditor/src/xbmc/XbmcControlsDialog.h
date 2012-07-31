@@ -31,42 +31,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 // ID for dockable window
-#define	MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0
+#define  MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0
 
 
 class CXbmcControlsDialog : public DockingDlgInterface, public IController
 {
 public:
-	CXbmcControlsDialog();
-	~CXbmcControlsDialog();
-	// Not inherited from DockingDlgInterface
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
-	virtual void Shutdown();
-	// Inherited from DockingDlgInterface
-	virtual void destroy() {}
+  CXbmcControlsDialog();
+  ~CXbmcControlsDialog();
+  // Not inherited from DockingDlgInterface
+  virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+  virtual void Shutdown();
+  // Inherited from DockingDlgInterface
+  virtual void destroy() {}
 
-	void ShowDialog( bool Show = TRUE );
+  void ShowDialog( bool Show = TRUE );
   void SetCurrentControl(CStdString control);
 
-	virtual void OnModelModified();
+  virtual void OnModelModified();
   void OnNotepadChange();
   void ResetCurrentControl() { m_pStrCurrent = L""; }
 protected:
-	// Overload DockingDlgInterface's dialog procedure
-	virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );
+  // Overload DockingDlgInterface's dialog procedure
+  virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );
 
-	// Initialise dialog here
-	void InitialiseDialog();
+  // Initialise dialog here
+  void InitialiseDialog();
 
-	// Toolbar commands
-	void tb_cmd(UINT message);
+  // Toolbar commands
+  void tb_cmd(UINT message);
 private:
-	tTbData TBData;
-	bool IsShown;
+  tTbData TBData;
+  bool IsShown;
   bool IsLoadingControls;
-	UINT DragListMessage;
-	MultiClipOLEDataObject * pDataObject;
-	MultiClipOLEDropSource * pDropSource;
+  UINT DragListMessage;
+  MultiClipOLEDataObject * pDataObject;
+  MultiClipOLEDropSource * pDropSource;
 
   CStdString m_pStrCurrent;
   CStdString m_pStrCurrentControl;
@@ -76,21 +76,21 @@ private:
   CXbmcControlsFactory* m_pXbmcControlsFactory;
   CXBMCComboBox m_pComboBox;
   CDuoTextBoxContainer m_pDuoTextBox;
-	void ShowXbmcControls();
-	void OnListSelectionChanged();
-	void OnListDoubleClicked();
+  void ShowXbmcControls();
+  void OnListSelectionChanged();
+  void OnListDoubleClicked();
   void OnEditBoxFocus();
-	void OnEditBoxUpdated();
+  void OnEditBoxUpdated();
 
 
-	void PasteSelectedItem();
-	void PasteAllItems();
-	void DeleteSelectedItem();
-	void DeleteAllItems();
-	void CopySelectedItemToClipboard();
+  void PasteSelectedItem();
+  void PasteAllItems();
+  void DeleteSelectedItem();
+  void DeleteAllItems();
+  void CopySelectedItemToClipboard();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
-	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
+  virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+  virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 };
 
 

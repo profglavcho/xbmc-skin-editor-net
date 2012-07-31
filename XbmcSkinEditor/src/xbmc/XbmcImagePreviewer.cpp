@@ -51,7 +51,7 @@ XbmcImagePreviewer::~XbmcImagePreviewer()
 
 void XbmcImagePreviewer::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
 {
-	DockingDlgInterface::init( g_hInstance, g_NppData._nppHandle );
+  DockingDlgInterface::init( g_hInstance, g_NppData._nppHandle );
   IController::Init( pNewModel, pClipboardProxy, pSettings );
 }
 
@@ -63,95 +63,95 @@ void XbmcImagePreviewer::Shutdown()
 
 void XbmcImagePreviewer::ShowDialog( bool Show )
 {
-	if ( !isCreated() )
-	{
-		create( &TBData );
+  if ( !isCreated() )
+  {
+    create( &TBData );
 
-		// define the default docking behaviour
-		if ( !NLGetText( g_hInstance, g_NppData._nppHandle, TEXT("Xbmc Image Previewer"), TBData.pszName, MAX_PATH) )
-		{
-			lstrcpy( TBData.pszName, TEXT("Xbmc Image Previewer") );
-		}
-		TBData.uMask			= DWS_DF_CONT_LEFT | DWS_ICONTAB;
-		TBData.hIconTab		= (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MULTICLIPBOARD), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
-		TBData.pszModuleName	= getPluginFileName();
-		TBData.dlgID			= MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX;
-		::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
-	}
+    // define the default docking behaviour
+    if ( !NLGetText( g_hInstance, g_NppData._nppHandle, TEXT("Xbmc Image Previewer"), TBData.pszName, MAX_PATH) )
+    {
+      lstrcpy( TBData.pszName, TEXT("Xbmc Image Previewer") );
+    }
+    TBData.uMask      = DWS_DF_CONT_LEFT | DWS_ICONTAB;
+    TBData.hIconTab    = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MULTICLIPBOARD), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
+    TBData.pszModuleName  = getPluginFileName();
+    TBData.dlgID      = MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX;
+    ::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
+  }
 
-	display( Show );
-	IsShown = Show;
+  display( Show );
+  IsShown = Show;
 }
 
 
 BOOL CALLBACK XbmcImagePreviewer::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp )
 {
 
-	switch ( msg )
-	{
-	case WM_INITDIALOG:
-		InitialiseDialog();
-		break;
+  switch ( msg )
+  {
+  case WM_INITDIALOG:
+    InitialiseDialog();
+    break;
   case WM_NCHITTEST:
     ShowImage();
     break;
-	case WM_SIZE:
+  case WM_SIZE:
     {
       m_pCurrentLine = -1;
       ShowImage();
     }
-	case WM_MOVE:
-		{
-			RECT rc;
-			getClientRect(rc);
+  case WM_MOVE:
+    {
+      RECT rc;
+      getClientRect(rc);
      
-			break;
-		}
+      break;
+    }
 
-	case WM_NOTIFY:
-		{
-			LPNMHDR nmhdr = (LPNMHDR) lp;
-			if ( nmhdr->hwndFrom == _hParent )
-			{
-				switch ( LOWORD( nmhdr->code ) )
-				{
-				case DMN_FLOAT:
-				case DMN_DOCK:
-					{
-						if ( LOWORD( nmhdr->code ) == DMN_FLOAT )
-						{
-							_isFloating = true;
-						}
-						else
-						{
-							_isFloating = false;
-							_iDockedPos = HIWORD( nmhdr->code );
-						}
-						break;
-					}
-				default:
-					// Parse all other notifications to docking dialog interface
-					return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
-				}
-			}
-			else
-			{
-				// Parse all other notifications to docking dialog interface
-				return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
-			}
-			break;
-		}
+  case WM_NOTIFY:
+    {
+      LPNMHDR nmhdr = (LPNMHDR) lp;
+      if ( nmhdr->hwndFrom == _hParent )
+      {
+        switch ( LOWORD( nmhdr->code ) )
+        {
+        case DMN_FLOAT:
+        case DMN_DOCK:
+          {
+            if ( LOWORD( nmhdr->code ) == DMN_FLOAT )
+            {
+              _isFloating = true;
+            }
+            else
+            {
+              _isFloating = false;
+              _iDockedPos = HIWORD( nmhdr->code );
+            }
+            break;
+          }
+        default:
+          // Parse all other notifications to docking dialog interface
+          return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+        }
+      }
+      else
+      {
+        // Parse all other notifications to docking dialog interface
+        return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+      }
+      break;
+    }
 
-	case WM_DESTROY:
-		// Destroy icon of tab
-		::DestroyIcon( TBData.hIconTab );
-		break;
+  case WM_DESTROY:
+    // Destroy icon of tab
+    ::DestroyIcon( TBData.hIconTab );
+    break;
 
-	default:
-		return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
-	}
+  default:
+    return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+  }
 
-	return FALSE;
+  return FALSE;
 }
 
 
@@ -162,7 +162,7 @@ void XbmcImagePreviewer::InitialiseDialog()
 
 void XbmcImagePreviewer::OnModelModified()
 {
-	
+  
 }
 
 std::wstring A_to_W (const char* p)
@@ -191,7 +191,7 @@ void XbmcImagePreviewer::ClearWindow()
   {
     if (m_pPicture.ColorBits() == 32)
       m_pPicture.ApplyEffect( FCEffectPremultipleAlpha());
-    RECT		rcWindow;
+    RECT    rcWindow;
     HDC hdc;
     ::GetClientRect(getHSelf(), &rcWindow);
     SIZE   img_size = {m_pPicture.Width(), m_pPicture.Height()} ;
@@ -211,10 +211,10 @@ void XbmcImagePreviewer::ClearWindow()
 
 void XbmcImagePreviewer::ShowImage()
 {
-	if ( !IsShown && IsLoading )
-	{
-		return;
-	}
+  if ( !IsShown && IsLoading )
+  {
+    return;
+  }
   
   IsLoading=true;
   TCHAR currentmsg[MAX_PATH];
@@ -230,7 +230,7 @@ void XbmcImagePreviewer::ShowImage()
   }
   std::wstring strCurrentLine = currentmsg;
   INT line_start = (INT)g_Scintilla.ScintillaMsg(SCI_POSITIONFROMLINE, current_line);
-	INT line_end = (INT)g_Scintilla.ScintillaMsg(SCI_GETLINEENDPOSITION, current_line);
+  INT line_end = (INT)g_Scintilla.ScintillaMsg(SCI_GETLINEENDPOSITION, current_line);
   int buffer_size = line_end-line_start+1;
   LPSTR strLine = (LPSTR) new CHAR[buffer_size];
 
@@ -284,7 +284,7 @@ void XbmcImagePreviewer::ShowImage()
       
       if (m_pPicture.ColorBits() == 32)
         m_pPicture.ApplyEffect( FCEffectPremultipleAlpha());
-      RECT		rcWindow;
+      RECT    rcWindow;
       HDC hdc;
       ::GetClientRect(getHSelf(), &rcWindow);
       SIZE   img_size = {m_pPicture.Width(), m_pPicture.Height()} ;
@@ -305,12 +305,12 @@ void XbmcImagePreviewer::ShowImage()
 
 void XbmcImagePreviewer::OnObserverAdded( LoonySettingsManager * SettingsManager )
 {
-	SettingsObserver::OnObserverAdded( SettingsManager );
+  SettingsObserver::OnObserverAdded( SettingsManager );
 }
 
 
 void XbmcImagePreviewer::OnSettingsChanged( const stringType & GroupName, const stringType & SettingName )
 {
-	if ( GroupName != SETTINGS_GROUP_XBMC )
-		return;
+  if ( GroupName != SETTINGS_GROUP_XBMC )
+    return;
 }

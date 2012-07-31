@@ -25,73 +25,73 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 void MultiClipboardListbox::init(HINSTANCE hInst, HWND parent)
 {
-	hNewFont = 0;
+  hNewFont = 0;
 
-	Window::init( hInst, parent );
+  Window::init( hInst, parent );
 
-	_hSelf = CreateWindow( TEXT("listbox"), NULL,
-		WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_STANDARD ^ LBS_SORT | LBS_NOINTEGRALHEIGHT,
-		0, 0, 1, 1, parent, 0, hInst, NULL );
+  _hSelf = CreateWindow( TEXT("listbox"), NULL,
+    WS_CHILD | WS_VISIBLE | WS_BORDER | LBS_STANDARD ^ LBS_SORT | LBS_NOINTEGRALHEIGHT,
+    0, 0, 1, 1, parent, 0, hInst, NULL );
 
-	if ( !_hSelf )
-	{
-		return;
-	}
+  if ( !_hSelf )
+  {
+    return;
+  }
 
-	// subclass the listbox control
-	oldWndProc = (WNDPROC)::SetWindowLong( _hSelf, GWL_WNDPROC, (LONG)StaticListboxProc );
+  // subclass the listbox control
+  oldWndProc = (WNDPROC)::SetWindowLong( _hSelf, GWL_WNDPROC, (LONG)StaticListboxProc );
 
-	// associate this class instance with the listbox instance
-	::SetWindowLongPtr( _hSelf, GWL_USERDATA, (LONG)this );
+  // associate this class instance with the listbox instance
+  ::SetWindowLongPtr( _hSelf, GWL_USERDATA, (LONG)this );
 
-	// Make items draggable
-	MakeDragList( _hSelf );
+  // Make items draggable
+  MakeDragList( _hSelf );
 
-	hNewFont = (HFONT)::SendMessage( _hSelf, WM_GETFONT, 0, 0 );
-	if ( hNewFont == NULL )
-	{
-		hNewFont = (HFONT)::GetStockObject( SYSTEM_FONT );
-	}
-	LOGFONT lf;
-	::GetObject( hNewFont, sizeof( lf ), &lf );
-	lf.lfHeight = 15;
-	lf.lfWidth = 0;
-	lf.lfWeight = FW_NORMAL;
-	lstrcpy( lf.lfFaceName, TEXT("Courier New") );
-	hNewFont = ::CreateFontIndirect( &lf );
-	::SendMessage( _hSelf, WM_SETFONT, (WPARAM)hNewFont, 1 );
+  hNewFont = (HFONT)::SendMessage( _hSelf, WM_GETFONT, 0, 0 );
+  if ( hNewFont == NULL )
+  {
+    hNewFont = (HFONT)::GetStockObject( SYSTEM_FONT );
+  }
+  LOGFONT lf;
+  ::GetObject( hNewFont, sizeof( lf ), &lf );
+  lf.lfHeight = 15;
+  lf.lfWidth = 0;
+  lf.lfWeight = FW_NORMAL;
+  lstrcpy( lf.lfFaceName, TEXT("Courier New") );
+  hNewFont = ::CreateFontIndirect( &lf );
+  ::SendMessage( _hSelf, WM_SETFONT, (WPARAM)hNewFont, 1 );
 }
 
 
 void MultiClipboardListbox::destroy()
 {
-	::DeleteObject( hNewFont );
+  ::DeleteObject( hNewFont );
 }
 
 
 void MultiClipboardListbox::AddItem( std::wstring item )
 {
   lstText.push_back(item);
-	::SendMessage( _hSelf, LB_ADDSTRING, 0, (LPARAM)item.c_str() );
+  ::SendMessage( _hSelf, LB_ADDSTRING, 0, (LPARAM)item.c_str() );
 }
 
 
 void MultiClipboardListbox::ClearAll()
 {
   lstText.clear();
-	::SendMessage( _hSelf, LB_RESETCONTENT, 0, 0 );
+  ::SendMessage( _hSelf, LB_RESETCONTENT, 0, 0 );
 }
 
 
 INT MultiClipboardListbox::GetItemCount()
 {
-	return (INT)::SendMessage( _hSelf, LB_GETCOUNT, 0, 0 );
+  return (INT)::SendMessage( _hSelf, LB_GETCOUNT, 0, 0 );
 }
 
 
 INT MultiClipboardListbox::GetCurrentSelectionIndex()
 {
-	return (INT)::SendMessage( _hSelf, LB_GETCURSEL, 0, 0 );
+  return (INT)::SendMessage( _hSelf, LB_GETCURSEL, 0, 0 );
 }
 
 
@@ -108,44 +108,44 @@ std::wstring MultiClipboardListbox::GetCurrentSelectionText()
 
 void MultiClipboardListbox::SetCurrentSelectedItem( INT NewSelectionIndex, BOOL bStrictSelect )
 {
-	if ( bStrictSelect )
-	{
-		::SendMessage( _hSelf, LB_SETCURSEL, NewSelectionIndex, 0 );
-	}
-	else
-	{
-		INT ItemCount = GetItemCount();
-		if ( ItemCount == LB_ERR || ItemCount <= 0)
-		{
-			// Error, can't get item count or no items, don't select anything
-			return;
-		}
-		if ( ItemCount > NewSelectionIndex )
-		{
-			// Requested index is valid, select it
-			::SendMessage( _hSelf, LB_SETCURSEL, NewSelectionIndex, 0 );
-		}
-		else
-		{
-			// Requested index out of bounds, select the last item
-			::SendMessage( _hSelf, LB_SETCURSEL, ItemCount-1, 0 );
-		}
-	}
+  if ( bStrictSelect )
+  {
+    ::SendMessage( _hSelf, LB_SETCURSEL, NewSelectionIndex, 0 );
+  }
+  else
+  {
+    INT ItemCount = GetItemCount();
+    if ( ItemCount == LB_ERR || ItemCount <= 0)
+    {
+      // Error, can't get item count or no items, don't select anything
+      return;
+    }
+    if ( ItemCount > NewSelectionIndex )
+    {
+      // Requested index is valid, select it
+      ::SendMessage( _hSelf, LB_SETCURSEL, NewSelectionIndex, 0 );
+    }
+    else
+    {
+      // Requested index out of bounds, select the last item
+      ::SendMessage( _hSelf, LB_SETCURSEL, ItemCount-1, 0 );
+    }
+  }
 }
 
 
 LRESULT MultiClipboardListbox::runProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	switch ( message )
-	{
-	case WM_KEYUP:
-		switch ( wParam )
-		{
-		case VK_DELETE:
-			SendMessage( _hParent, WM_COMMAND, MAKEWPARAM(0, LBN_DELETEITEM), (LPARAM)_hSelf );
-			return 0;
-		}
-	}
+  switch ( message )
+  {
+  case WM_KEYUP:
+    switch ( wParam )
+    {
+    case VK_DELETE:
+      SendMessage( _hParent, WM_COMMAND, MAKEWPARAM(0, LBN_DELETEITEM), (LPARAM)_hSelf );
+      return 0;
+    }
+  }
 
-	return ::CallWindowProc( oldWndProc, hwnd, message, wParam, lParam );
+  return ::CallWindowProc( oldWndProc, hwnd, message, wParam, lParam );
 }

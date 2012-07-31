@@ -38,64 +38,64 @@ MultiClipCyclicPaste::MultiClipCyclicPaste()
 
 void MultiClipCyclicPaste::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
 {
-	IController::Init( pNewModel, pClipboardProxy, pSettings );
-	pClipboardProxy->AddCyclicPasteListener( this );
+  IController::Init( pNewModel, pClipboardProxy, pSettings );
+  pClipboardProxy->AddCyclicPasteListener( this );
 }
 
 
 void MultiClipCyclicPaste::DoCyclicPaste()
 {
-	ClipboardList * pClipboardList = (ClipboardList*)GetModel();
-	if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
-	{
-		return;
-	}
+  ClipboardList * pClipboardList = (ClipboardList*)GetModel();
+  if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
+  {
+    return;
+  }
 
-	// begin the undo action if not already so, to prevent unnecessary undos for the cyclic pastes
-	g_ClipboardProxy.CyclicPasteBegin();
+  // begin the undo action if not already so, to prevent unnecessary undos for the cyclic pastes
+  g_ClipboardProxy.CyclicPasteBegin();
 
-	// get scintilla selection pos
-	int currentPosStart = 0, currentPosEnd = 0;
-	g_ClipboardProxy.GetCurrentSelectionPosition( currentPosStart, currentPosEnd );
+  // get scintilla selection pos
+  int currentPosStart = 0, currentPosEnd = 0;
+  g_ClipboardProxy.GetCurrentSelectionPosition( currentPosStart, currentPosEnd );
 
-	// compare with current pos
-	if ( !( currentPosStart == selectionPosStart && currentPosEnd == selectionPosEnd ) )
-	{
-		// if different, reset text index
-		ResetPasteIndex();
-	}
+  // compare with current pos
+  if ( !( currentPosStart == selectionPosStart && currentPosEnd == selectionPosEnd ) )
+  {
+    // if different, reset text index
+    ResetPasteIndex();
+  }
 
-	// paste text into current selection pos
-	const ClipboardListItem & itemToPaste = pClipboardList->GetText( nextPasteIndex );
-	g_ClipboardProxy.ReplaceSelectionText( itemToPaste );
+  // paste text into current selection pos
+  const ClipboardListItem & itemToPaste = pClipboardList->GetText( nextPasteIndex );
+  g_ClipboardProxy.ReplaceSelectionText( itemToPaste );
 
-	// Select this newly pasted text
-	if ( itemToPaste.textMode == TCM_COLUMN )
-	{
-		currentPosEnd = g_ClipboardProxy.SetRectangularSelection( currentPosStart, itemToPaste.columnText.GetNumColumns(), itemToPaste.columnText.GetNumRows() );
-	}
-	else
-	{
-		currentPosEnd = currentPosStart + pClipboardList->GetText( nextPasteIndex ).text.size();
-		g_ClipboardProxy.SetCurrentSelectionPosition( currentPosStart, currentPosEnd );
-	}
+  // Select this newly pasted text
+  if ( itemToPaste.textMode == TCM_COLUMN )
+  {
+    currentPosEnd = g_ClipboardProxy.SetRectangularSelection( currentPosStart, itemToPaste.columnText.GetNumColumns(), itemToPaste.columnText.GetNumRows() );
+  }
+  else
+  {
+    currentPosEnd = currentPosStart + pClipboardList->GetText( nextPasteIndex ).text.size();
+    g_ClipboardProxy.SetCurrentSelectionPosition( currentPosStart, currentPosEnd );
+  }
 
-	// Update next paste index
-	++nextPasteIndex;
-	if ( (unsigned int) nextPasteIndex >= pClipboardList->GetNumText() )
-	{
-		ResetPasteIndex();
-	}
+  // Update next paste index
+  ++nextPasteIndex;
+  if ( (unsigned int) nextPasteIndex >= pClipboardList->GetNumText() )
+  {
+    ResetPasteIndex();
+  }
 
-	// update stored selection pos
-	selectionPosStart = currentPosStart;
-	selectionPosEnd = currentPosEnd;
+  // update stored selection pos
+  selectionPosStart = currentPosStart;
+  selectionPosEnd = currentPosEnd;
 }
 
 
 void MultiClipCyclicPaste::ResetPasteIndex()
 {
-	nextPasteIndex = 0;
+  nextPasteIndex = 0;
 }
 
 
@@ -106,34 +106,34 @@ void MultiClipCyclicPaste::OnCyclicPasteBegin()
 
 void MultiClipCyclicPaste::OnCyclicPasteEnd()
 {
-	int currPasteIndex = nextPasteIndex - 1;
-	ResetPasteIndex();
+  int currPasteIndex = nextPasteIndex - 1;
+  ResetPasteIndex();
 
-	ClipboardList * pClipboardList = (ClipboardList*)GetModel();
-	if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
-	{
-		return;
-	}
-	if ( currPasteIndex < 0 )
-	{
-		// Handle wrap around
-		currPasteIndex = pClipboardList->GetNumText() - 1;
-	}
-	pClipboardList->PasteText( (unsigned int)currPasteIndex );
-	selectionPosStart = -1;
-	selectionPosEnd = -1;
+  ClipboardList * pClipboardList = (ClipboardList*)GetModel();
+  if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
+  {
+    return;
+  }
+  if ( currPasteIndex < 0 )
+  {
+    // Handle wrap around
+    currPasteIndex = pClipboardList->GetNumText() - 1;
+  }
+  pClipboardList->PasteText( (unsigned int)currPasteIndex );
+  selectionPosStart = -1;
+  selectionPosEnd = -1;
 }
 
 
 void MultiClipCyclicPaste::OnModelModified()
 {
-	ResetPasteIndex();
+  ResetPasteIndex();
 }
 
 
 void MultiClipCyclicPaste::OnObserverAdded( LoonySettingsManager * SettingsManager )
 {
-	SettingsObserver::OnObserverAdded( SettingsManager );
+  SettingsObserver::OnObserverAdded( SettingsManager );
 }
 
 

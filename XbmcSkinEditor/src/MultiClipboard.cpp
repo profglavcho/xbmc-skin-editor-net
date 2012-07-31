@@ -40,16 +40,16 @@ END_MESSAGE_MAP()
 // information for notepad++
 
 
-CONST TCHAR	PLUGIN_NAME[] = TEXT("&XbmcSkinPlugin");
+CONST TCHAR  PLUGIN_NAME[] = TEXT("&XbmcSkinPlugin");
 LoonySettingsManager g_SettingsManager( TEXT("XbmcSkinPluginSettings") );
 CONST TCHAR configFileName[] = TEXT( "\\XbmcSkinPlugin.xml" );
-NppData				g_NppData;
-WNDPROC				g_NppWndProc;
-SciSubClassWrp		g_ScintillaMain, g_ScintillaSecond;
+NppData        g_NppData;
+WNDPROC        g_NppWndProc;
+SciSubClassWrp    g_ScintillaMain, g_ScintillaSecond;
 HINSTANCE g_hInstance;
 TCHAR configPath[MAX_PATH];
-MultiClipboardProxy	g_ClipboardProxy;
-HWND				g_HSource;
+MultiClipboardProxy  g_ClipboardProxy;
+HWND        g_HSource;
 MultiClipboardSettingsDialog OptionsDlg;
 CStdString g_configDir;
 
@@ -73,89 +73,89 @@ nbFunc(NUMBER_OF_FUNCTIONS)
 
 CXbmcPluginEditor theApp;
 
-FuncItem			funcItem[NUMBER_OF_FUNCTIONS];
+FuncItem      funcItem[NUMBER_OF_FUNCTIONS];
 
 BOOL CXbmcPluginEditor::InitInstance()
 {
   CWinApp::InitInstance();
-	
+  
   // Set function pointers
   modulestate = AfxGetModuleState();
   g_hInstance = m_hInstance;
-	return TRUE;
+  return TRUE;
 }
 
 int CXbmcPluginEditor::ExitInstance()
 {
   delete funcItem[0]._pShKey;
   //delete funcItem[1]._pShKey;
-	delete funcItem[2]._pShKey;
+  delete funcItem[2]._pShKey;
   delete funcItem[3]._pShKey;
   delete funcItem[4]._pShKey;
 
-	// save settings
-	SaveSettings();
+  // save settings
+  SaveSettings();
 
-	ShutDownPlugin();
+  ShutDownPlugin();
   return 0;
 }// return app exit code
 
 extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 { 
-	// stores notepad data
-	g_NppData = notpadPlusData;
+  // stores notepad data
+  g_NppData = notpadPlusData;
   
-	g_ClipboardProxy.Init();
+  g_ClipboardProxy.Init();
 
-	// Subclass the Notepad++ windows procedure
-	g_NppWndProc = (WNDPROC) SetWindowLong( g_NppData._nppHandle, GWL_WNDPROC, (LONG) MCSubClassNppWndProc );
-	// As well as the 2 scintilla windows'
-	g_ScintillaMain.Init( g_NppData._scintillaMainHandle, MCSubClassSciWndProc );
-	g_ScintillaSecond.Init( g_NppData._scintillaSecondHandle, MCSubClassSciWndProc );
+  // Subclass the Notepad++ windows procedure
+  g_NppWndProc = (WNDPROC) SetWindowLong( g_NppData._nppHandle, GWL_WNDPROC, (LONG) MCSubClassNppWndProc );
+  // As well as the 2 scintilla windows'
+  g_ScintillaMain.Init( g_NppData._scintillaMainHandle, MCSubClassSciWndProc );
+  g_ScintillaSecond.Init( g_NppData._scintillaSecondHandle, MCSubClassSciWndProc );
 
-	// load data of plugin
-	theApp.LoadSettings();
+  // load data of plugin
+  theApp.LoadSettings();
 
-	// initial dialogs
-	theApp.AboutDlg.Init( theApp.m_hInstance, g_NppData );
-	OptionsDlg.Init( theApp.m_hInstance, g_NppData._nppHandle );
+  // initial dialogs
+  theApp.AboutDlg.Init( theApp.m_hInstance, g_NppData );
+  OptionsDlg.Init( theApp.m_hInstance, g_NppData._nppHandle );
   
   // Init xbmc components
   g_SettingsManager.AddSettingsObserver( &theApp.controlsList );
   theApp.controlsList.LoadControls();
 
-	// Initialisation of MVC components
-	g_SettingsManager.AddSettingsObserver( &theApp.clipboardList );
+  // Initialisation of MVC components
+  g_SettingsManager.AddSettingsObserver( &theApp.clipboardList );
 
-	theApp.clipboardList.LoadClipboardSession();
+  theApp.clipboardList.LoadClipboardSession();
   
   theApp.clipXbmcImage.Init(&theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
   theApp.clipXbmcDialog.Init(&theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
   theApp.clipXbmcControls.Init(&theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
-	theApp.OSClipboard.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
-	theApp.clipViewerDialog.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
-	theApp.clipPasteMenu.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
-	theApp.cyclicPaste.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
-	theApp.autoCopier.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+  theApp.OSClipboard.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+  theApp.clipViewerDialog.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+  theApp.clipPasteMenu.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+  theApp.cyclicPaste.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+  theApp.autoCopier.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
 }
 
 extern "C" __declspec(dllexport) const TCHAR * getName()
 {
-	return PLUGIN_NAME;
+  return PLUGIN_NAME;
 }
 
 extern "C" __declspec(dllexport) FuncItem * getFuncsArray(INT *nbF)
 {
   funcItem[0]._pFunc = ToggleView;//ToggleView;
   funcItem[1]._pFunc = ToggleXbmcView;
-	funcItem[2]._pFunc = ToggleXbmcImage;
+  funcItem[2]._pFunc = ToggleXbmcImage;
   funcItem[3]._pFunc = ToggleXbmcControls;
   funcItem[4]._pFunc = ShowClipPasteMenu;
-	funcItem[4]._pFunc = ShowOptionsDlg;
-	funcItem[5]._pFunc = ShowAboutDlg;
+  funcItem[4]._pFunc = ShowOptionsDlg;
+  funcItem[5]._pFunc = ShowAboutDlg;
 
   //clipXbmcImage
-	// Fill menu names
+  // Fill menu names
   lstrcpy( funcItem[0]._itemName, TEXT("&Xbmc Skin Controls...") );
   lstrcpy( funcItem[1]._itemName, TEXT("&Xbmc Tester") );
   lstrcpy( funcItem[2]._itemName, TEXT("&Xbmc Image Previewer") );
@@ -165,40 +165,40 @@ extern "C" __declspec(dllexport) FuncItem * getFuncsArray(INT *nbF)
 
   // Set shortcuts
   funcItem[0]._pShKey = new ShortcutKey;
-  funcItem[0]._pShKey->_isAlt		= true;
-  funcItem[0]._pShKey->_isCtrl	= true;
-  funcItem[0]._pShKey->_isShift	= false;
-  funcItem[0]._pShKey->_key		= 'V';
+  funcItem[0]._pShKey->_isAlt    = true;
+  funcItem[0]._pShKey->_isCtrl  = true;
+  funcItem[0]._pShKey->_isShift  = false;
+  funcItem[0]._pShKey->_key    = 'V';
   /*funcItem[1]._pShKey = new ShortcutKey;
-  funcItem[1]._pShKey->_isAlt		= true;
-  funcItem[1]._pShKey->_isCtrl	= true;
-  funcItem[1]._pShKey->_isShift	= false;
-  funcItem[1]._pShKey->_key		= 'B';*/
+  funcItem[1]._pShKey->_isAlt    = true;
+  funcItem[1]._pShKey->_isCtrl  = true;
+  funcItem[1]._pShKey->_isShift  = false;
+  funcItem[1]._pShKey->_key    = 'B';*/
   funcItem[2]._pShKey = new ShortcutKey;
-  funcItem[2]._pShKey->_isAlt		= true;
-  funcItem[2]._pShKey->_isCtrl	= true;
-  funcItem[2]._pShKey->_isShift	= false;
-  funcItem[2]._pShKey->_key		= 'N';
+  funcItem[2]._pShKey->_isAlt    = true;
+  funcItem[2]._pShKey->_isCtrl  = true;
+  funcItem[2]._pShKey->_isShift  = false;
+  funcItem[2]._pShKey->_key    = 'N';
   funcItem[3]._pShKey = new ShortcutKey;
-  funcItem[3]._pShKey->_isAlt		= true;
-  funcItem[3]._pShKey->_isCtrl	= true;
-  funcItem[3]._pShKey->_isShift	= false;
-  funcItem[3]._pShKey->_key		= 'B';
+  funcItem[3]._pShKey->_isAlt    = true;
+  funcItem[3]._pShKey->_isCtrl  = true;
+  funcItem[3]._pShKey->_isShift  = false;
+  funcItem[3]._pShKey->_key    = 'B';
   funcItem[4]._pShKey = new ShortcutKey;
-  funcItem[4]._pShKey->_isAlt		= false;
-  funcItem[4]._pShKey->_isCtrl	= true;
-  funcItem[4]._pShKey->_isShift	= true;
-  funcItem[4]._pShKey->_key		= 'V';
+  funcItem[4]._pShKey->_isAlt    = false;
+  funcItem[4]._pShKey->_isCtrl  = true;
+  funcItem[4]._pShKey->_isShift  = true;
+  funcItem[4]._pShKey->_key    = 'V';
   funcItem[4]._pShKey = NULL;
   funcItem[5]._pShKey = NULL;
-	*nbF = NUMBER_OF_FUNCTIONS;
-	return funcItem;
+  *nbF = NUMBER_OF_FUNCTIONS;
+  return funcItem;
 }
 
 /***
- *	beNotification()
+ *  beNotification()
  *
- *	This function is called, if a notification in Scantilla/Notepad++ occurs
+ *  This function is called, if a notification in Scantilla/Notepad++ occurs
  */
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 {
@@ -208,105 +208,105 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
     theApp.clipXbmcControls.OnNotepadChange();
   }
 
-	if (notifyCode->nmhdr.hwndFrom == g_NppData._nppHandle)
-	{
-		// Change menu language
-		NLChangeNppMenu( (HINSTANCE)theApp.m_hInstance, g_NppData._nppHandle, (LPTSTR)PLUGIN_NAME, funcItem, NUMBER_OF_FUNCTIONS );
+  if (notifyCode->nmhdr.hwndFrom == g_NppData._nppHandle)
+  {
+    // Change menu language
+    NLChangeNppMenu( (HINSTANCE)theApp.m_hInstance, g_NppData._nppHandle, (LPTSTR)PLUGIN_NAME, funcItem, NUMBER_OF_FUNCTIONS );
 
-		// On this notification code you can register your plugin icon in Notepad++ toolbar
-		/*if (notifyCode->nmhdr.code == NPPN_TBMODIFICATION)
-		{
-			theApp.g_TBWndMgr.hToolbarBmp = (HBITMAP)::LoadImage( (HINSTANCE)theApp.m_hInstance, MAKEINTRESOURCE(IDB_EX_MULTICLIPBOARD), IMAGE_BITMAP, 0, 0, (LR_LOADMAP3DCOLORS) );
-			::SendMessage( g_NppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, (LPARAM)&g_TBWndMgr );
-		}*/
-	}
+    // On this notification code you can register your plugin icon in Notepad++ toolbar
+    /*if (notifyCode->nmhdr.code == NPPN_TBMODIFICATION)
+    {
+      theApp.g_TBWndMgr.hToolbarBmp = (HBITMAP)::LoadImage( (HINSTANCE)theApp.m_hInstance, MAKEINTRESOURCE(IDB_EX_MULTICLIPBOARD), IMAGE_BITMAP, 0, 0, (LR_LOADMAP3DCOLORS) );
+      ::SendMessage( g_NppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, (LPARAM)&g_TBWndMgr );
+    }*/
+  }
 }
 
 /***
- *	messageProc()
+ *  messageProc()
  *
- *	This function is called, if a notification from Notepad occurs
+ *  This function is called, if a notification from Notepad occurs
  */
 extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam, LPARAM lParam)
 {
-	return TRUE;
+  return TRUE;
 }
 
 
 #ifdef UNICODE
 extern "C" __declspec(dllexport) BOOL isUnicode()
 {
-	return TRUE;
+  return TRUE;
 }
 #endif //UNICODE
 
 
 /***
- *	LoadSettings()
+ *  LoadSettings()
  *
- *	Load the parameters of plugin
+ *  Load the parameters of plugin
  */
 void CXbmcPluginEditor::LoadSettings(void)
 {
-	// initialize the config directory
-	::SendMessage( g_NppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)configPath );
+  // initialize the config directory
+  ::SendMessage( g_NppData._nppHandle, NPPM_GETPLUGINSCONFIGDIR, MAX_PATH, (LPARAM)configPath );
 
-	// Test if config path exist
-	if ( ::PathFileExists( configPath ) == FALSE )
-	{
-		::CreateDirectory( configPath, NULL );
-	}
+  // Test if config path exist
+  if ( ::PathFileExists( configPath ) == FALSE )
+  {
+    ::CreateDirectory( configPath, NULL );
+  }
   g_configDir = configPath;
-	lstrcpy( SettingsFilePath, configPath );
-	lstrcat( SettingsFilePath, configFileName );
-	if ( ::PathFileExists(SettingsFilePath) == FALSE )
-	{
-		::CloseHandle( ::CreateFile( SettingsFilePath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ) );
-	}
+  lstrcpy( SettingsFilePath, configPath );
+  lstrcat( SettingsFilePath, configFileName );
+  if ( ::PathFileExists(SettingsFilePath) == FALSE )
+  {
+    ::CloseHandle( ::CreateFile( SettingsFilePath, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL ) );
+  }
 
-	g_SettingsManager.LoadSettings( SettingsFilePath );
+  g_SettingsManager.LoadSettings( SettingsFilePath );
 }
 
 /***
- *	SaveSettings()
+ *  SaveSettings()
  *
- *	Saves the parameters of plugin
+ *  Saves the parameters of plugin
  */
 void CXbmcPluginEditor::SaveSettings(void)
 {
-	g_SettingsManager.SaveSettings( SettingsFilePath );
+  g_SettingsManager.SaveSettings( SettingsFilePath );
 
-	clipboardList.SaveClipboardSession();
+  clipboardList.SaveClipboardSession();
 }
 
 void CXbmcPluginEditor::ShutDownPlugin()
 {
   clipXbmcDialog.Shutdown();
-	clipViewerDialog.Shutdown();
-	g_ClipboardProxy.Destroy();
-	// Shutdown COM for OLE drag drop
-	OleUninitialize();
+  clipViewerDialog.Shutdown();
+  g_ClipboardProxy.Destroy();
+  // Shutdown COM for OLE drag drop
+  OleUninitialize();
 }
 
 /**************************************************************************
- *	Interface functions
+ *  Interface functions
  */
 void ToggleView(void)
 {
-	// get menu and test if dockable dialog is open
-	HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
-	UINT state = ::GetMenuState(hMenu, funcItem[0]._cmdID, MF_BYCOMMAND);
+  // get menu and test if dockable dialog is open
+  HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
+  UINT state = ::GetMenuState(hMenu, funcItem[0]._cmdID, MF_BYCOMMAND);
 
-	theApp.clipViewerDialog.ShowDialog( state & MF_CHECKED ? false : true );
+  theApp.clipViewerDialog.ShowDialog( state & MF_CHECKED ? false : true );
 }
 
 void ToggleXbmcView(void)
 {
-	// get menu and test if dockable dialog is open
-	HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
-	UINT state = ::GetMenuState(hMenu, funcItem[1]._cmdID, MF_BYCOMMAND);
+  // get menu and test if dockable dialog is open
+  HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
+  UINT state = ::GetMenuState(hMenu, funcItem[1]._cmdID, MF_BYCOMMAND);
 
-	theApp.clipXbmcDialog.ShowDialog( state & MF_CHECKED ? false : true );
+  theApp.clipXbmcDialog.ShowDialog( state & MF_CHECKED ? false : true );
 }
 
 void ToggleXbmcImage(void)
@@ -316,8 +316,8 @@ void ToggleXbmcImage(void)
 
   theApp.UpdateHSCI();
   // get menu and test if dockable dialog is open
-	HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
-	UINT state = ::GetMenuState(hMenu, funcItem[2]._cmdID, MF_BYCOMMAND);
+  HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
+  UINT state = ::GetMenuState(hMenu, funcItem[2]._cmdID, MF_BYCOMMAND);
 
   theApp.clipXbmcImage.ShowDialog( state & MF_CHECKED ? false : true );
 }
@@ -332,54 +332,54 @@ void ToggleXbmcControls(void)
 
 void ShowAboutDlg(void)
 {
-	theApp.AboutDlg.doDialog();
+  theApp.AboutDlg.doDialog();
 }
 
 
 void ShowOptionsDlg()
 {
-	OptionsDlg.ShowDialog();
+  OptionsDlg.ShowDialog();
 }
 
 
 void ShowClipPasteMenu()
 {
-	if ( theApp.clipPasteMenu.IsUsePasteMenu() )
-	{
-		theApp.clipPasteMenu.ShowPasteMenu();
-	}
-	else
-	{
-		theApp.cyclicPaste.DoCyclicPaste();
-	}
+  if ( theApp.clipPasteMenu.IsUsePasteMenu() )
+  {
+    theApp.clipPasteMenu.ShowPasteMenu();
+  }
+  else
+  {
+    theApp.cyclicPaste.DoCyclicPaste();
+  }
 }
 
 /***
- *	getCurrentHScintilla()
+ *  getCurrentHScintilla()
  *
- *	Get the handle of the current scintilla
+ *  Get the handle of the current scintilla
  */
 void CXbmcPluginEditor::UpdateHSCI(void)
 {
-	::SendMessage(g_NppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentSCI);
-	g_HSource = (currentSCI == MAIN_VIEW)?g_NppData._scintillaMainHandle:g_NppData._scintillaSecondHandle;
+  ::SendMessage(g_NppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentSCI);
+  g_HSource = (currentSCI == MAIN_VIEW)?g_NppData._scintillaMainHandle:g_NppData._scintillaSecondHandle;
 }
 
 void CXbmcPluginEditor::ScintillaGetText(char *text, int start, int end) 
 {
-	TextRange tr;
-	tr.chrg.cpMin = start;
-	tr.chrg.cpMax = end;
-	tr.lpstrText  = text;
-	ScintillaMsg(SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
+  TextRange tr;
+  tr.chrg.cpMin = start;
+  tr.chrg.cpMax = end;
+  tr.lpstrText  = text;
+  ScintillaMsg(SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
 }
 
 /***
- *	ScintillaMsg()
+ *  ScintillaMsg()
  *
- *	API-Wrapper
+ *  API-Wrapper
  */
 LRESULT CXbmcPluginEditor::ScintillaMsg(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return ::SendMessage(g_HSource, message, wParam, lParam);
+  return ::SendMessage(g_HSource, message, wParam, lParam);
 }

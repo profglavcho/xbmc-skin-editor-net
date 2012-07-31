@@ -33,10 +33,10 @@ class CDuoTextBox : public Window
 public:
   CDuoTextBox(int index);
 
-	virtual void init(HINSTANCE hInst, HWND parent);
-	virtual void destroy();
+  virtual void init(HINSTANCE hInst, HWND parent);
+  virtual void destroy();
 
-	virtual void SetValue(CStdString name, CStdString value);
+  virtual void SetValue(CStdString name, CStdString value);
   
   virtual void Resize(RECT rc);
   virtual int GetLastPosition() { return GetTop() + 20;}
@@ -46,21 +46,21 @@ public:
 private:
   int GetTop() { return m_pIndex * 20; }
   std::vector<CStdString> lstText;
-	HFONT hNewFont;
+  HFONT hNewFont;
 
   HBRUSH hSplitterBrush;
-	HPEN hSplitterPen;
+  HPEN hSplitterPen;
 
-	WNDPROC oldWndProc;
+  WNDPROC oldWndProc;
 
   int m_pIndex;
   int m_pBottom;
 
 
-	// Subclass the list box's wnd proc for customised behavior
-	static LRESULT CALLBACK StaticDuoTextBoxProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
-	
-	LRESULT runProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  // Subclass the list box's wnd proc for customised behavior
+  static LRESULT CALLBACK StaticDuoTextBoxProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  
+  LRESULT runProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 };
 
 
