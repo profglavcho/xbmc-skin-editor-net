@@ -214,7 +214,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\src\MultiClipboard.cpp">
+    <ClCompile Include="..\..\src\XbmcPluginEditor.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -325,7 +325,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClInclude Include="..\..\src\ClipboardMVC\ControlsList.h" />
     <ClInclude Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.h" />
     <ClInclude Include="..\..\src\MCSubClassWndProc.h" />
-    <ClInclude Include="..\..\src\MultiClipboard.h" />
+    <ClInclude Include="..\..\src\XbmcPluginEditor.h" />
     <ClInclude Include="..\..\src\MultiClipboardProxy.h" />
     <ClInclude Include="..\..\src\MultiClipboardStringType.h" />
     <ClInclude Include="..\..\src\resource.h" />
@@ -382,17 +382,17 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <None Include="..\..\res\delete.bmp" />
     <None Include="..\..\res\down.bmp" />
     <None Include="..\..\res\leftright.cur" />
-    <None Include="..\..\res\multiclipboard.bmp" />
-    <None Include="..\..\res\multiclipboard.ico" />
-    <None Include="..\..\lang\MultiClipboard_en.ini" />
+    <None Include="..\..\res\XbmcSkinEditor.bmp" />
+    <None Include="..\..\res\XbmcSkinEditor.ico" />
+    <None Include="..\..\lang\XbmcSkinEditor_en.ini" />
     <None Include="..\..\res\page_white_stack.bmp" />
     <None Include="..\..\res\paste.bmp" />
     <None Include="..\..\res\up.bmp" />
     <None Include="..\..\res\updown.cur" />
-    <None Include="..\..\src\MultiClipboard.txt" />
+    <None Include="..\..\src\XbmcSkinEditor.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\src\MultiClipboard.rc" />
+    <ResourceCompile Include="..\..\src\XbmcSkinEditor.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
