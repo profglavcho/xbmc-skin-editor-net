@@ -106,7 +106,7 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "J:\Coding\XbmcPlugin\XbmcSkinPlugin_versionmfc\XbmcSkinEditor\projects\2010\Debug\*.dll" "C:\Program Files (x86)\Notepad++\plugins\" /Y</Command>
+      <Command>xcopy "J:\Coding\XbmcPlugin\XbmcSkinPlugin_versionmfc\XbmcSkinEditor2\projects\2010\Debug\*.dll" "C:\Program Files (x86)\Notepad++\plugins\" /Y</Command>
       <Message>
       </Message>
     </PostBuildEvent>

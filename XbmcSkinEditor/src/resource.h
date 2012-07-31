@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by MultiClipboard.rc
+// Used by XbmcSkinEditor.rc
 //
 #define IDB_EX_MULTICLIPBOARD           110
 #define IDB_EX_UP                       111

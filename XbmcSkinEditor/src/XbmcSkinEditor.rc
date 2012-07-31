@@ -1,6 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
+
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -10,10 +11,13 @@
 #include "windows.h"
 #undef APSTUDIO_HIDDEN_SYMBOLS
 #include "resource.h"
+
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
+
 /////////////////////////////////////////////////////////////////////////////
 // Neutral resources
+
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
@@ -202,6 +206,7 @@ IDB_EX_COPY_TO_CLIPBOARD BITMAP                  "..\\res\\brick_go.bmp"
 IDB_EX_DELETE           BITMAP                  "..\\res\\delete.bmp"
 IDB_EX_DELETE_ALL       BITMAP                  "..\\res\\bin_empty.bmp"
 IDB_EX_OPTIONS          BITMAP                  "..\\res\\cog.bmp"
+IDB_BACKGROUND          BITMAP                  "..\\res\\background.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -220,13 +225,6 @@ IDC_UPDOWN              CURSOR                  "..\\res\\updown.cur"
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRC)
 LANGUAGE LANG_FRENCH, SUBLANG_FRENCH_CANADIAN
 #pragma code_page(1252)
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_BACKGROUND          BITMAP                  "J:\\Coding\\XbmcPlugin\\XbmcSkinPlugin_versionmfc\\XbmcSkinEditor\\res\\background.bmp"
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
