@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "ScintillaHelper.h"
 #include <Windows.h>
-#include "../../MultiClipboard.h"
+#include "XbmcPluginEditor.h"
 
 
 CScintillaHelper g_Scintilla;

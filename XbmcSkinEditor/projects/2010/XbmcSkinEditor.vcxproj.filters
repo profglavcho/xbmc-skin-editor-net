@@ -73,9 +73,6 @@
     <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\MultiClipboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
       <Filter>Source Files\ClipboardMVC</Filter>
     </ClCompile>
@@ -111,6 +108,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\xbmc\lib\ScintillaHelper.cpp">
       <Filter>Source Files\Xbmc\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\XbmcPluginEditor.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -240,9 +240,6 @@
     <ClInclude Include="..\..\src\xbmc\XbmcImagePreviewer.h">
       <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\MultiClipboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\xbmc\PJAImage.h">
       <Filter>Source Files\Xbmc</Filter>
     </ClInclude>
@@ -267,6 +264,9 @@
     <ClInclude Include="..\..\src\xbmc\lib\ScintillaHelper.h">
       <Filter>Source Files\Xbmc\lib</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\XbmcPluginEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\res\delete.bmp">
@@ -276,15 +276,6 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\..\res\leftright.cur">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\res\multiclipboard.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\res\multiclipboard.ico">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\..\lang\MultiClipboard_en.ini">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\..\res\paste.bmp">
@@ -308,10 +299,19 @@
     <None Include="..\..\res\cog.bmp">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\src\MultiClipboard.txt">
+    <None Include="..\..\res\background.bmp">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\..\res\background.bmp">
+    <None Include="..\..\src\XbmcSkinEditor.txt">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\lang\XbmcSkinEditor_en.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\XbmcSkinEditor.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\XbmcSkinEditor.ico">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -378,7 +378,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\src\MultiClipboard.rc">
+    <ResourceCompile Include="..\..\src\XbmcSkinEditor.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

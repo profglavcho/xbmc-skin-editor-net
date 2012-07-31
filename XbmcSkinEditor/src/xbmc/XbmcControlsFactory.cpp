@@ -6,7 +6,7 @@
 #include "lib/ScintillaHelper.h"
 #include <iostream>//for temp file writing
 #include <fstream>
-#include "MultiClipboard.h"
+#include "XbmcPluginEditor.h"
 
 typedef struct
 {
