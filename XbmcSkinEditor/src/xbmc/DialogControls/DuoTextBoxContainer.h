@@ -43,13 +43,16 @@ public:
   virtual void GetLabel( CStdString & text );
   virtual void GetTextBox( CStdString & text );
 private :
-  void UpdateScroll();
+  void ResetScrollbar();
+  void SetupScrollbar();
   std::vector<CDuoTextBox*> m_pDuoTextBox;
 	HCURSOR hSplitterCursorUpDown;
 	HBRUSH hSplitterBrush;
 	HPEN hSplitterPen;
   int m_pBottomPosition;
-  
+  int  m_nVertInc,m_nVscrollMax,m_nVscrollPos;
+  CRect m_ClientRect;
+
 	// For passing through drag list box messages
 	UINT DragListMessage;
 

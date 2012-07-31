@@ -26,7 +26,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #endif
 
 #define DUO_TEXTBOX_CONTAINER_CLASS_NAME TEXT( "DuoTextBoxContainer" )
-
+#define VERT_PTS 5
 
 CDuoTextBoxContainer::CDuoTextBoxContainer()
 : hSplitterCursorUpDown( 0 )
@@ -90,6 +90,11 @@ void CDuoTextBoxContainer::init( HINSTANCE hInst, HWND parent )
 	hSplitterPen = ::CreatePen( PS_SOLID, 0, RGB(212,208,200));//::GetSysColor(CTLCOLOR_DLG) );
 
 	DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
+  
+  m_nVscrollPos = 0;
+  GetClientRect(_hSelf,&m_ClientRect);
+  ResetScrollbar();
+  SetupScrollbar();
 }
 
 void CDuoTextBoxContainer::AddAttribute(CStdString name, CStdString value)
@@ -100,7 +105,8 @@ void CDuoTextBoxContainer::AddAttribute(CStdString name, CStdString value)
   
   m_pDuoTextBox.push_back(pDuoTextBox);
   m_pBottomPosition = pDuoTextBox->GetBottomPosition();
-  UpdateScroll();
+  m_ClientRect.bottom = m_pBottomPosition;
+  SetupScrollbar();
 }
 
 void CDuoTextBoxContainer::ClearAttributes()
@@ -124,6 +130,28 @@ RECT CDuoTextBoxContainer::GetContainerRect()
 
 int CDuoTextBoxContainer::OnScroll(WPARAM wParam)
 {
+  int nInc;
+  int nPos = (short)HIWORD(wParam);
+  switch (LOWORD(wParam))
+  {
+    case SB_TOP:        nInc = -m_nVscrollPos;               break;
+    case SB_BOTTOM:     nInc = m_nVscrollMax-m_nVscrollPos;  break;
+    case SB_LINEUP:     nInc = -1;                           break;
+    case SB_LINEDOWN:   nInc = 1;                            break;
+    case SB_PAGEUP:     nInc = min(-1, -m_nVertInc);         break;
+    case SB_PAGEDOWN:   nInc = max(1, m_nVertInc);           break;
+    case SB_THUMBTRACK: nInc = nPos - m_nVscrollPos;         break;
+    default:            nInc = 0;
+  }
+  nInc = max(-m_nVscrollPos, min(nInc, m_nVscrollMax - m_nVscrollPos));
+  if (nInc)
+	{
+			m_nVscrollPos += nInc;
+			int iMove = -VERT_PTS * nInc;
+			ScrollWindow(getHSelf(), 0, iMove, NULL, NULL);
+			SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);
+	}
+  return 1;
   //wParam is the type of scroll
   RECT rc;
   getClientRect(rc);
@@ -235,11 +263,45 @@ void CDuoTextBoxContainer::Resize(RECT rc)
   }
   rc.top = 45;
   reSizeToWH(rc);
-  UpdateScroll();
+  SetupScrollbar();
 }
 
-void CDuoTextBoxContainer::UpdateScroll()
+void CDuoTextBoxContainer::ResetScrollbar()
 {
+  CRect tempRect;
+  GetClientRect(getHSelf(),&tempRect);
+	BOOL bMaximized;
+    
+    //Max Vertical Scrolling is the difference between size
+	//of the Whole Property Page with Controls and that with
+	//the current one devided by the Indentation you set
+
+	m_nVertInc = (m_ClientRect.Height() - tempRect.Height())/VERT_PTS;
+
+	m_nVscrollMax = max(0, m_nVertInc);
+  m_nVscrollPos = min(m_nVscrollPos, m_nVscrollMax);
+  SetScrollRange(getHSelf(), SB_VERT, 0, m_nVscrollMax, FALSE);
+  SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);	
+}
+
+void CDuoTextBoxContainer::SetupScrollbar()
+{
+  	CRect tempRect;
+    GetClientRect(getHSelf(), &tempRect);
+	BOOL bMaximized;
+    
+    //Max Vertical Scrolling is the difference between size
+	//of the Whole Property Page with Controls and that with
+	//the current one devided by the Indentation you set
+
+	m_nVertInc = (m_ClientRect.Height() - tempRect.Height())/VERT_PTS;
+
+	m_nVscrollMax = max(0, m_nVertInc);
+  m_nVscrollPos = min(m_nVscrollPos, m_nVscrollMax);
+  SetScrollRange(getHSelf(), SB_VERT, 0, m_nVscrollMax, FALSE);
+  SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);	
+
+#if 0
   RECT rc;
   getClientRect(rc);
   BOOL res = 0;
@@ -257,6 +319,7 @@ void CDuoTextBoxContainer::UpdateScroll()
   {
     res = ShowScrollBar(getHSelf(), SB_VERT, 0);
   }
+#endif
 }
 
 void CDuoTextBoxContainer::GetLabel( CStdString & text )
