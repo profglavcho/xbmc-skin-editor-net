@@ -9,7 +9,7 @@ void CXBMCComboBox::init(HINSTANCE hInst, HWND parent)
   hNewFont = 0;
 
   Window::init( hInst, parent );
-  DWORD dwComboStyle = CBS_DROPDOWN | WS_VSCROLL | WS_CHILD | WS_VISIBLE;
+  DWORD dwComboStyle = CBS_DROPDOWNLIST | WS_VSCROLL | WS_CHILD | WS_VISIBLE;
     dwComboStyle |=  CBS_HASSTRINGS;
   _hSelf = CreateWindow( TEXT("combobox"), NULL, dwComboStyle,
                            0, 5, 188, 30, parent, 0, hInst, NULL );

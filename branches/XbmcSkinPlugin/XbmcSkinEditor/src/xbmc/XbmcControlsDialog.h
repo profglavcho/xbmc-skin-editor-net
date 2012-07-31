@@ -78,7 +78,7 @@ private:
   CDuoTextBoxContainer m_pDuoTextBox;
   void ShowXbmcControls();
   void OnListSelectionChanged();
-  void OnListDoubleClicked();
+ 
   void OnEditBoxFocus();
   void OnEditBoxUpdated();
 
