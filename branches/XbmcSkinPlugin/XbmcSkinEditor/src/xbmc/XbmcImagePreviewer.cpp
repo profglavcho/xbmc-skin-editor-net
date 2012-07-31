@@ -181,7 +181,8 @@ std::wstring A_to_W (const char* p)
 
 void XbmcImagePreviewer::UpdateImage()
 {
-  ShowImage();
+  if (IsShown)
+    ShowImage();
 }
 
 void XbmcImagePreviewer::ClearWindow()
@@ -228,6 +229,7 @@ void XbmcImagePreviewer::ShowImage()
     IsLoading = false;
     return;
   }
+
   std::wstring strCurrentLine = currentmsg;
   INT line_start = (INT)g_Scintilla.ScintillaMsg(SCI_POSITIONFROMLINE, current_line);
   INT line_end = (INT)g_Scintilla.ScintillaMsg(SCI_GETLINEENDPOSITION, current_line);
@@ -291,6 +293,8 @@ void XbmcImagePreviewer::ShowImage()
       
       RECT   rc = FCObjImage::CalcFitWindowSize(img_size, rcWindow) ;
       hdc = GetWindowDC(getHSelf());
+      
+      ::GetClientRect(getHSelf(), &rcWindow);
       m_pPicture.Draw (hdc, rc) ;
       printf("image printed");
     }
