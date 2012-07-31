@@ -17,20 +17,20 @@ CScintillaHelper::~CScintillaHelper()
 
 void CScintillaHelper::ScintillaGetText(char *text, int start, int end) 
 {
-	TextRange tr;
-	tr.chrg.cpMin = start;
-	tr.chrg.cpMax = end;
-	tr.lpstrText  = text;
-	ScintillaMsg(SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
+  TextRange tr;
+  tr.chrg.cpMin = start;
+  tr.chrg.cpMax = end;
+  tr.lpstrText  = text;
+  ScintillaMsg(SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
   
 }
 void CScintillaHelper::ScintillaSearch(char *text, int start, int end) 
 {
-	TextRange tr;
-	tr.chrg.cpMin = start;
-	tr.chrg.cpMax = end;
-	tr.lpstrText  = text;
-	ScintillaMsg(SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
+  TextRange tr;
+  tr.chrg.cpMin = start;
+  tr.chrg.cpMax = end;
+  tr.lpstrText  = text;
+  ScintillaMsg(SCI_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
   
 }
 
@@ -41,13 +41,13 @@ int CScintillaHelper::getLineIndentation(int line) const
 
 }
 /***
- *	ScintillaMsg()
+ *  ScintillaMsg()
  *
- *	API-Wrapper
+ *  API-Wrapper
  */
 LRESULT CScintillaHelper::ScintillaMsg(UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return ::SendMessage(g_HSource, message, wParam, lParam);
+  return ::SendMessage(g_HSource, message, wParam, lParam);
 }
 
 LRESULT CScintillaHelper::ScintillaMsg(UINT uMsg, WPARAM wParam , LPARAM lParam ) const
@@ -165,7 +165,7 @@ CStdStringA CScintillaHelper::W_to_A (const wchar_t* p)
 CStdString CScintillaHelper::getTextLine(int line) const
 {
   int line_start = getLineStartPosition(line);
-	int line_end = getLineEndPosition(line);
+  int line_end = getLineEndPosition(line);
   int buffer_size = line_end-line_start+1;
   LPSTR strLine = (LPSTR) new CHAR[buffer_size];
 

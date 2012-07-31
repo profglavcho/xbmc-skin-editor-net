@@ -30,27 +30,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class OSClipboardController : public IController, public ClipboardListener
 {
 public:
-	OSClipboardController();
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+  OSClipboardController();
+  virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
 
-	// ClipboardListener interface
-	void OnNewClipboardText( const TextItem & textItem );
-	void OnTextPasted();
+  // ClipboardListener interface
+  void OnNewClipboardText( const TextItem & textItem );
+  void OnTextPasted();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
-	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
+  virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+  virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 private:
-	// True - Get text copied only from N++, False - Get from text all applications
-	BOOL bGetClipTextFromOS;
-	// Valid only when bGetClipTextFromOS is True, get text only when it is pasted into N++
-	BOOL bOnlyWhenPastedInNpp;
-	// Buffer for clipboard text, used when bOnlyWhenPastedInNpp is True
-	std::wstring LastClipboardText;
-	// True - Do not store text greater than LargeClipboardTextSize in plugin
-	BOOL bIgnoreLargeClipboardText;
-	// Size of text in kilobyte to be considered as large clipboard text
-	UINT LargeClipboardTextSize;
+  // True - Get text copied only from N++, False - Get from text all applications
+  BOOL bGetClipTextFromOS;
+  // Valid only when bGetClipTextFromOS is True, get text only when it is pasted into N++
+  BOOL bOnlyWhenPastedInNpp;
+  // Buffer for clipboard text, used when bOnlyWhenPastedInNpp is True
+  std::wstring LastClipboardText;
+  // True - Do not store text greater than LargeClipboardTextSize in plugin
+  BOOL bIgnoreLargeClipboardText;
+  // Size of text in kilobyte to be considered as large clipboard text
+  UINT LargeClipboardTextSize;
 };
 
 

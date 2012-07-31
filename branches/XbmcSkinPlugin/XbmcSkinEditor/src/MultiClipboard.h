@@ -1,10 +1,10 @@
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error "include 'stdafx.h' before including this file for PCH"
+  #error "include 'stdafx.h' before including this file for PCH"
 #endif
 
-#include "resource.h"		// main symbols
+#include "resource.h"    // main symbols
 
 #include "PluginInterface.h"
 
@@ -33,13 +33,13 @@
 class CXbmcPluginEditor : public CWinApp
 {
 public:
-	CXbmcPluginEditor();
+  CXbmcPluginEditor();
 
 // Overrides
 public:
-	virtual BOOL InitInstance();
+  virtual BOOL InitInstance();
   virtual int ExitInstance(); // return app exit code
-	DECLARE_MESSAGE_MAP()
+  DECLARE_MESSAGE_MAP()
 public:
   // Function prototypes for this plugin
 void ShutDownPlugin();
@@ -54,13 +54,13 @@ LRESULT ScintillaMsg(UINT message, WPARAM wParam = 0, LPARAM lParam = 0);
 void UpdateHSCI(void);
 void ScintillaGetText(char *text, int start, int end);
 
-  CONST INT	nbFunc;
-toolbarIcons		g_TBWndMgr;
-SciSubClassWrp		g_ScintillaMain, g_ScintillaSecond;
+  CONST INT  nbFunc;
+toolbarIcons    g_TBWndMgr;
+SciSubClassWrp    g_ScintillaMain, g_ScintillaSecond;
 
 public:
 // dialog classes
-AboutDialog			AboutDlg;
+AboutDialog      AboutDlg;
 // settings
 
 // ini file name
@@ -80,12 +80,12 @@ XbmcImagePreviewer clipXbmcImage;
 CXbmcControlsDialog clipXbmcControls;
 public:
 AFX_MODULE_STATE* modulestate;
-UINT				currentSCI;
+UINT        currentSCI;
 
 protected:
 };
 
 extern CXbmcPluginEditor theApp;
-extern HWND	g_HSource;
+extern HWND  g_HSource;
 extern NppData g_NppData;
 extern CStdString g_configDir;

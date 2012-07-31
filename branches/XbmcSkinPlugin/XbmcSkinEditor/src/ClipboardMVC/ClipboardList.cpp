@@ -32,15 +32,15 @@ extern TCHAR configPath[MAX_PATH];
 
 struct SessionFileHeader
 {
-	unsigned int FileHeaderSize;
-	unsigned int Version;
-	unsigned int NumberClipboardListItem;
+  unsigned int FileHeaderSize;
+  unsigned int Version;
+  unsigned int NumberClipboardListItem;
 
-	SessionFileHeader( unsigned int inNumberClipboardListItem = 0 )
-		: FileHeaderSize( sizeof(SessionFileHeader) )
-		, Version( MULTICLIPBOARD_SESSION_FILE_VERSION )
-		, NumberClipboardListItem( inNumberClipboardListItem )
-	{}
+  SessionFileHeader( unsigned int inNumberClipboardListItem = 0 )
+    : FileHeaderSize( sizeof(SessionFileHeader) )
+    , Version( MULTICLIPBOARD_SESSION_FILE_VERSION )
+    , NumberClipboardListItem( inNumberClipboardListItem )
+  {}
 };
 
 
@@ -52,19 +52,19 @@ ClipboardListItem::ClipboardListItem()
 ClipboardListItem::ClipboardListItem( const TextItem & textItem )
 : TextItem( textItem )
 {
-	UpdateColumnText();
+  UpdateColumnText();
 }
 
 
 bool ClipboardListItem::operator==( const TextItem & rhs ) const
 {
-	return text == rhs.text && textMode == rhs.textMode;
+  return text == rhs.text && textMode == rhs.textMode;
 }
 
 
 void ClipboardListItem::UpdateColumnText()
 {
-	MakeColumnText( columnText );
+  MakeColumnText( columnText );
 }
 
 
@@ -77,295 +77,295 @@ ClipboardList::ClipboardList()
 bool ClipboardList::AddText( const TextItem & textItem )
 {
   
-	if ( IsTextAvailable( textItem.text ) )
-	{
-		// Text already in list, don't add double entry
-		return false;
-	}
+  if ( IsTextAvailable( textItem.text ) )
+  {
+    // Text already in list, don't add double entry
+    return false;
+  }
 
-	ClipboardListItem clipboardItem( textItem );
-	textList.push_front( clipboardItem );
+  ClipboardListItem clipboardItem( textItem );
+  textList.push_front( clipboardItem );
 
-	// Check if max list size is exceeded
-	while ( GetNumText() > GetMaxListSize() )
-	{
-		// If so, remove the last one from the list
-		textList.pop_back();
-	}
+  // Check if max list size is exceeded
+  while ( GetNumText() > GetMaxListSize() )
+  {
+    // If so, remove the last one from the list
+    textList.pop_back();
+  }
 
-	OnModified();
-	return true;
+  OnModified();
+  return true;
 }
 
 
 void ClipboardList::RemoveText( const unsigned int index )
 {
-	TextListIterator iter = GetIterAtIndex( index );
-	if ( iter == textList.end() )
-	{
-		return;
-	}
-	textList.erase( iter );
-	OnModified();
+  TextListIterator iter = GetIterAtIndex( index );
+  if ( iter == textList.end() )
+  {
+    return;
+  }
+  textList.erase( iter );
+  OnModified();
 }
 
 
 void ClipboardList::RemoveAllTexts()
 {
-	textList.clear();
-	OnModified();
+  textList.clear();
+  OnModified();
 }
 
 
 const ClipboardListItem & ClipboardList::GetText( const unsigned int index )
 {
-	TextListIterator iter = GetIterAtIndex( index );
-	if ( iter == textList.end() )
-	{
-		return NullStruct;
-	}
+  TextListIterator iter = GetIterAtIndex( index );
+  if ( iter == textList.end() )
+  {
+    return NullStruct;
+  }
 
-	return *iter;
+  return *iter;
 }
 
 
 const ClipboardListItem & ClipboardList::PasteText( const unsigned int index )
 {
-	TextListIterator iter = GetIterAtIndex( index );
-	if ( iter == textList.end() )
-	{
-		return NullStruct;
-	}
+  TextListIterator iter = GetIterAtIndex( index );
+  if ( iter == textList.end() )
+  {
+    return NullStruct;
+  }
 
-	// Cut it and move it to the front of the list
-	textList.push_front( *iter );
-	textList.erase( iter );
+  // Cut it and move it to the front of the list
+  textList.push_front( *iter );
+  textList.erase( iter );
 
-	OnModified();
-	return *(textList.begin());
+  OnModified();
+  return *(textList.begin());
 }
 
 
 bool ClipboardList::EditText( const int index, const std::wstring & newText )
 {
-	TextListIterator iter = GetIterAtIndex( index );
-	if ( iter == textList.end() )
-	{
-		return false;
-	}
+  TextListIterator iter = GetIterAtIndex( index );
+  if ( iter == textList.end() )
+  {
+    return false;
+  }
 
-	iter->text = newText;
-	iter->UpdateColumnText();
-	OnModified();
-	return true;
+  iter->text = newText;
+  iter->UpdateColumnText();
+  OnModified();
+  return true;
 }
 
 
 bool ClipboardList::ModifyTextItem( const TextItem & fromTextItem, const TextItem & toTextItem )
 {
-	TextListIterator iter;
-	for ( iter = textList.begin(); iter != textList.end(); ++iter )
-	{
-		if ( *iter == fromTextItem )
-		{
-			*iter = toTextItem;
-			iter->UpdateColumnText();
-			OnModified();
-			return true;
-		}
-	}
-	return false;
+  TextListIterator iter;
+  for ( iter = textList.begin(); iter != textList.end(); ++iter )
+  {
+    if ( *iter == fromTextItem )
+    {
+      *iter = toTextItem;
+      iter->UpdateColumnText();
+      OnModified();
+      return true;
+    }
+  }
+  return false;
 }
 
 
 void ClipboardList::SetTextNewIndex( const unsigned int index, const unsigned int newIndex )
 {
-	if ( index    < 0 || index    >= GetNumText() ||
-		 newIndex < 0 || newIndex >= GetNumText() ||
-		 newIndex == index )
-	{
-		return;
-	}
+  if ( index    < 0 || index    >= GetNumText() ||
+     newIndex < 0 || newIndex >= GetNumText() ||
+     newIndex == index )
+  {
+    return;
+  }
 
-	TextListIterator CurrPosition = GetIterAtIndex( index );
-	TextListIterator NewPosition;
-	if ( index < newIndex )
-	{
-		NewPosition = GetIterAtIndex( newIndex+1 );
-	}
-	else
-	{
-		NewPosition = GetIterAtIndex( newIndex );
-	}
-	textList.insert( NewPosition, *CurrPosition );
-	textList.erase( CurrPosition );
-	OnModified();
+  TextListIterator CurrPosition = GetIterAtIndex( index );
+  TextListIterator NewPosition;
+  if ( index < newIndex )
+  {
+    NewPosition = GetIterAtIndex( newIndex+1 );
+  }
+  else
+  {
+    NewPosition = GetIterAtIndex( newIndex );
+  }
+  textList.insert( NewPosition, *CurrPosition );
+  textList.erase( CurrPosition );
+  OnModified();
 }
 
 
 bool ClipboardList::IsTextAvailable( const std::wstring & text ) const
 {
-	ConstTextListIterator iter;
-	for ( iter = textList.begin(); iter != textList.end(); ++iter )
-	{
-		if ( iter->text == text )
-		{
-			return true;
-		}
-	}
-	return false;
+  ConstTextListIterator iter;
+  for ( iter = textList.begin(); iter != textList.end(); ++iter )
+  {
+    if ( iter->text == text )
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 
 int ClipboardList::GetTextItemIndex( const TextItem & text ) const
 {
-	int textIndex = 0;
-	ConstTextListIterator iter;
-	for ( iter = textList.begin(); iter != textList.end(); ++iter, ++textIndex )
-	{
-		if ( *iter == text )
-		{
-			return textIndex;
-		}
-	}
-	return -1;
+  int textIndex = 0;
+  ConstTextListIterator iter;
+  for ( iter = textList.begin(); iter != textList.end(); ++iter, ++textIndex )
+  {
+    if ( *iter == text )
+    {
+      return textIndex;
+    }
+  }
+  return -1;
 }
 
 
 unsigned int ClipboardList::GetNumText() const
 {
-	return (unsigned int)textList.size();
+  return (unsigned int)textList.size();
 }
 
 
 void ClipboardList::SetMaxListSize( const int NewSize )
 {
-	if ( NewSize <= 0 )
-	{
-		return;
-	}
+  if ( NewSize <= 0 )
+  {
+    return;
+  }
 
-	MaxListSize = NewSize;
+  MaxListSize = NewSize;
 
-	bool NeedToTrim = GetNumText() > GetMaxListSize();
-	// Trim clipboard if necessary to new size
-	while ( GetNumText() > GetMaxListSize() )
-	{
-		textList.pop_back();
-	}
+  bool NeedToTrim = GetNumText() > GetMaxListSize();
+  // Trim clipboard if necessary to new size
+  while ( GetNumText() > GetMaxListSize() )
+  {
+    textList.pop_back();
+  }
 
-	if ( NeedToTrim )
-	{
-		// Inform all clipboard viewers that the text list has changed
-		OnModified();
-	}
+  if ( NeedToTrim )
+  {
+    // Inform all clipboard viewers that the text list has changed
+    OnModified();
+  }
 }
 
 
 void ClipboardList::SaveClipboardSession()
 {
-	if ( bSaveClipboardSession )
-	{
-		TCHAR SessionFilePath[MAX_PATH];
-		lstrcpy( SessionFilePath, configPath );
-		lstrcat( SessionFilePath, MULTICLIPBOARD_SESSION_FILENAME );
+  if ( bSaveClipboardSession )
+  {
+    TCHAR SessionFilePath[MAX_PATH];
+    lstrcpy( SessionFilePath, configPath );
+    lstrcat( SessionFilePath, MULTICLIPBOARD_SESSION_FILENAME );
 
-		HANDLE hSessionFile = ::CreateFile( SessionFilePath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
-		if ( hSessionFile != INVALID_HANDLE_VALUE )
-		{
-			SessionFileHeader header( GetNumText() );
-			DWORD BytesWritten = 0;
-			::WriteFile( hSessionFile, &header, header.FileHeaderSize, &BytesWritten, NULL );
+    HANDLE hSessionFile = ::CreateFile( SessionFilePath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
+    if ( hSessionFile != INVALID_HANDLE_VALUE )
+    {
+      SessionFileHeader header( GetNumText() );
+      DWORD BytesWritten = 0;
+      ::WriteFile( hSessionFile, &header, header.FileHeaderSize, &BytesWritten, NULL );
 
-			// Use a reverse iterator here because when loading, items will be added in reverse order
-			ConstReverseTextListIterator iter;
-			for ( iter = textList.rbegin(); iter != textList.rend(); ++iter )
-			{
-				unsigned int textSize = iter->text.size();
-				unsigned int textMode = iter->textMode;
-				::WriteFile( hSessionFile, &textSize, sizeof(textSize), &BytesWritten, NULL );
-				::WriteFile( hSessionFile, &textMode, sizeof(textMode), &BytesWritten, NULL );
-				::WriteFile( hSessionFile, iter->text.c_str(), sizeof(std::wstring::value_type)*textSize, &BytesWritten, NULL );
-			}
+      // Use a reverse iterator here because when loading, items will be added in reverse order
+      ConstReverseTextListIterator iter;
+      for ( iter = textList.rbegin(); iter != textList.rend(); ++iter )
+      {
+        unsigned int textSize = iter->text.size();
+        unsigned int textMode = iter->textMode;
+        ::WriteFile( hSessionFile, &textSize, sizeof(textSize), &BytesWritten, NULL );
+        ::WriteFile( hSessionFile, &textMode, sizeof(textMode), &BytesWritten, NULL );
+        ::WriteFile( hSessionFile, iter->text.c_str(), sizeof(std::wstring::value_type)*textSize, &BytesWritten, NULL );
+      }
 
-			::CloseHandle( hSessionFile );
-		}
-	}
+      ::CloseHandle( hSessionFile );
+    }
+  }
 }
 
 
 void ClipboardList::LoadClipboardSession()
 {
-	if ( bSaveClipboardSession )
-	{
-		TCHAR SessionFilePath[MAX_PATH];
-		lstrcpy( SessionFilePath, configPath );
-		lstrcat( SessionFilePath, MULTICLIPBOARD_SESSION_FILENAME );
+  if ( bSaveClipboardSession )
+  {
+    TCHAR SessionFilePath[MAX_PATH];
+    lstrcpy( SessionFilePath, configPath );
+    lstrcat( SessionFilePath, MULTICLIPBOARD_SESSION_FILENAME );
 
-		HANDLE hSessionFile = ::CreateFile( SessionFilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
-		if ( hSessionFile != INVALID_HANDLE_VALUE )
-		{
-			SessionFileHeader header;
-			DWORD BytesRead = 0;
-			::ReadFile( hSessionFile, &header, header.FileHeaderSize, &BytesRead, NULL );
+    HANDLE hSessionFile = ::CreateFile( SessionFilePath, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
+    if ( hSessionFile != INVALID_HANDLE_VALUE )
+    {
+      SessionFileHeader header;
+      DWORD BytesRead = 0;
+      ::ReadFile( hSessionFile, &header, header.FileHeaderSize, &BytesRead, NULL );
 
-			for ( unsigned int textIndex = 0; textIndex < header.NumberClipboardListItem; ++textIndex )
-			{
-				unsigned int textSize = 0;
-				unsigned int textMode = 0;
-				::ReadFile( hSessionFile, &textSize, sizeof(textSize), &BytesRead, NULL );
-				::ReadFile( hSessionFile, &textMode, sizeof(textMode), &BytesRead, NULL );
-				// Copy the text item to a buffer
-				std::vector< unsigned char > buffer( sizeof(std::wstring::value_type)*textSize );
-				::ReadFile( hSessionFile, &buffer[0], buffer.size(), &BytesRead, NULL );
-				// Add the text to the clipboard list
-				TextItem textItem;
-				textItem.textMode = (TextCopyModeEnum) textMode;
-				textItem.text.assign( (std::wstring::value_type*) &buffer[0], textSize );
-				AddText( textItem );
-			}
+      for ( unsigned int textIndex = 0; textIndex < header.NumberClipboardListItem; ++textIndex )
+      {
+        unsigned int textSize = 0;
+        unsigned int textMode = 0;
+        ::ReadFile( hSessionFile, &textSize, sizeof(textSize), &BytesRead, NULL );
+        ::ReadFile( hSessionFile, &textMode, sizeof(textMode), &BytesRead, NULL );
+        // Copy the text item to a buffer
+        std::vector< unsigned char > buffer( sizeof(std::wstring::value_type)*textSize );
+        ::ReadFile( hSessionFile, &buffer[0], buffer.size(), &BytesRead, NULL );
+        // Add the text to the clipboard list
+        TextItem textItem;
+        textItem.textMode = (TextCopyModeEnum) textMode;
+        textItem.text.assign( (std::wstring::value_type*) &buffer[0], textSize );
+        AddText( textItem );
+      }
 
-			::CloseHandle( hSessionFile );
-		}
-	}
+      ::CloseHandle( hSessionFile );
+    }
+  }
 }
 
 
 ClipboardList::TextListType::iterator ClipboardList::GetIterAtIndex( const unsigned int index )
 {
-	if ( index >= GetNumText() )
-	{
-		return textList.end();
-	}
+  if ( index >= GetNumText() )
+  {
+    return textList.end();
+  }
 
-	TextListType::iterator iter = textList.begin();
-	std::advance( iter, index );
-	return iter;
+  TextListType::iterator iter = textList.begin();
+  std::advance( iter, index );
+  return iter;
 }
 
 
 void ClipboardList::OnObserverAdded( LoonySettingsManager * SettingsManager )
 {
-	SettingsObserver::OnObserverAdded( SettingsManager );
+  SettingsObserver::OnObserverAdded( SettingsManager );
 
-	// Add default settings if it doesn't exists
-	//SET_SETTINGS_INT( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_CLIPBOARD_ITEMS, MaxListSize )
-	//SET_SETTINGS_BOOL( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_SAVE_CLIPBOARD_SESSION, bSaveClipboardSession )
+  // Add default settings if it doesn't exists
+  //SET_SETTINGS_INT( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_CLIPBOARD_ITEMS, MaxListSize )
+  //SET_SETTINGS_BOOL( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_SAVE_CLIPBOARD_SESSION, bSaveClipboardSession )
 }
 
 
 void ClipboardList::OnSettingsChanged( const stringType & GroupName, const stringType & SettingName )
 {
-	/*if ( GroupName != SETTINGS_GROUP_CLIPBOARDLIST )
-	{
-		return;
-	}
+  /*if ( GroupName != SETTINGS_GROUP_CLIPBOARDLIST )
+  {
+    return;
+  }
 
-	int NewMaxClipboardItems = 0;
-	IF_SETTING_CHANGED_INT( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_CLIPBOARD_ITEMS, NewMaxClipboardItems )
-	else IF_SETTING_CHANGED_BOOL( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_SAVE_CLIPBOARD_SESSION, bSaveClipboardSession )
-	if ( NewMaxClipboardItems > 0 )
-	{
-		SetMaxListSize( NewMaxClipboardItems );
-	}*/
+  int NewMaxClipboardItems = 0;
+  IF_SETTING_CHANGED_INT( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_CLIPBOARD_ITEMS, NewMaxClipboardItems )
+  else IF_SETTING_CHANGED_BOOL( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_SAVE_CLIPBOARD_SESSION, bSaveClipboardSession )
+  if ( NewMaxClipboardItems > 0 )
+  {
+    SetMaxListSize( NewMaxClipboardItems );
+  }*/
 }

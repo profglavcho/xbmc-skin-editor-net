@@ -32,74 +32,74 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 // ID for dockable window
-#define	MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0
+#define  MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0
 
 
 class MultiClipViewerDialog : public DockingDlgInterface, public IController
 {
 public:
-	MultiClipViewerDialog();
-	~MultiClipViewerDialog();
-	// Not inherited from DockingDlgInterface
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
-	virtual void Shutdown();
-	// Inherited from DockingDlgInterface
-	virtual void destroy() {}
+  MultiClipViewerDialog();
+  ~MultiClipViewerDialog();
+  // Not inherited from DockingDlgInterface
+  virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+  virtual void Shutdown();
+  // Inherited from DockingDlgInterface
+  virtual void destroy() {}
 
-	void ShowDialog( bool Show = TRUE );
+  void ShowDialog( bool Show = TRUE );
 
-	virtual void OnModelModified();
+  virtual void OnModelModified();
 
 protected:
-	// Overload DockingDlgInterface's dialog procedure
-	virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );
+  // Overload DockingDlgInterface's dialog procedure
+  virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );
 
-	// Initialise dialog here
-	void InitialiseDialog();
+  // Initialise dialog here
+  void InitialiseDialog();
 
-	// Toolbar commands
-	void tb_cmd(UINT message);
+  // Toolbar commands
+  void tb_cmd(UINT message);
 
-	void SetSplitterOrientation();
+  void SetSplitterOrientation();
 
 private:
-	tTbData TBData;
-	bool IsShown;
-	UINT DragListMessage;
-	MultiClipOLEDataObject * pDataObject;
-	MultiClipOLEDropSource * pDropSource;
+  tTbData TBData;
+  bool IsShown;
+  UINT DragListMessage;
+  MultiClipOLEDataObject * pDataObject;
+  MultiClipOLEDropSource * pDropSource;
 
-	// Don't allow display and editing of text greater than NoEditLargeTextSize
-	BOOL bNoEditLargeText;
-	UINT NoEditLargeTextSize;
-	UINT LargeTextDisplaySize;
-	BOOL bPasteAllReverseOrder;
-	BOOL bPasteAllEOLBetweenItems;
+  // Don't allow display and editing of text greater than NoEditLargeTextSize
+  BOOL bNoEditLargeText;
+  UINT NoEditLargeTextSize;
+  UINT LargeTextDisplaySize;
+  BOOL bPasteAllReverseOrder;
+  BOOL bPasteAllEOLBetweenItems;
 
-	SplitterPanel MultiClipViewerPanel;
-	ToolbarPanel ListBoxPanel;
-	ToolbarPanel EditBoxPanel;
-	ToolBar ListBoxToolBar;
-	MultiClipboardListbox MultiClipViewerListbox;
-	MultiClipboardEditbox MultiClipViewerEditBox;
+  SplitterPanel MultiClipViewerPanel;
+  ToolbarPanel ListBoxPanel;
+  ToolbarPanel EditBoxPanel;
+  ToolBar ListBoxToolBar;
+  MultiClipboardListbox MultiClipViewerListbox;
+  MultiClipboardEditbox MultiClipViewerEditBox;
 
-	void ShowClipText();
-	void OnListSelectionChanged();
-	void OnListDoubleClicked();
-	void OnEditBoxUpdated();
-	// Get toolbar tooltips
-	void OnToolBarRequestToolTip( LPNMHDR nmhdr );
-	void OnToolBarCommand( UINT Cmd );
-	BOOL OnDragListMessage( LPDRAGLISTINFO pDragListInfo );
+  void ShowClipText();
+  void OnListSelectionChanged();
+  void OnListDoubleClicked();
+  void OnEditBoxUpdated();
+  // Get toolbar tooltips
+  void OnToolBarRequestToolTip( LPNMHDR nmhdr );
+  void OnToolBarCommand( UINT Cmd );
+  BOOL OnDragListMessage( LPDRAGLISTINFO pDragListInfo );
 
-	void PasteSelectedItem();
-	void PasteAllItems();
-	void DeleteSelectedItem();
-	void DeleteAllItems();
-	void CopySelectedItemToClipboard();
+  void PasteSelectedItem();
+  void PasteAllItems();
+  void DeleteSelectedItem();
+  void DeleteAllItems();
+  void CopySelectedItemToClipboard();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
-	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
+  virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+  virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 };
 
 

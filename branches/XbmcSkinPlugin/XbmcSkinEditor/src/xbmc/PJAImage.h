@@ -66,8 +66,8 @@ protected:
     void DitherBlt(CDC *pToDC, int x, int y, int w, int h, CDC *pFromDC);  // draw the bitmap grayed
     void DrawTransparent(CDC *pToDC, int w, int h, CDC *pFromDC); // draw the bitmap transparently
     int Gray(int r, int g, int b);
-	HBITMAP GrayScale (CDC *pDC, HBITMAP hBitmap);
-	BOOL IsTransparent(int r, int g, int b);
+  HBITMAP GrayScale (CDC *pDC, HBITMAP hBitmap);
+  BOOL IsTransparent(int r, int g, int b);
 
 private:
     DWORD m_ImageFlags;                 // the control flags

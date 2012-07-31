@@ -30,20 +30,20 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 class MultiClipboardEditbox : public Window
 {
 public:
-	virtual void init(HINSTANCE hInst, HWND parent);
-	virtual void destroy();
+  virtual void init(HINSTANCE hInst, HWND parent);
+  virtual void destroy();
 
-	virtual void SetText( const std::wstring & text );
-	virtual std::wstring GetText();
-	// This should be slightly more efficient due to not pass text around too much
-	virtual void GetText( std::wstring & text );
+  virtual void SetText( const std::wstring & text );
+  virtual std::wstring GetText();
+  // This should be slightly more efficient due to not pass text around too much
+  virtual void GetText( std::wstring & text );
 
-	virtual void SetEditBoxReadOnly( const BOOL bReadOnly = TRUE );
-	virtual void EnableEditBox( const BOOL bEnable = TRUE );
-	virtual BOOL IsEditBoxEnabled();
+  virtual void SetEditBoxReadOnly( const BOOL bReadOnly = TRUE );
+  virtual void EnableEditBox( const BOOL bEnable = TRUE );
+  virtual BOOL IsEditBoxEnabled();
 
 private:
-	HFONT hNewFont;
+  HFONT hNewFont;
 };
 
 

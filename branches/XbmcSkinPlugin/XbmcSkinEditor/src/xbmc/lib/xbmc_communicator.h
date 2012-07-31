@@ -5,14 +5,14 @@
 class XbmcCommunicator
 {
 public:
-	XbmcCommunicator();
-	~XbmcCommunicator();
+  XbmcCommunicator();
+  ~XbmcCommunicator();
   void SendCommand(std::wstring ip,std::wstring login,std::wstring password,std::wstring wget_path, std::wstring window);
   std::wstring GetWindowId(std::wstring thewindow);
 protected:
   
   
-	
+  
 };
 
 #endif

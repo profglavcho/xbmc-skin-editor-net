@@ -33,7 +33,7 @@ class CXbmcControlsFactory
 {
 public:
   CXbmcControlsFactory();
-	~CXbmcControlsFactory();
+  ~CXbmcControlsFactory();
   void LoadControls();
   std::vector<CStdString> GetControlsList();
   bool ControlTypeExist(CStdString type);

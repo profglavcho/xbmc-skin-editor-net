@@ -39,57 +39,57 @@ CDuoTextBoxContainer::CDuoTextBoxContainer()
 
 void CDuoTextBoxContainer::init( HINSTANCE hInst, HWND parent )
 {
-	Window::init( hInst, parent );
+  Window::init( hInst, parent );
 
-	WNDCLASS wndclass;
-	ZeroMemory( &wndclass, sizeof(WNDCLASS) );
-	wndclass.style = CS_HREDRAW | CS_VREDRAW;
-	wndclass.lpfnWndProc = StaticDuoTextBoxPanelProc;
-	wndclass.hInstance = _hInst;
-	wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
-	wndclass.hbrBackground = (HBRUSH) CreateSolidBrush( RGB(212,208,200));
-	wndclass.lpszClassName = DUO_TEXTBOX_CONTAINER_CLASS_NAME;
+  WNDCLASS wndclass;
+  ZeroMemory( &wndclass, sizeof(WNDCLASS) );
+  wndclass.style = CS_HREDRAW | CS_VREDRAW;
+  wndclass.lpfnWndProc = StaticDuoTextBoxPanelProc;
+  wndclass.hInstance = _hInst;
+  wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
+  wndclass.hbrBackground = (HBRUSH) CreateSolidBrush( RGB(212,208,200));
+  wndclass.lpszClassName = DUO_TEXTBOX_CONTAINER_CLASS_NAME;
 
   /*test window class*/
   WNDCLASS wndclass2;
-	ZeroMemory( &wndclass2, sizeof(WNDCLASS) );
+  ZeroMemory( &wndclass2, sizeof(WNDCLASS) );
   if (!GetClassInfo(_hInst, DUO_TEXTBOX_CONTAINER_CLASS_NAME,&wndclass2))
   {
-	  if ( !::RegisterClass( &wndclass ) )
-	  {
-		  DWORD dwErr = GetLastError();
-		  // Check if class is already registered, if not then we have some other errors
-		  if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
-		  {
-			  TCHAR errText[512] = TEXT("");
-			  wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CONTAINER_CLASS_NAME, dwErr );
-			  ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
-			  return;
-		  }
-		  return;
-	  }
+    if ( !::RegisterClass( &wndclass ) )
+    {
+      DWORD dwErr = GetLastError();
+      // Check if class is already registered, if not then we have some other errors
+      if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
+      {
+        TCHAR errText[512] = TEXT("");
+        wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CONTAINER_CLASS_NAME, dwErr );
+        ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+        return;
+      }
+      return;
+    }
   }
   RECT rc;
   GetClientRect(parent, &rc);
-	_hSelf = CreateWindowW( DUO_TEXTBOX_CONTAINER_CLASS_NAME, 0, WS_CHILD | WS_VISIBLE | WS_VSCROLL , 0, 45,rc.right,rc.bottom-45, _hParent, 0, _hInst, 0 );
-	if ( !_hSelf )
-	{
-		DWORD dwErr = GetLastError();
-		TCHAR errText[512] = TEXT("");
-		wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CONTAINER_CLASS_NAME, dwErr );
-		::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
-	}
+  _hSelf = CreateWindowW( DUO_TEXTBOX_CONTAINER_CLASS_NAME, 0, WS_CHILD | WS_VISIBLE | WS_VSCROLL , 0, 45,rc.right,rc.bottom-45, _hParent, 0, _hInst, 0 );
+  if ( !_hSelf )
+  {
+    DWORD dwErr = GetLastError();
+    TCHAR errText[512] = TEXT("");
+    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CONTAINER_CLASS_NAME, dwErr );
+    ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+  }
 
-	// Store the instance pointer within the window user data
-	::SetWindowLongPtr( _hSelf, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this) );
+  // Store the instance pointer within the window user data
+  ::SetWindowLongPtr( _hSelf, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this) );
 
-	// Load the cursors for moving the splitter
-	hSplitterCursorUpDown    = ::LoadCursor( _hInst, MAKEINTRESOURCE(IDC_UPDOWN) );
-	// Make splitter same colour as the dialog pane
-	hSplitterBrush = ::CreateSolidBrush( RGB(212,208,200));//::GetSysColor(CTLCOLOR_DLG) );
-	hSplitterPen = ::CreatePen( PS_SOLID, 0, RGB(212,208,200));//::GetSysColor(CTLCOLOR_DLG) );
+  // Load the cursors for moving the splitter
+  hSplitterCursorUpDown    = ::LoadCursor( _hInst, MAKEINTRESOURCE(IDC_UPDOWN) );
+  // Make splitter same colour as the dialog pane
+  hSplitterBrush = ::CreateSolidBrush( RGB(212,208,200));//::GetSysColor(CTLCOLOR_DLG) );
+  hSplitterPen = ::CreatePen( PS_SOLID, 0, RGB(212,208,200));//::GetSysColor(CTLCOLOR_DLG) );
 
-	DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
+  DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
   
   m_nVscrollPos = 0;
   GetClientRect(_hSelf,&m_ClientRect);
@@ -145,12 +145,12 @@ int CDuoTextBoxContainer::OnScroll(WPARAM wParam)
   }
   nInc = max(-m_nVscrollPos, min(nInc, m_nVscrollMax - m_nVscrollPos));
   if (nInc)
-	{
-			m_nVscrollPos += nInc;
-			int iMove = -VERT_PTS * nInc;
-			ScrollWindow(getHSelf(), 0, iMove, NULL, NULL);
-			SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);
-	}
+  {
+      m_nVscrollPos += nInc;
+      int iMove = -VERT_PTS * nInc;
+      ScrollWindow(getHSelf(), 0, iMove, NULL, NULL);
+      SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);
+  }
   return 1;
   //wParam is the type of scroll
   RECT rc;
@@ -174,7 +174,7 @@ int CDuoTextBoxContainer::OnScroll(WPARAM wParam)
   SCROLLINFO si;
   si.cbSize = sizeof(si); 
   si.fMask  = SIF_POS; 
-	si.nPos   = newpos; 
+  si.nPos   = newpos; 
   SetScrollInfo(getHSelf(), SB_VERT, &si, TRUE); 
   UpdateWindow (getHSelf());
   return 1;
@@ -183,47 +183,47 @@ int CDuoTextBoxContainer::OnScroll(WPARAM wParam)
 LRESULT CDuoTextBoxContainer::DuoTextBoxProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
   DWORD command;
-	if ( message == DragListMessage )
-	{
-		// Being a container window which doesn't care about child window control notifications,
-		// forward the child window controls' notifications to the parent window for processing
-		return ::SendMessage( _hParent, message, wParam, lParam );
-	}
+  if ( message == DragListMessage )
+  {
+    // Being a container window which doesn't care about child window control notifications,
+    // forward the child window controls' notifications to the parent window for processing
+    return ::SendMessage( _hParent, message, wParam, lParam );
+  }
 
-	switch ( message )
-	{
-	case WM_MOVE:
-	case WM_SIZE:
-		return 0;
+  switch ( message )
+  {
+  case WM_MOVE:
+  case WM_SIZE:
+    return 0;
   case WM_VSCROLL:
     {
       return OnScroll(wParam);
     }
-	case WM_PAINT:
-		{
-			HDC hdc;
-			PAINTSTRUCT ps;
-			RECT rc;
-			HBRUSH hOldBrush;
-			HPEN hOldPen;
+  case WM_PAINT:
+    {
+      HDC hdc;
+      PAINTSTRUCT ps;
+      RECT rc;
+      HBRUSH hOldBrush;
+      HPEN hOldPen;
 
-			
+      
       GetWindowRect(_hSelf, &rc);
-			hdc = ::BeginPaint( _hSelf, &ps );
+      hdc = ::BeginPaint( _hSelf, &ps );
 
-			hOldBrush = (HBRUSH)::SelectObject( hdc, hSplitterBrush );
-			hOldPen = (HPEN)::SelectObject( hdc, hSplitterPen );
-			::Rectangle( hdc, rc.left, rc.top, rc.right, rc.bottom );
+      hOldBrush = (HBRUSH)::SelectObject( hdc, hSplitterBrush );
+      hOldPen = (HPEN)::SelectObject( hdc, hSplitterPen );
+      ::Rectangle( hdc, rc.left, rc.top, rc.right, rc.bottom );
 
-			// clean up
-			::SelectObject( hdc, hOldBrush );
-			::SelectObject( hdc, hOldPen );
+      // clean up
+      ::SelectObject( hdc, hOldBrush );
+      ::SelectObject( hdc, hOldPen );
 
-			::EndPaint( _hSelf, &ps );
-			return 0;
-		}
+      ::EndPaint( _hSelf, &ps );
+      return 0;
+    }
 
-	case WM_COMMAND:
+  case WM_COMMAND:
     command = HIWORD(wParam);
     if (HIWORD(wParam) == EN_CHANGE)//768 1024
     {
@@ -239,17 +239,17 @@ LRESULT CDuoTextBoxContainer::DuoTextBoxProc( HWND hwnd, UINT message, WPARAM wP
       return ::SendMessage( _hParent, message, wParam, (LPARAM)getHSelf() );
     }
     break;
-	case WM_NOTIFY:
-		// Being a container window which doesn't care about child window control notifications,
-		// forward the child window controls' notifications to the parent window for processing
-		return ::SendMessage( _hParent, message, wParam, lParam );
+  case WM_NOTIFY:
+    // Being a container window which doesn't care about child window control notifications,
+    // forward the child window controls' notifications to the parent window for processing
+    return ::SendMessage( _hParent, message, wParam, lParam );
 
-	case WM_DESTROY:
-		::DeleteBrush( hSplitterBrush );
-		::DeletePen( hSplitterPen );
-		return 0;
-	}
-	return ::DefWindowProc( hwnd, message, wParam, lParam );
+  case WM_DESTROY:
+    ::DeleteBrush( hSplitterBrush );
+    ::DeletePen( hSplitterPen );
+    return 0;
+  }
+  return ::DefWindowProc( hwnd, message, wParam, lParam );
 }
 
 void CDuoTextBoxContainer::Resize(RECT rc)
@@ -270,96 +270,76 @@ void CDuoTextBoxContainer::ResetScrollbar()
 {
   CRect tempRect;
   GetClientRect(getHSelf(),&tempRect);
-	BOOL bMaximized;
+  BOOL bMaximized;
     
     //Max Vertical Scrolling is the difference between size
-	//of the Whole Property Page with Controls and that with
-	//the current one devided by the Indentation you set
+  //of the Whole Property Page with Controls and that with
+  //the current one devided by the Indentation you set
 
-	m_nVertInc = (m_ClientRect.Height() - tempRect.Height())/VERT_PTS;
+  m_nVertInc = (m_ClientRect.Height() - tempRect.Height())/VERT_PTS;
 
-	m_nVscrollMax = max(0, m_nVertInc);
+  m_nVscrollMax = max(0, m_nVertInc);
   m_nVscrollPos = min(m_nVscrollPos, m_nVscrollMax);
   SetScrollRange(getHSelf(), SB_VERT, 0, m_nVscrollMax, FALSE);
-  SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);	
+  SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);  
 }
 
 void CDuoTextBoxContainer::SetupScrollbar()
 {
-  	CRect tempRect;
-    GetClientRect(getHSelf(), &tempRect);
-	BOOL bMaximized;
+  CRect tempRect;
+  GetClientRect(getHSelf(), &tempRect);
+  BOOL bMaximized;
     
     //Max Vertical Scrolling is the difference between size
-	//of the Whole Property Page with Controls and that with
-	//the current one devided by the Indentation you set
+  //of the Whole Property Page with Controls and that with
+  //the current one devided by the Indentation you set
 
-	m_nVertInc = (m_ClientRect.Height() - tempRect.Height())/VERT_PTS;
+  m_nVertInc = (m_ClientRect.Height() - tempRect.Height())/VERT_PTS;
 
-	m_nVscrollMax = max(0, m_nVertInc);
+  m_nVscrollMax = max(0, m_nVertInc);
   m_nVscrollPos = min(m_nVscrollPos, m_nVscrollMax);
   SetScrollRange(getHSelf(), SB_VERT, 0, m_nVscrollMax, FALSE);
-  SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);	
-
-#if 0
-  RECT rc;
-  getClientRect(rc);
-  BOOL res = 0;
-  RECT rcTextBox;
-  if ((rc.bottom-rc.top)< m_pBottomPosition)
-  {
-    int ammountpossible = (rc.bottom-rc.top)/20;
-    int ammountmissing = m_pDuoTextBox.size()-ammountpossible;
-
-    res = ShowScrollBar(getHSelf(), SB_VERT, TRUE);
-    res = SetScrollRange(getHSelf(), SB_VERT, 0, /*ammountmissing*/100, TRUE);
-    res = EnableScrollBar(getHSelf(), SB_VERT, ESB_ENABLE_BOTH);
-  }
-  else
-  {
-    res = ShowScrollBar(getHSelf(), SB_VERT, 0);
-  }
-#endif
+  SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);
 }
 
 void CDuoTextBoxContainer::GetLabel( CStdString & text )
 {
   // Use stl's vector to store the text from editbox, instead of new and delete array
-	// because it is safer against memory leaks
+  // because it is safer against memory leaks
 
-	// Get length of text in edit box
-	INT textLength = ::GetWindowTextLength(m_pCurrentLabel);
-	// Use stl's vector to store the text, make sure to reserve space for null terminator
-	std::vector< std::wstring::value_type > data( textLength + 1, 0 );
-	// Get the window text into the vector
-	::GetWindowText( m_pCurrentLabel, &data[0], (int)data.capacity() );
+  // Get length of text in edit box
+  INT textLength = ::GetWindowTextLength(m_pCurrentLabel);
+  // Use stl's vector to store the text, make sure to reserve space for null terminator
+  std::vector< std::wstring::value_type > data( textLength + 1, 0 );
+  // Get the window text into the vector
+  ::GetWindowText( m_pCurrentLabel, &data[0], (int)data.capacity() );
 
-	// return the text
-	text.assign( &data[0] );
+  // return the text
+  text.assign( &data[0] );
 }
 
 void CDuoTextBoxContainer::GetTextBox( CStdString & text )
 {
   // Use stl's vector to store the text from editbox, instead of new and delete array
-	// because it is safer against memory leaks
+  // because it is safer against memory leaks
 
-	// Get length of text in edit box
-	INT textLength = ::GetWindowTextLength(m_pCurrentTextBox);
-	// Use stl's vector to store the text, make sure to reserve space for null terminator
-	std::vector< std::wstring::value_type > data( textLength + 1, 0 );
-	// Get the window text into the vector
-	::GetWindowText( m_pCurrentTextBox, &data[0], (int)data.capacity() );
+  // Get length of text in edit box
+  INT textLength = ::GetWindowTextLength(m_pCurrentTextBox);
+  // Use stl's vector to store the text, make sure to reserve space for null terminator
+  std::vector< std::wstring::value_type > data( textLength + 1, 0 );
+  // Get the window text into the vector
+  ::GetWindowText( m_pCurrentTextBox, &data[0], (int)data.capacity() );
 
-	// return the text
-	text.assign( &data[0] );
+  // return the text
+  text.assign( &data[0] );
 }
 
 LRESULT CALLBACK CDuoTextBoxContainer::StaticDuoTextBoxPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	CDuoTextBoxContainer * pDuoTextBox = reinterpret_cast<CDuoTextBoxContainer *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
-	if ( !pDuoTextBox )
-	{
-		return ::DefWindowProc( hwnd, message, wParam, lParam );
-	}
-	return pDuoTextBox->DuoTextBoxProc( hwnd, message, wParam, lParam );
+  CDuoTextBoxContainer * pDuoTextBox = reinterpret_cast<CDuoTextBoxContainer *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
+  if ( !pDuoTextBox )
+  {
+    return ::DefWindowProc( hwnd, message, wParam, lParam );
+  }
+  return pDuoTextBox->DuoTextBoxProc( hwnd, message, wParam, lParam );
 }

@@ -30,68 +30,68 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class MultiClipboardSettingsDialog : public StaticDialog
 {
 public:
-	void Init( HINSTANCE hInst, HWND hNpp );
-	void ShowDialog( bool Show = TRUE );
+  void Init( HINSTANCE hInst, HWND hNpp );
+  void ShowDialog( bool Show = TRUE );
 
 protected:
-	virtual BOOL CALLBACK run_dlgProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+  virtual BOOL CALLBACK run_dlgProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 
 private:
-	void LoadMultiClipboardSettings();
-	void SaveMultiClipboardSettings();
+  void LoadMultiClipboardSettings();
+  void SaveMultiClipboardSettings();
 
-	void SetIntValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
-	void SetBoolValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
+  void SetIntValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
+  void SetBoolValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
   void SetStringValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
-	void GetIntValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
-	void GetBoolValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
+  void GetIntValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
+  void GetBoolValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
   void GetStringValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID );
 
-	void SubclassChildControl( const int ControlID );
-	void SubclassStaticTextChildControl( const int ControlID );
-	void SubclassAllChildControls();
-	void GetSettingsGroupAndName( const int Control, std::wstring & GroupName, std::wstring & SettingName );
+  void SubclassChildControl( const int ControlID );
+  void SubclassStaticTextChildControl( const int ControlID );
+  void SubclassAllChildControls();
+  void GetSettingsGroupAndName( const int Control, std::wstring & GroupName, std::wstring & SettingName );
 
-	// ID of child control the mouse cursor is current over, for displaying context help
-	int CurrentMouseOverID;
-	void DisplayMouseOverIDHelp( const int ControlID );
-	LPCTSTR GetControlHelpText( int ControlID );
+  // ID of child control the mouse cursor is current over, for displaying context help
+  int CurrentMouseOverID;
+  void DisplayMouseOverIDHelp( const int ControlID );
+  LPCTSTR GetControlHelpText( int ControlID );
 
   void ShowFolderBrowser();
 
-	// Handles mapping from settings to dialog item control ID and vice versa
-	// All mappings shall be defined in this function
-	void LoadSettingsControlMap();
-	enum SettingControlTypeEnum
-	{
-		SCTE_BOOL,
-		SCTE_INT,
+  // Handles mapping from settings to dialog item control ID and vice versa
+  // All mappings shall be defined in this function
+  void LoadSettingsControlMap();
+  enum SettingControlTypeEnum
+  {
+    SCTE_BOOL,
+    SCTE_INT,
     SCTE_STRING
-	};
-	struct SettingsControlMapStruct
-	{
-		int ControlID;
-		int ControlStaticTextID;
-		SettingControlTypeEnum SettingType;
-		std::wstring GroupName;
-		std::wstring SettingName;
-		std::wstring SettingHelp;
+  };
+  struct SettingsControlMapStruct
+  {
+    int ControlID;
+    int ControlStaticTextID;
+    SettingControlTypeEnum SettingType;
+    std::wstring GroupName;
+    std::wstring SettingName;
+    std::wstring SettingHelp;
 
-		SettingsControlMapStruct(
-			int controlID, int controlStaticTextID, SettingControlTypeEnum settingType,
-			std::wstring groupName, std::wstring settingName, std::wstring settingHelp )
-			: ControlID( controlID ), ControlStaticTextID( controlStaticTextID ), SettingType( settingType )
-			, GroupName( groupName ), SettingName( settingName ), SettingHelp( settingHelp ) {}
+    SettingsControlMapStruct(
+      int controlID, int controlStaticTextID, SettingControlTypeEnum settingType,
+      std::wstring groupName, std::wstring settingName, std::wstring settingHelp )
+      : ControlID( controlID ), ControlStaticTextID( controlStaticTextID ), SettingType( settingType )
+      , GroupName( groupName ), SettingName( settingName ), SettingHelp( settingHelp ) {}
 
-		SettingsControlMapStruct(
-			int controlID, SettingControlTypeEnum settingType,
-			std::wstring groupName, std::wstring settingName, std::wstring settingHelp )
-			: ControlID( controlID ), ControlStaticTextID( -1 ), SettingType( settingType )
-			, GroupName( groupName ), SettingName( settingName ), SettingHelp( settingHelp ) {}
-	};
-	typedef std::vector< SettingsControlMapStruct > SettingsControlMapType;
-	typedef SettingsControlMapType::iterator SettingsControlMapIter;
-	SettingsControlMapType SettingsControlMap;
+    SettingsControlMapStruct(
+      int controlID, SettingControlTypeEnum settingType,
+      std::wstring groupName, std::wstring settingName, std::wstring settingHelp )
+      : ControlID( controlID ), ControlStaticTextID( -1 ), SettingType( settingType )
+      , GroupName( groupName ), SettingName( settingName ), SettingHelp( settingHelp ) {}
+  };
+  typedef std::vector< SettingsControlMapStruct > SettingsControlMapType;
+  typedef SettingsControlMapType::iterator SettingsControlMapIter;
+  SettingsControlMapType SettingsControlMap;
 };
 
 

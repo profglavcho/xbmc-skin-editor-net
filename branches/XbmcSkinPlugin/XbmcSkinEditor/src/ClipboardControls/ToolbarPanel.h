@@ -29,32 +29,32 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 class ToolbarPanel : public Window
 {
 public:
-	ToolbarPanel();
+  ToolbarPanel();
 
-	virtual void init(HINSTANCE hInst, HWND parent);
-	virtual void destroy() {}
+  virtual void init(HINSTANCE hInst, HWND parent);
+  virtual void destroy() {}
 
-	// Warning: Not tested with changing toolbar in runtime!
-	void SetToolbar( ToolBar * pNewToolBar );
-	void SetChildWindow( Window * pNewChildWin );
-	Window * GetChildWindow();
+  // Warning: Not tested with changing toolbar in runtime!
+  void SetToolbar( ToolBar * pNewToolBar );
+  void SetChildWindow( Window * pNewChildWin );
+  Window * GetChildWindow();
 
 protected:
-	ToolBar * pToolbar;
-	ReBar Rebar;
-	Window * pChildWin;
-	HPEN hChildWindowPen;
-	// For passing through drag list box messages
-	UINT DragListMessage;
+  ToolBar * pToolbar;
+  ReBar Rebar;
+  Window * pChildWin;
+  HPEN hChildWindowPen;
+  // For passing through drag list box messages
+  UINT DragListMessage;
 
-	void GetPanelRect( RECT &PanelRect );
-	void GetToolbarRect( RECT &ToolbarRect );
-	void GetChildWinRect( RECT &ChildWinRect );
-	void ResizeChildren();
+  void GetPanelRect( RECT &PanelRect );
+  void GetToolbarRect( RECT &ToolbarRect );
+  void GetChildWinRect( RECT &ChildWinRect );
+  void ResizeChildren();
 
-	LRESULT CALLBACK ToolbarPanelProc( HWND hwnd ,UINT Message, WPARAM wParam, LPARAM lParam );
+  LRESULT CALLBACK ToolbarPanelProc( HWND hwnd ,UINT Message, WPARAM wParam, LPARAM lParam );
 
-	static LRESULT CALLBACK StaticToolbarPanelProc( HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam );
+  static LRESULT CALLBACK StaticToolbarPanelProc( HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam );
 };
 
 #endif //TOOLBAR_PANEL_H

@@ -29,26 +29,26 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class MultiClipCyclicPaste : public IController, public CyclicPasteListener
 {
 public:
-	MultiClipCyclicPaste();
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+  MultiClipCyclicPaste();
+  virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
 
-	void DoCyclicPaste();
-	void ResetPasteIndex();
+  void DoCyclicPaste();
+  void ResetPasteIndex();
 
-	// CyclicPasteListener interface
-	virtual void OnCyclicPasteBegin();
-	virtual void OnCyclicPasteEnd();
+  // CyclicPasteListener interface
+  virtual void OnCyclicPasteBegin();
+  virtual void OnCyclicPasteEnd();
 
-	virtual void OnModelModified();
+  virtual void OnModelModified();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
-	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
+  virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+  virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 private:
-	// Where the last used text selection position in the scintilla edit is
-	int selectionPosStart, selectionPosEnd;
-	// The index into the clip list for the next text to paste
-	unsigned int nextPasteIndex;
+  // Where the last used text selection position in the scintilla edit is
+  int selectionPosStart, selectionPosEnd;
+  // The index into the clip list for the next text to paste
+  unsigned int nextPasteIndex;
 };
 
 

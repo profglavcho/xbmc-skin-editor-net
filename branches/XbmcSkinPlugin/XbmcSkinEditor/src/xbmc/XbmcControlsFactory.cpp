@@ -343,7 +343,7 @@ newLineString CXbmcControlsFactory::GetLineModification(CStdString strControl, C
   
   
   returnline.strNewLine = g_Scintilla.A_to_W(printer.CStr());
-	return returnline;
+  return returnline;
 
 }
 
@@ -361,7 +361,7 @@ void CXbmcControlsFactory::LoadCurrentControl(CStdString strControl)
   TiXmlDocument doc(m_pTempXmlControlPath.c_str());
   bool loadOkay = doc.LoadFile();
   CStdString type;
-	if (loadOkay)
+  if (loadOkay)
   {
     TiXmlElement* ele = doc.FirstChildElement("control");
     type = GetType(ele);

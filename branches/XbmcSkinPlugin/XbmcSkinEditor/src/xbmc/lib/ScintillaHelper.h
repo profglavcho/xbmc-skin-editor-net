@@ -6,8 +6,8 @@
 class CScintillaHelper
 {
 public:
-	CScintillaHelper();
-	~CScintillaHelper();
+  CScintillaHelper();
+  ~CScintillaHelper();
 
   void ScintillaSearch(char *text, int start, int end);
   void ScintillaGetText(char *text, int start, int end);

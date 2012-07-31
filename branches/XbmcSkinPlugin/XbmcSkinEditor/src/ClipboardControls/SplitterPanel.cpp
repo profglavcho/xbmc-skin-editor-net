@@ -44,328 +44,328 @@ SplitterPanel::SplitterPanel()
 
 void SplitterPanel::init( HINSTANCE hInst, HWND parent )
 {
-	Window::init( hInst, parent );
+  Window::init( hInst, parent );
 
-	WNDCLASS wndclass;
-	ZeroMemory( &wndclass, sizeof(WNDCLASS) );
-	wndclass.style = CS_HREDRAW | CS_VREDRAW;
-	wndclass.lpfnWndProc = StaticSplitterPanelProc;
-	wndclass.hInstance = _hInst;
-	wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
-	wndclass.hbrBackground = (HBRUSH) (COLOR_WINDOWFRAME);
-	wndclass.lpszClassName = SPLITTER_PANEL_CLASS_NAME;
+  WNDCLASS wndclass;
+  ZeroMemory( &wndclass, sizeof(WNDCLASS) );
+  wndclass.style = CS_HREDRAW | CS_VREDRAW;
+  wndclass.lpfnWndProc = StaticSplitterPanelProc;
+  wndclass.hInstance = _hInst;
+  wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
+  wndclass.hbrBackground = (HBRUSH) (COLOR_WINDOWFRAME);
+  wndclass.lpszClassName = SPLITTER_PANEL_CLASS_NAME;
 
   /*test window class*/
   WNDCLASS wndclass2;
-	ZeroMemory( &wndclass2, sizeof(WNDCLASS) );
+  ZeroMemory( &wndclass2, sizeof(WNDCLASS) );
   if (!GetClassInfo(_hInst, SPLITTER_PANEL_CLASS_NAME,&wndclass2))
   {
   
-	  if ( !::RegisterClass( &wndclass ) )
-	  {
-		  DWORD dwErr = GetLastError();
-		  // Check if class is already registered, if not then we have some other errors
-		  if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
-		  {
-			  TCHAR errText[512] = TEXT("");
-			  wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), SPLITTER_PANEL_CLASS_NAME, dwErr );
-			  ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
-			  return;
-		  }
-		  return;
-	  }
+    if ( !::RegisterClass( &wndclass ) )
+    {
+      DWORD dwErr = GetLastError();
+      // Check if class is already registered, if not then we have some other errors
+      if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
+      {
+        TCHAR errText[512] = TEXT("");
+        wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), SPLITTER_PANEL_CLASS_NAME, dwErr );
+        ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+        return;
+      }
+      return;
+    }
   }
-	_hSelf = CreateWindowW( SPLITTER_PANEL_CLASS_NAME, 0, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, _hParent, 0, _hInst, 0 );
-	if ( !_hSelf )
-	{
-		DWORD dwErr = GetLastError();
-		TCHAR errText[512] = TEXT("");
-		wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), SPLITTER_PANEL_CLASS_NAME, dwErr );
-		::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
-	}
+  _hSelf = CreateWindowW( SPLITTER_PANEL_CLASS_NAME, 0, WS_CHILD | WS_VISIBLE, 0, 0, 0, 0, _hParent, 0, _hInst, 0 );
+  if ( !_hSelf )
+  {
+    DWORD dwErr = GetLastError();
+    TCHAR errText[512] = TEXT("");
+    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), SPLITTER_PANEL_CLASS_NAME, dwErr );
+    ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+  }
 
-	// Store the instance pointer within the window user data
-	::SetWindowLongPtr( _hSelf, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this) );
+  // Store the instance pointer within the window user data
+  ::SetWindowLongPtr( _hSelf, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this) );
 
-	// Load the cursors for moving the splitter
-	hSplitterCursorUpDown    = ::LoadCursor( _hInst, MAKEINTRESOURCE(IDC_UPDOWN) );
-	hSplitterCursorLeftRight = ::LoadCursor( _hInst, MAKEINTRESOURCE(IDC_LEFTRIGHT) );
-	// Make splitter same colour as the dialog pane
-	hSplitterBrush = ::CreateSolidBrush( ::GetSysColor(COLOR_BTNFACE) );
-	hSplitterPen = ::CreatePen( PS_SOLID, 0, ::GetSysColor(COLOR_BTNFACE) );
+  // Load the cursors for moving the splitter
+  hSplitterCursorUpDown    = ::LoadCursor( _hInst, MAKEINTRESOURCE(IDC_UPDOWN) );
+  hSplitterCursorLeftRight = ::LoadCursor( _hInst, MAKEINTRESOURCE(IDC_LEFTRIGHT) );
+  // Make splitter same colour as the dialog pane
+  hSplitterBrush = ::CreateSolidBrush( ::GetSysColor(COLOR_BTNFACE) );
+  hSplitterPen = ::CreatePen( PS_SOLID, 0, ::GetSysColor(COLOR_BTNFACE) );
 
-	DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
+  DragListMessage = ::RegisterWindowMessage( DRAGLISTMSGSTRING );
 }
 
 void SplitterPanel::SetSplitterPanelOrientation( ESplitterPanelOrientation NewOrientation )
 {
-	if ( Orientation != NewOrientation )
-	{
-		Orientation = NewOrientation;
+  if ( Orientation != NewOrientation )
+  {
+    Orientation = NewOrientation;
 
-		// Resize child windows
-		ResizeChildren();
-	}
+    // Resize child windows
+    ResizeChildren();
+  }
 }
 
 void SplitterPanel::GetSplitterBarRect( RECT &SplitterPosRect )
 {
-	RECT rect;
+  RECT rect;
 
-	// Calculate splitter position
-	getClientRect( rect );
-	if ( Orientation == ESPO_VERTICAL )
-	{
-		SplitterPosRect.top = (INT) ( (rect.bottom-rect.top) * SplitterBarPositionPercent );
-		SplitterPosRect.bottom = SplitterPosRect.top + SplitterBarThickness;
-		SplitterPosRect.left = 0;
-		SplitterPosRect.right = rect.right - rect.left;
-	}
-	else
-	{
-		SplitterPosRect.top = 0;
-		SplitterPosRect.bottom = rect.bottom - rect.top;
-		SplitterPosRect.left = (INT) ( (rect.right-rect.left) * SplitterBarPositionPercent );
-		SplitterPosRect.right = SplitterPosRect.left + SplitterBarThickness;
-	}
+  // Calculate splitter position
+  getClientRect( rect );
+  if ( Orientation == ESPO_VERTICAL )
+  {
+    SplitterPosRect.top = (INT) ( (rect.bottom-rect.top) * SplitterBarPositionPercent );
+    SplitterPosRect.bottom = SplitterPosRect.top + SplitterBarThickness;
+    SplitterPosRect.left = 0;
+    SplitterPosRect.right = rect.right - rect.left;
+  }
+  else
+  {
+    SplitterPosRect.top = 0;
+    SplitterPosRect.bottom = rect.bottom - rect.top;
+    SplitterPosRect.left = (INT) ( (rect.right-rect.left) * SplitterBarPositionPercent );
+    SplitterPosRect.right = SplitterPosRect.left + SplitterBarThickness;
+  }
 }
 void SplitterPanel::GetPanel1Rect( RECT &Panel1Rect )
 {
-	RECT SplitterBarRect;
+  RECT SplitterBarRect;
 
-	// Calculate splitter position
-	GetSplitterBarRect( SplitterBarRect );
+  // Calculate splitter position
+  GetSplitterBarRect( SplitterBarRect );
 
-	if ( Orientation == ESPO_VERTICAL )
-	{
-		// Put ChildWin1 directly above splitter bar
-		Panel1Rect.top = 0;
-		Panel1Rect.bottom = SplitterBarRect.top;
-		Panel1Rect.left = 0;
-		Panel1Rect.right = SplitterBarRect.right;
-	}
-	else
-	{
-		// Put ChildWin1 directly left of splitter bar
-		Panel1Rect.top = 0;
-		Panel1Rect.bottom = SplitterBarRect.bottom;
-		Panel1Rect.left = 0;
-		Panel1Rect.right = SplitterBarRect.left;
-	}
+  if ( Orientation == ESPO_VERTICAL )
+  {
+    // Put ChildWin1 directly above splitter bar
+    Panel1Rect.top = 0;
+    Panel1Rect.bottom = SplitterBarRect.top;
+    Panel1Rect.left = 0;
+    Panel1Rect.right = SplitterBarRect.right;
+  }
+  else
+  {
+    // Put ChildWin1 directly left of splitter bar
+    Panel1Rect.top = 0;
+    Panel1Rect.bottom = SplitterBarRect.bottom;
+    Panel1Rect.left = 0;
+    Panel1Rect.right = SplitterBarRect.left;
+  }
 }
 
 void SplitterPanel::GetPanel2Rect( RECT &Panel2Rect )
 {
-	RECT ClientRect, SplitterBarRect;
+  RECT ClientRect, SplitterBarRect;
 
-	getClientRect( ClientRect );
-	// Calculate splitter position
-	GetSplitterBarRect( SplitterBarRect );
-	if ( Orientation == ESPO_VERTICAL )
-	{
-		// Put ChildWin2 directly below splitter bar
-		Panel2Rect.top = SplitterBarRect.bottom;
-		Panel2Rect.bottom = ClientRect.bottom;
-		Panel2Rect.left = 0;
-		Panel2Rect.right = ClientRect.right;
-	}
-	else
-	{
-		// Put ChildWin1 directly right of splitter bar
-		Panel2Rect.top = 0;
-		Panel2Rect.bottom = ClientRect.bottom;
-		Panel2Rect.left = SplitterBarRect.right;
-		Panel2Rect.right = ClientRect.right;
-	}
+  getClientRect( ClientRect );
+  // Calculate splitter position
+  GetSplitterBarRect( SplitterBarRect );
+  if ( Orientation == ESPO_VERTICAL )
+  {
+    // Put ChildWin2 directly below splitter bar
+    Panel2Rect.top = SplitterBarRect.bottom;
+    Panel2Rect.bottom = ClientRect.bottom;
+    Panel2Rect.left = 0;
+    Panel2Rect.right = ClientRect.right;
+  }
+  else
+  {
+    // Put ChildWin1 directly right of splitter bar
+    Panel2Rect.top = 0;
+    Panel2Rect.bottom = ClientRect.bottom;
+    Panel2Rect.left = SplitterBarRect.right;
+    Panel2Rect.right = ClientRect.right;
+  }
 }
 
 
 void SplitterPanel::ResizeChildren()
 {
-	if ( pChildWin1 )
-	{
-		RECT ChildWin1Rect;
-		GetPanel1Rect( ChildWin1Rect );
-		pChildWin1->reSizeToWH( ChildWin1Rect );
-	}
-	if ( pChildWin2 )
-	{
-		RECT ChildWin2Rect;
-		GetPanel2Rect( ChildWin2Rect );
-		pChildWin2->reSizeToWH( ChildWin2Rect );
-	}
+  if ( pChildWin1 )
+  {
+    RECT ChildWin1Rect;
+    GetPanel1Rect( ChildWin1Rect );
+    pChildWin1->reSizeToWH( ChildWin1Rect );
+  }
+  if ( pChildWin2 )
+  {
+    RECT ChildWin2Rect;
+    GetPanel2Rect( ChildWin2Rect );
+    pChildWin2->reSizeToWH( ChildWin2Rect );
+  }
 }
 
 
 void SplitterPanel::SetCurrentCursor()
 {
-	if ( IsDraggingSplitter )
-	{
-		if ( Orientation == ESPO_VERTICAL )
-		{
-			SetCursor( hSplitterCursorUpDown );
-		}
-		else
-		{
-			SetCursor( hSplitterCursorLeftRight );
-		}
-	}
-	else
-	{
-		RECT SplitterBarRect;
-		GetSplitterBarRect( SplitterBarRect );
-		POINT MousePos;
-		GetCursorPos( &MousePos );
-		ScreenToClient( _hSelf, &MousePos );
+  if ( IsDraggingSplitter )
+  {
+    if ( Orientation == ESPO_VERTICAL )
+    {
+      SetCursor( hSplitterCursorUpDown );
+    }
+    else
+    {
+      SetCursor( hSplitterCursorLeftRight );
+    }
+  }
+  else
+  {
+    RECT SplitterBarRect;
+    GetSplitterBarRect( SplitterBarRect );
+    POINT MousePos;
+    GetCursorPos( &MousePos );
+    ScreenToClient( _hSelf, &MousePos );
 
-		if ( PtInRect( &SplitterBarRect, MousePos ) )
-		{
-			if ( Orientation == ESPO_VERTICAL )
-			{
-				SetCursor( hSplitterCursorUpDown );
-			}
-			else
-			{
-				SetCursor( hSplitterCursorLeftRight );
-			}
-		}
-		else
-		{
-			SetCursor( LoadCursor( NULL, IDC_ARROW) );
-		}
-	}
+    if ( PtInRect( &SplitterBarRect, MousePos ) )
+    {
+      if ( Orientation == ESPO_VERTICAL )
+      {
+        SetCursor( hSplitterCursorUpDown );
+      }
+      else
+      {
+        SetCursor( hSplitterCursorLeftRight );
+      }
+    }
+    else
+    {
+      SetCursor( LoadCursor( NULL, IDC_ARROW) );
+    }
+  }
 }
 
 
 LRESULT SplitterPanel::SplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	if ( message == DragListMessage )
-	{
-		// Being a container window which doesn't care about child window control notifications,
-		// forward the child window controls' notifications to the parent window for processing
-		return ::SendMessage( _hParent, message, wParam, lParam );
-	}
+  if ( message == DragListMessage )
+  {
+    // Being a container window which doesn't care about child window control notifications,
+    // forward the child window controls' notifications to the parent window for processing
+    return ::SendMessage( _hParent, message, wParam, lParam );
+  }
 
-	switch ( message )
-	{
-	case WM_MOUSEMOVE:
-		{
-			POINT MousePos;
-			MousePos.x = GET_X_LPARAM( lParam );
-			MousePos.y = GET_Y_LPARAM( lParam );
+  switch ( message )
+  {
+  case WM_MOUSEMOVE:
+    {
+      POINT MousePos;
+      MousePos.x = GET_X_LPARAM( lParam );
+      MousePos.y = GET_Y_LPARAM( lParam );
 
-			if ( IsDraggingSplitter )
-			{
-				RECT ClientRect;
-				getClientRect( ClientRect );
+      if ( IsDraggingSplitter )
+      {
+        RECT ClientRect;
+        getClientRect( ClientRect );
 
-				if ( Orientation == ESPO_VERTICAL )
-				{
-					int height = ClientRect.bottom - ClientRect.top;
-					if ( MousePos.y > 0 && ( MousePos.y + SplitterBarThickness ) < height )
-					{
-						SplitterBarPositionPercent = (FLOAT) MousePos.y / height;
-					}
-				}
-				else
-				{
-					int width = ClientRect.right - ClientRect.left;
-					if ( MousePos.x > 0 && ( MousePos.x + SplitterBarThickness ) < width )
-					{
-						SplitterBarPositionPercent = (FLOAT) MousePos.x / width;
-					}
-				}
-				ResizeChildren();
-				InvalidateRect( _hSelf, 0, TRUE );
-			}
-			else
-			{
-				SetCurrentCursor();
-			}
-			return 0;
-		}
+        if ( Orientation == ESPO_VERTICAL )
+        {
+          int height = ClientRect.bottom - ClientRect.top;
+          if ( MousePos.y > 0 && ( MousePos.y + SplitterBarThickness ) < height )
+          {
+            SplitterBarPositionPercent = (FLOAT) MousePos.y / height;
+          }
+        }
+        else
+        {
+          int width = ClientRect.right - ClientRect.left;
+          if ( MousePos.x > 0 && ( MousePos.x + SplitterBarThickness ) < width )
+          {
+            SplitterBarPositionPercent = (FLOAT) MousePos.x / width;
+          }
+        }
+        ResizeChildren();
+        InvalidateRect( _hSelf, 0, TRUE );
+      }
+      else
+      {
+        SetCurrentCursor();
+      }
+      return 0;
+    }
 
-	case WM_LBUTTONDOWN:
-		{
-			RECT SplitterBarRect;
-			GetSplitterBarRect( SplitterBarRect );
-			POINT MousePos;
-			MousePos.x = LOWORD( lParam );
-			MousePos.y = HIWORD( lParam );
+  case WM_LBUTTONDOWN:
+    {
+      RECT SplitterBarRect;
+      GetSplitterBarRect( SplitterBarRect );
+      POINT MousePos;
+      MousePos.x = LOWORD( lParam );
+      MousePos.y = HIWORD( lParam );
 
-			if ( PtInRect( &SplitterBarRect, MousePos ) )
-			{
-				IsDraggingSplitter = TRUE;
-				SetCapture( _hSelf );
-				InvalidateRect( _hSelf, 0, TRUE );
-				return 0;
-			}
-		}
-		break;
+      if ( PtInRect( &SplitterBarRect, MousePos ) )
+      {
+        IsDraggingSplitter = TRUE;
+        SetCapture( _hSelf );
+        InvalidateRect( _hSelf, 0, TRUE );
+        return 0;
+      }
+    }
+    break;
 
-	case WM_LBUTTONUP:
-		{
-			if ( IsDraggingSplitter )
-			{
-				IsDraggingSplitter = FALSE;
-				ReleaseCapture();
-				InvalidateRect( _hSelf, 0, TRUE );
-				return 0;
-			}
-		}
-		break;
+  case WM_LBUTTONUP:
+    {
+      if ( IsDraggingSplitter )
+      {
+        IsDraggingSplitter = FALSE;
+        ReleaseCapture();
+        InvalidateRect( _hSelf, 0, TRUE );
+        return 0;
+      }
+    }
+    break;
 
-	case WM_MOVE:
-	case WM_SIZE:
-		ResizeChildren();
-		return 0;
+  case WM_MOVE:
+  case WM_SIZE:
+    ResizeChildren();
+    return 0;
 
-	case WM_PAINT:
-		{
-			HDC hdc;
-			PAINTSTRUCT ps;
-			RECT SplitterBarRect;
-			HBRUSH hOldBrush;
-			HPEN hOldPen;
+  case WM_PAINT:
+    {
+      HDC hdc;
+      PAINTSTRUCT ps;
+      RECT SplitterBarRect;
+      HBRUSH hOldBrush;
+      HPEN hOldPen;
 
-			SetCurrentCursor();
+      SetCurrentCursor();
 
-			GetSplitterBarRect( SplitterBarRect );
-			hdc = ::BeginPaint( _hSelf, &ps );
+      GetSplitterBarRect( SplitterBarRect );
+      hdc = ::BeginPaint( _hSelf, &ps );
 
-			hOldBrush = (HBRUSH)::SelectObject( hdc, hSplitterBrush );
-			hOldPen = (HPEN)::SelectObject( hdc, hSplitterPen );
-			::Rectangle( hdc, SplitterBarRect.left, SplitterBarRect.top, SplitterBarRect.right, SplitterBarRect.bottom );
+      hOldBrush = (HBRUSH)::SelectObject( hdc, hSplitterBrush );
+      hOldPen = (HPEN)::SelectObject( hdc, hSplitterPen );
+      ::Rectangle( hdc, SplitterBarRect.left, SplitterBarRect.top, SplitterBarRect.right, SplitterBarRect.bottom );
 
-			// clean up
-			::SelectObject( hdc, hOldBrush );
-			::SelectObject( hdc, hOldPen );
+      // clean up
+      ::SelectObject( hdc, hOldBrush );
+      ::SelectObject( hdc, hOldPen );
 
-			::EndPaint( _hSelf, &ps );
-			return 0;
-		}
+      ::EndPaint( _hSelf, &ps );
+      return 0;
+    }
 
-	case WM_COMMAND:
-	case WM_NOTIFY:
-		// Being a container window which doesn't care about child window control notifications,
-		// forward the child window controls' notifications to the parent window for processing
-		return ::SendMessage( _hParent, message, wParam, lParam );
+  case WM_COMMAND:
+  case WM_NOTIFY:
+    // Being a container window which doesn't care about child window control notifications,
+    // forward the child window controls' notifications to the parent window for processing
+    return ::SendMessage( _hParent, message, wParam, lParam );
 
-	case WM_DESTROY:
-		::DeleteBrush( hSplitterBrush );
-		::DeletePen( hSplitterPen );
-		return 0;
-	}
-	return ::DefWindowProc( hwnd, message, wParam, lParam );
+  case WM_DESTROY:
+    ::DeleteBrush( hSplitterBrush );
+    ::DeletePen( hSplitterPen );
+    return 0;
+  }
+  return ::DefWindowProc( hwnd, message, wParam, lParam );
 }
 
 
 LRESULT CALLBACK SplitterPanel::StaticSplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	SplitterPanel * pSplitterPanel = reinterpret_cast<SplitterPanel *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
-	if ( !pSplitterPanel )
-	{
-		return ::DefWindowProc( hwnd, message, wParam, lParam );
-	}
-	return pSplitterPanel->SplitterPanelProc( hwnd, message, wParam, lParam );
+  SplitterPanel * pSplitterPanel = reinterpret_cast<SplitterPanel *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
+  if ( !pSplitterPanel )
+  {
+    return ::DefWindowProc( hwnd, message, wParam, lParam );
+  }
+  return pSplitterPanel->SplitterPanelProc( hwnd, message, wParam, lParam );
 }
