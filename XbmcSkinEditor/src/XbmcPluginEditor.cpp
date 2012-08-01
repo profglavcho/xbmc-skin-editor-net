@@ -202,23 +202,28 @@ extern "C" __declspec(dllexport) FuncItem * getFuncsArray(INT *nbF)
  */
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 {
-  if (notifyCode->nmhdr.code == SCN_UPDATEUI)
+  if (notifyCode->nmhdr.code == NPPN_BUFFERACTIVATED)
   {
+    
+    theApp.clipXbmcControls.OnBufferActivated();
+  }
+  else if (notifyCode->nmhdr.code == SCN_UPDATEUI)
+  {
+    HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
+    UINT state = ::GetMenuState(hMenu, funcItem[DIALOG_IMAGE_PREVIEWER]._cmdID, MF_BYCOMMAND);
+    if (!(state & MF_CHECKED))
+      theApp.clipXbmcImage.SetHidden();
     theApp.clipXbmcImage.UpdateImage();
+    
+    state = ::GetMenuState(hMenu, funcItem[DIALOG_CONTROLS]._cmdID, MF_BYCOMMAND);
+    if (!(state & MF_CHECKED))
+      theApp.clipXbmcControls.SetHidden();
     theApp.clipXbmcControls.OnNotepadChange();
   }
-
-  if (notifyCode->nmhdr.hwndFrom == g_NppData._nppHandle)
+  else if (notifyCode->nmhdr.hwndFrom == g_NppData._nppHandle)
   {
     // Change menu language
     NLChangeNppMenu( (HINSTANCE)theApp.m_hInstance, g_NppData._nppHandle, (LPTSTR)PLUGIN_NAME, funcItem, NUMBER_OF_FUNCTIONS );
-
-    // On this notification code you can register your plugin icon in Notepad++ toolbar
-    /*if (notifyCode->nmhdr.code == NPPN_TBMODIFICATION)
-    {
-      theApp.g_TBWndMgr.hToolbarBmp = (HBITMAP)::LoadImage( (HINSTANCE)theApp.m_hInstance, MAKEINTRESOURCE(IDB_EX_MULTICLIPBOARD), IMAGE_BITMAP, 0, 0, (LR_LOADMAP3DCOLORS) );
-      ::SendMessage( g_NppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, (LPARAM)&g_TBWndMgr );
-    }*/
   }
 }
 

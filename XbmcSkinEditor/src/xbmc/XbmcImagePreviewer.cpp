@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "MultiClipboardSettingsDialog.h"
 #include "xbmc/lib/xbmc_communicator.h"
 #include "lib/Scintillahelper.h"
+#include "XbmcPluginEditor.h"
 #endif
 
 
@@ -75,7 +76,7 @@ void XbmcImagePreviewer::ShowDialog( bool Show )
     TBData.uMask      = DWS_DF_CONT_LEFT | DWS_ICONTAB;
     TBData.hIconTab    = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MULTICLIPBOARD), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
     TBData.pszModuleName  = getPluginFileName();
-    TBData.dlgID      = MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX;
+    TBData.dlgID      = DIALOG_IMAGE_PREVIEWER;
     ::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
   }
 

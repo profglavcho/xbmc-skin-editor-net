@@ -47,6 +47,7 @@ public:
   virtual void OnModelModified();
   void UpdateImage();
   void ShowImage(CStdString image);
+  void SetHidden() { IsShown = false; }
 protected:
   // Overload DockingDlgInterface's dialog procedure
   virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );

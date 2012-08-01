@@ -29,6 +29,14 @@
 #include "SelectedTextAutoCopier.h"
 
 #define NUMBER_OF_FUNCTIONS 6
+#define DIALOG_SKIN_CONTROLS   0
+#define DIALOG_TESTER          1
+#define DIALOG_IMAGE_PREVIEWER 2
+#define DIALOG_CONTROLS        3
+#define DIALOG_OPTIONS         4
+#define DIALOG_ABOUT           5
+
+
 
 class CXbmcPluginEditor : public CWinApp
 {

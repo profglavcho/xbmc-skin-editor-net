@@ -321,6 +321,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClCompile Include="..\..\src\xbmc\XbmcControlsDialog.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcControlsFactory.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcImagePreviewer.cpp" />
+    <ClCompile Include="..\..\src\xbmc\XbmcIncludesFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ClipboardMVC\ControlsList.h" />
@@ -375,6 +376,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClInclude Include="..\..\src\xbmc\XbmcControlsDialog.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcControlsFactory.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcImagePreviewer.h" />
+    <ClInclude Include="..\..\src\xbmc\XbmcIncludesFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\res\background.bmp" />

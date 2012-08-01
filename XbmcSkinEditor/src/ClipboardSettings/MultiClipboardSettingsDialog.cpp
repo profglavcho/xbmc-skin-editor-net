@@ -379,6 +379,16 @@ void MultiClipboardSettingsDialog::LoadSettingsControlMap()
     IDC_EDIT_PASSWORD, SCTE_STRING,
     SETTINGS_GROUP_XBMC,SETTINGS_XBMC_PASS,
     TEXT("Password") ) );
+
+  SettingsControlMap.push_back( SettingsControlMapStruct(
+    IDC_CHECK_LOAD_INCLUDES, SCTE_BOOL,
+    SETTINGS_GROUP_XBMC,SETTINGS_LOAD_INCLUDES,
+    TEXT("Load includes") ) );
+
+  SettingsControlMap.push_back( SettingsControlMapStruct(
+    IDC_CHECK_LOAD_IMAGES, SCTE_BOOL,
+    SETTINGS_GROUP_XBMC,SETTINGS_LOAD_IMAGES,
+    TEXT("Load images") ) );
   /*SettingsControlMap.push_back( SettingsControlMapStruct(
     IDC_CHECK_COPY_FROM_OTHER_PROGRAMS, SCTE_BOOL,
     SETTINGS_GROUP_OSCLIPBOARD, SETTINGS_COPY_FROM_OTHER_PROGRAMS,
