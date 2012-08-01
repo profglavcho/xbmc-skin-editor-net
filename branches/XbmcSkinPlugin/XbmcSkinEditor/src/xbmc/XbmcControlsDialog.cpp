@@ -18,14 +18,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
+#include "stdafx.h"
 #include "XbmcControlsDialog.h"
 #include "resource.h"
 #include "NativeLang_def.h"
 #include "MultiClipboardSettings.h"
 #include "MultiClipboardSettingsDialog.h"
+#include "XbmcPluginEditor.h"
 #include "xbmc/lib/xbmc_communicator.h"
 #include "xbmc/lib/ScintillaHelper.h"
-#include <Richedit.h>
+#include "lib/SADirRead.h"
 #endif
 
 
@@ -140,6 +142,8 @@ BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, 
       /*case EN_UPDATE:
         OnEditBoxUpdated();
         return 0;*/
+      case CBN_EDITCHANGE:
+      case CBN_SELCHANGE:
       case EN_CHANGE:
         OnEditBoxUpdated();
         return 0;
@@ -223,6 +227,47 @@ void CXbmcControlsDialog::ShowXbmcControls()
   }
 }
 
+std::vector<CStdString> CXbmcControlsDialog::GetTexture()
+{
+  CSADirRead dr;
+  //get media dir
+  TCHAR dirpath[ MAX_PATH];
+  SendMessage(g_NppData._nppHandle, NPPM_GETCURRENTDIRECTORY , MAX_PATH,(LPARAM)dirpath);
+     
+  std::wstring wpath = dirpath;
+    
+  for (;;)
+  {
+    int last = wpath.find_last_of(L"\\");
+    if (wpath.size()-1 == last)
+      break;
+    else
+      wpath.pop_back();
+  }
+  wpath.insert(wpath.size(),L"media\\");
+  CStdStringA convertedpath;
+  convertedpath = g_Scintilla.W_to_A(wpath.c_str());
+
+  dr.GetDirs(convertedpath.c_str(), true);
+  dr.GetFiles("*.png");
+  dr.GetFiles("*.jpg");
+  dr.GetFiles("*.bmp");
+  CSADirRead::SAFileVector &fileVector = dr.Files();
+  std::vector<CStdString> returnvec;
+  for (CSADirRead::SAFileVector::const_iterator it = fileVector.begin(); it != fileVector.end(); it++)
+	{
+    CStdString currentFile;
+    currentFile = it->m_sName;
+    if (!it->bIsFolder)
+    {
+      currentFile.Replace(wpath.c_str(),L"");
+      returnvec.push_back(currentFile);
+    }
+    
+
+	}
+  return returnvec;
+}
 
 void CXbmcControlsDialog::OnListSelectionChanged()
 {
@@ -237,16 +282,19 @@ void CXbmcControlsDialog::OnListSelectionChanged()
   Attributes attrib = m_pXbmcControlsFactory->GetAttributes(m_pStrCurrent);
   for (AttributesIt it = attrib.begin(); it != attrib.end(); it++)
   {
-    m_pDuoTextBox.AddAttribute((*it).first, (*it).second);
-
+    if (it->first.Find(L"texture") != -1)
+    {
+      std::vector<CStdString> text = GetTexture();
+      m_pDuoTextBox.AddAttribute((*it).first, text, it->second);//(*it).second);
+    }
+    else
+      m_pDuoTextBox.AddAttribute((*it).first, (*it).second);
 
   }
+  //update the size of the container it might have changed
   SendMessage(getHSelf(), WM_SIZE, 0, 0);
-
-  RECT rc = m_pDuoTextBox.GetContainerRect();
-  printf("onlistselection");
   IsLoadingControls = false;
-  //draw items
+  
 }
 
 void CXbmcControlsDialog::OnNotepadChange()
@@ -347,7 +395,11 @@ void CXbmcControlsDialog::OnEditBoxUpdated()
   CStdString pLabel;
 
   m_pDuoTextBox.GetLabel(pLabel);
-  m_pDuoTextBox.GetTextBox(pTextbox);
+  bool iscombobox = m_pDuoTextBox.GetTextBox(pTextbox);
+  if (iscombobox)
+  {
+    theApp.clipXbmcImage.ShowImage(pTextbox);
+  }
 
   // Get length of text in edit box
   bool insertnewline = false;

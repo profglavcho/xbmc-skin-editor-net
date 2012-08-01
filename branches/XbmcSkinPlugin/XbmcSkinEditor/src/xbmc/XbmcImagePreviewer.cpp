@@ -210,6 +210,63 @@ void XbmcImagePreviewer::ClearWindow()
   
 }
 
+void XbmcImagePreviewer::ShowImage(CStdString image)
+{
+  if ( !IsShown && IsLoading )
+  {
+    return;
+  }
+  
+  IsLoading=true;
+  
+  TCHAR dirpath[ MAX_PATH];
+  SendMessage(g_NppData._nppHandle, NPPM_GETCURRENTDIRECTORY , MAX_PATH,(LPARAM)dirpath);
+   
+  std::wstring wpath = dirpath;
+  std::wstring convertedstring = image;
+  for (;;)
+  {
+    int last = wpath.find_last_of(L"\\");
+    if (wpath.size()-1 == last)
+    break;
+    else
+    wpath.pop_back();
+  }
+  wpath.insert(wpath.size(),L"media\\");
+  convertedstring.insert(0,wpath);
+  //reset background to normal
+  ClearWindow();
+  CStdString conv = convertedstring;
+  conv.Replace(L"/",L"\\");
+  bool res =m_pPicture.Load(conv.c_str());
+
+
+  if (res)
+  {
+    
+    if (m_pPicture.ColorBits() == 32)
+    m_pPicture.ApplyEffect( FCEffectPremultipleAlpha());
+    RECT  rcWindow;
+    HDC hdc;
+    ::GetClientRect(getHSelf(), &rcWindow);
+    SIZE   img_size = {m_pPicture.Width(), m_pPicture.Height()} ;
+    
+    RECT   rc = FCObjImage::CalcFitWindowSize(img_size, rcWindow) ;
+    hdc = GetWindowDC(getHSelf());
+    
+    ::GetClientRect(getHSelf(), &rcWindow);
+    m_pPicture.Draw (hdc, rc) ;
+    printf("image printed");
+  }
+  else
+    printf("failed to load");
+
+
+  
+  IsLoading = false;
+
+}
+
 void XbmcImagePreviewer::ShowImage()
 {
   if ( !IsShown && IsLoading )
@@ -275,6 +332,7 @@ void XbmcImagePreviewer::ShowImage()
     }
     wpath.insert(wpath.size(),L"media\\");
     convertedstring.insert(0,wpath);
+    //reset background to normal
     ClearWindow();
     CStdString conv = convertedstring;
     conv.Replace(L"/",L"\\");

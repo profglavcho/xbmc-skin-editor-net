@@ -35,13 +35,16 @@ public:
   virtual void init(HINSTANCE hInst, HWND parent);
   virtual void destroy() {}
   virtual void Resize(RECT rc);
+  //use textbox
   virtual void AddAttribute(CStdString name, CStdString value);
+  //use combobox
+  virtual void AddAttribute(CStdString name, std::vector<CStdString> value, CStdString currentValue);
   virtual RECT GetContainerRect();
   virtual void ClearAttributes();
   HWND m_pCurrentLabel;
   HWND m_pCurrentTextBox;
   virtual void GetLabel( CStdString & text );
-  virtual void GetTextBox( CStdString & text );
+  virtual bool GetTextBox( CStdString & text ); // return yes if is a combobox
 private :
   void ResetScrollbar();
   void SetupScrollbar();
