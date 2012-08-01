@@ -112,6 +112,9 @@
     <ClCompile Include="..\..\src\XbmcPluginEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\lib\SADirRead.cpp">
+      <Filter>Source Files\Xbmc\lib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\MCSubClassWndProc.h">
@@ -266,6 +269,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\XbmcPluginEditor.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\lib\SADirRead.h">
+      <Filter>Source Files\Xbmc\lib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

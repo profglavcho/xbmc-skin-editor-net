@@ -313,6 +313,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClCompile Include="..\..\src\xbmc\DialogControls\ComboBox.cpp" />
     <ClCompile Include="..\..\src\xbmc\DialogControls\DuoTextBox.cpp" />
     <ClCompile Include="..\..\src\xbmc\DialogControls\DuoTextBoxContainer.cpp" />
+    <ClCompile Include="..\..\src\xbmc\lib\SADirRead.cpp" />
     <ClCompile Include="..\..\src\xbmc\lib\ScintillaHelper.cpp" />
     <ClCompile Include="..\..\src\xbmc\lib\xbmc_communicator.cpp" />
     <ClCompile Include="..\..\src\xbmc\PJAImage.cpp" />
@@ -365,6 +366,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClInclude Include="..\..\src\xbmc\DialogControls\ComboBox.h" />
     <ClInclude Include="..\..\src\xbmc\DialogControls\DuoTextBox.h" />
     <ClInclude Include="..\..\src\xbmc\DialogControls\DuoTextBoxContainer.h" />
+    <ClInclude Include="..\..\src\xbmc\lib\SADirRead.h" />
     <ClInclude Include="..\..\src\xbmc\lib\ScintillaHelper.h" />
     <ClInclude Include="..\..\src\xbmc\lib\StdString.h" />
     <ClInclude Include="..\..\src\xbmc\lib\xbmc_communicator.h" />

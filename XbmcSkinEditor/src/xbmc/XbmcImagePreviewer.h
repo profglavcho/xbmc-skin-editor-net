@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "ModelViewController.h"
 #include "DockingDlgInterface.h"
 #include "ImageStone.h"
+#include "lib/StdString.h"
 #endif
 
 // ID for dockable window
@@ -45,6 +46,7 @@ public:
 
   virtual void OnModelModified();
   void UpdateImage();
+  void ShowImage(CStdString image);
 protected:
   // Overload DockingDlgInterface's dialog procedure
   virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );

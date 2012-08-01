@@ -37,14 +37,16 @@ public:
   virtual void destroy();
 
   virtual void SetValue(CStdString name, CStdString value);
+  virtual void SetValue(CStdString name, std::vector<CStdString> value, CStdString currentValue);
   
   virtual void Resize(RECT rc);
-  virtual int GetLastPosition() { return GetTop() + 20;}
+  virtual int GetLastPosition() { return GetTop() + 25;}
   virtual int GetBottomPosition() { return m_pBottom; }
   HWND m_pLabel;
   HWND m_pTextBox;
 private:
-  int GetTop() { return m_pIndex * 20; }
+  bool m_bComboBox;
+  int GetTop() { return m_pIndex * 25; }
   std::vector<CStdString> lstText;
   HFONT hNewFont;
 

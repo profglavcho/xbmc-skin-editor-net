@@ -104,7 +104,31 @@ void CDuoTextBoxContainer::AddAttribute(CStdString name, CStdString value)
   pDuoTextBox->SetValue(name, value);
   
   m_pDuoTextBox.push_back(pDuoTextBox);
-  m_pBottomPosition = pDuoTextBox->GetBottomPosition();
+  int heightpanel = 45;
+  for (size_t i = 0; i < m_pDuoTextBox.size(); i++)
+  {
+    heightpanel = heightpanel + m_pDuoTextBox[i]->getHeight();
+  }
+  m_pBottomPosition = heightpanel;
+
+  //m_pBottomPosition = pDuoTextBox->GetBottomPosition();
+  m_ClientRect.bottom = m_pBottomPosition;
+  SetupScrollbar();
+}
+
+void CDuoTextBoxContainer::AddAttribute(CStdString name, std::vector<CStdString> value, CStdString currentValue)
+{
+  CDuoTextBox* pDuoTextBox = new CDuoTextBox(m_pDuoTextBox.size());
+  pDuoTextBox->init(getHinst(), getHSelf());
+  pDuoTextBox->SetValue(name, value, currentValue);
+  
+  m_pDuoTextBox.push_back(pDuoTextBox);
+  int heightpanel = 45;
+  for (size_t i = 0; i < m_pDuoTextBox.size(); i++)
+  {
+    heightpanel = heightpanel + m_pDuoTextBox[i]->getHeight();
+  }
+  m_pBottomPosition = heightpanel;
   m_ClientRect.bottom = m_pBottomPosition;
   SetupScrollbar();
 }
@@ -151,32 +175,6 @@ int CDuoTextBoxContainer::OnScroll(WPARAM wParam)
       ScrollWindow(getHSelf(), 0, iMove, NULL, NULL);
       SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);
   }
-  return 1;
-  //wParam is the type of scroll
-  RECT rc;
-  getClientRect(rc);
-  BOOL res = 0;
-  int pixel_missing = m_pBottomPosition - rc.bottom - rc.top;
-  int pixel_per_step = pixel_missing / 100;
-
-  /*SCROLLINFO current;
-  ZeroMemory(&current, sizeof(current));
-  current.cbSize = sizeof(current);
-  current.fMask = SIF_ALL;*/
-  int currentpos = GetScrollPos(getHSelf(), SB_VERT);
-  if (LOWORD(wParam) == SB_LINEDOWN)
-   currentpos = currentpos + 1; 
-  
-  if (currentpos == 0)
-    return 0;
-  int newpos = currentpos * pixel_per_step;
-  ScrollWindowEx(getHSelf(), 0, (newpos * -1), NULL, NULL, NULL, NULL, SW_INVALIDATE|SW_ERASE);
-  SCROLLINFO si;
-  si.cbSize = sizeof(si); 
-  si.fMask  = SIF_POS; 
-  si.nPos   = newpos; 
-  SetScrollInfo(getHSelf(), SB_VERT, &si, TRUE); 
-  UpdateWindow (getHSelf());
   return 1;
 }
 
@@ -225,7 +223,7 @@ LRESULT CDuoTextBoxContainer::DuoTextBoxProc( HWND hwnd, UINT message, WPARAM wP
 
   case WM_COMMAND:
     command = HIWORD(wParam);
-    if (HIWORD(wParam) == EN_CHANGE)//768 1024
+    if (HIWORD(wParam) == EN_CHANGE || HIWORD(wParam) == CBN_EDITCHANGE || HIWORD(wParam) == CBN_SELCHANGE)//768 1024
     {
       for (int i  = 0; i < m_pDuoTextBox.size(); i++)
       {
@@ -318,20 +316,38 @@ void CDuoTextBoxContainer::GetLabel( CStdString & text )
   text.assign( &data[0] );
 }
 
-void CDuoTextBoxContainer::GetTextBox( CStdString & text )
+bool CDuoTextBoxContainer::GetTextBox( CStdString & text )
 {
   // Use stl's vector to store the text from editbox, instead of new and delete array
   // because it is safer against memory leaks
 
   // Get length of text in edit box
-  INT textLength = ::GetWindowTextLength(m_pCurrentTextBox);
-  // Use stl's vector to store the text, make sure to reserve space for null terminator
-  std::vector< std::wstring::value_type > data( textLength + 1, 0 );
-  // Get the window text into the vector
-  ::GetWindowText( m_pCurrentTextBox, &data[0], (int)data.capacity() );
+  TCHAR szClass[128];
+  RealGetWindowClass(m_pCurrentTextBox, szClass,1228);
+  CStdString classW = szClass;
+  if (classW.Equals(L"ComboBox"))
+  {
 
-  // return the text
-  text.assign( &data[0] );
+    int cursel = SendMessage( m_pCurrentTextBox, CB_GETCURSEL, 0, 0 );
+    int textLength = SendMessage( m_pCurrentTextBox, CB_GETLBTEXTLEN, cursel,0);
+    std::vector< std::wstring::value_type > data( textLength + 1, 0 );
+
+    SendMessage( m_pCurrentTextBox, CB_GETLBTEXT, cursel, (LPARAM)&data[0]);
+    text.assign( &data[0] );
+    return true;
+  }
+  else
+  {
+    INT textLength = ::GetWindowTextLength(m_pCurrentTextBox);
+    // Use stl's vector to store the text, make sure to reserve space for null terminator
+    std::vector< std::wstring::value_type > data( textLength + 1, 0 );
+    // Get the window text into the vector
+    ::GetWindowText( m_pCurrentTextBox, &data[0], (int)data.capacity() );
+
+    // return the text
+    text.assign( &data[0] );
+    return false;
+  }
 }
 
 LRESULT CALLBACK CDuoTextBoxContainer::StaticDuoTextBoxPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )

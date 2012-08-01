@@ -57,6 +57,7 @@ protected:
 
   // Initialise dialog here
   void InitialiseDialog();
+  std::vector<CStdString> GetTexture();
 
   // Toolbar commands
   void tb_cmd(UINT message);

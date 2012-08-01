@@ -3,10 +3,8 @@
 #include <windowsx.h>
 #include <commctrl.h>
 #include "resource.h"
-#include <Richedit.h>
 #endif
-
-#define DUO_TEXTBOX_CLASS_NAME TEXT( "DuoTextBox" )
+#define BOX_HEIGHT 20
 
 CDuoTextBox::CDuoTextBox(int index)
 : hSplitterBrush( 0 )
@@ -15,6 +13,7 @@ CDuoTextBox::CDuoTextBox(int index)
 , m_pTextBox(NULL)
 {
   m_pIndex = index;
+  m_bComboBox = false;
 }
 
 void CDuoTextBox::init(HINSTANCE hInst, HWND parent)
@@ -27,12 +26,12 @@ void CDuoTextBox::init(HINSTANCE hInst, HWND parent)
   wndclass.hInstance = _hInst;
   wndclass.hCursor = LoadCursor( NULL, IDC_ARROW );
   wndclass.hbrBackground = (HBRUSH) CreateSolidBrush( RGB(212,208,200));
-  wndclass.lpszClassName = DUO_TEXTBOX_CLASS_NAME;
+  wndclass.lpszClassName = TEXT("DuoTextBox");
 
   /*test window class*/
   WNDCLASS wndclass2;
   ZeroMemory( &wndclass2, sizeof(WNDCLASS) );
-  if (!GetClassInfo(_hInst, DUO_TEXTBOX_CLASS_NAME,&wndclass2))
+  if (!GetClassInfo(_hInst, TEXT("DuoTextBox"),&wndclass2))
   {
     if ( !::RegisterClass( &wndclass ) )
     {
@@ -41,7 +40,7 @@ void CDuoTextBox::init(HINSTANCE hInst, HWND parent)
       if ( ERROR_CLASS_ALREADY_EXISTS != dwErr )
       {
         TCHAR errText[512] = TEXT("");
-        wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CLASS_NAME, dwErr );
+        wsprintf( errText, TEXT("Cannot register window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TEXT("DuoTextBox"), dwErr );
         ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
         return;
       }
@@ -50,14 +49,14 @@ void CDuoTextBox::init(HINSTANCE hInst, HWND parent)
   }
   RECT rc;
   GetClientRect(parent, &rc);
-  int top = m_pIndex * 20;
-  _hSelf = CreateWindowW( DUO_TEXTBOX_CLASS_NAME, 0, WS_CHILD | WS_VISIBLE, 0, 45 + top, rc.right, 20 , _hParent, 0, _hInst, 0 );
+  int top = m_pIndex * 25;
+  _hSelf = CreateWindowW( TEXT("DuoTextBox"), 0, WS_CHILD | WS_VISIBLE, 0, 45 + top, rc.right, BOX_HEIGHT , _hParent, 0, _hInst, 0 );
   m_pBottom = 45+top;
   if ( !_hSelf )
   {
     DWORD dwErr = GetLastError();
     TCHAR errText[512] = TEXT("");
-    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CLASS_NAME, dwErr );
+    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TEXT("DuoTextBox"), dwErr );
     ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
   }
 
@@ -73,27 +72,17 @@ void CDuoTextBox::init(HINSTANCE hInst, HWND parent)
   
   m_pLabel = CreateWindow( TEXT("edit"), NULL,
     WS_CHILD | WS_VISIBLE |  ES_LEFT ,
-    rc.left, rc.top , rc.right/2, 15, getHSelf(), 0, hInst, NULL );
+    rc.left, rc.top , rc.right/2, BOX_HEIGHT, getHSelf(), 0, hInst, NULL );
   if ( !m_pLabel )
   {
     DWORD dwErr = GetLastError();
     TCHAR errText[512] = TEXT("");
-    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CLASS_NAME, dwErr );
+    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TEXT("DuoTextBox"), dwErr );
     ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
   }
   EnableWindow( m_pLabel, FALSE );
-  //LoadLibrary(L"riched32.dll");
-  m_pTextBox = CreateWindow( TEXT("edit"), NULL,
-    WS_CHILD | WS_VISIBLE |  ES_LEFT,
-    rc.right/2, rc.top , rc.right, 15, getHSelf(), 0, hInst, NULL );
   
-  if (!m_pTextBox)
-  {
-    DWORD dwErr = GetLastError();
-    TCHAR errText[512] = TEXT("");
-    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CLASS_NAME, dwErr );
-    ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
-  }
+  
 
 }
 
@@ -108,24 +97,81 @@ void CDuoTextBox::destroy()
 
 void CDuoTextBox::SetValue(CStdString name, CStdString value)
 {
+  m_bComboBox = false;
   SetWindowText(m_pLabel, name.c_str());
+  RECT rc;
+  GetClientRect(getHParent(), &rc);
+  //textbox
+  m_pTextBox = CreateWindow( TEXT("edit"), NULL,
+                             WS_CHILD | WS_VISIBLE |  ES_LEFT,
+                             rc.right/2, rc.top , rc.right, BOX_HEIGHT,
+                             getHSelf(), 0, getHinst(), NULL );
+  
+  if (!m_pTextBox)
+  {
+    DWORD dwErr = GetLastError();
+    TCHAR errText[512] = TEXT("");
+    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TEXT("DuoTextBox"), dwErr );
+    ::MessageBox( getHParent(), errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+  }
   SetWindowText(m_pTextBox, value.c_str());
   SendMessage( m_pTextBox, EM_SETREADONLY, (WPARAM) 0, 0 );
  
 }
 
+void CDuoTextBox::SetValue(CStdString name, std::vector<CStdString> value, CStdString currentValue)
+{
+  m_bComboBox = true;
+  SetWindowText(m_pLabel, name.c_str());
+  RECT rc;
+  GetClientRect(getHParent(), &rc);
+
+  
+  //textbox
+  m_pTextBox = CreateWindow( TEXT("combobox"), NULL,
+                             CBS_DROPDOWN | WS_VSCROLL | WS_CHILD | WS_VISIBLE | CBS_HASSTRINGS,
+                             rc.right/2, rc.top , rc.right, 30,
+                             getHSelf(), 0, getHinst(), NULL );
+  
+  if (!m_pTextBox)
+  {
+    DWORD dwErr = GetLastError();
+    TCHAR errText[512] = TEXT("");
+    wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), TEXT("combobox"), dwErr );
+    ::MessageBox( getHParent(), errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
+  }
+  TCHAR control_name[MAX_PATH];
+  UINT nResult;
+  for (std::vector<CStdString>::iterator it = value.begin(); it != value.end(); it++)
+  {
+    
+    //lstrcpy(control_name, it->c_str());
+    nResult = ::SendMessage( m_pTextBox, CB_ADDSTRING, 0, (LPARAM)it->c_str());
+    if (nResult != CB_ERR)
+      ::SendMessage(m_pTextBox, CB_SETITEMDATA, nResult, (LPARAM) nResult+1);
+
+  }
+  
+  BOOL res = SetWindowText(m_pTextBox, currentValue.c_str());
+  if (res)
+    printf("yeah");
+  
+
+}
+
 void CDuoTextBox::Resize(RECT rc)
 {
   rc.top = GetTop();
-  rc.bottom = rc.top+15;
-  
+  //rc.bottom = rc.top + m_bComboBox ? 15 : 30;
+  rc.bottom = rc.top + BOX_HEIGHT;
+
   reSizeToWH(rc);
   //stay at 120 px for the label
-  MoveWindow(m_pLabel, 0, 0, 120, 15, TRUE);
+  MoveWindow(m_pLabel, 0, 0, 120, BOX_HEIGHT, TRUE);
   InvalidateRect(m_pLabel, NULL, TRUE);
   UpdateWindow(m_pLabel);
 
-  MoveWindow(m_pTextBox, 120, 0, (rc.right -rc.left) - 120, 15, TRUE);
+  MoveWindow(m_pTextBox, 120, 0, (rc.right -rc.left) - 120, BOX_HEIGHT, TRUE);
   InvalidateRect(m_pTextBox, NULL, TRUE);
   UpdateWindow(m_pTextBox);
 
@@ -166,7 +212,7 @@ LRESULT CDuoTextBox::runProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
     }
 
   case WM_COMMAND:
-    if ( (HWND)lParam == m_pTextBox && HIWORD(wParam) == EN_CHANGE)
+    if ( (HWND)lParam == m_pTextBox && (HIWORD(wParam) == EN_CHANGE || HIWORD(wParam) == CBN_EDITCHANGE || HIWORD(wParam) == CBN_SELCHANGE))
     {
       return ::SendMessage( _hParent, message, wParam, lParam );
     }
