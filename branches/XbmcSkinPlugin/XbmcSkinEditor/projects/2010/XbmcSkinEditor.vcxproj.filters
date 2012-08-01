@@ -4,9 +4,6 @@
     <ClCompile Include="..\..\src\MCSubClassWndProc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\MultiClipboardProxy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Common\Ccpp\ImageListSet.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
@@ -88,15 +85,6 @@
     <ClCompile Include="..\..\src\xbmc\XbmcImagePreviewer.cpp">
       <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\xbmc\PJAImage.cpp">
-      <Filter>Source Files\Xbmc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\xbmc\XbmcControlsDialog.cpp">
-      <Filter>Source Files\Xbmc\Dialog</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\xbmc\XbmcControlsFactory.cpp">
-      <Filter>Source Files\Xbmc\Dialog</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\xbmc\DialogControls\ComboBox.cpp">
       <Filter>Source Files\Xbmc\Dialog\Controls</Filter>
     </ClCompile>
@@ -115,12 +103,24 @@
     <ClCompile Include="..\..\src\xbmc\lib\SADirRead.cpp">
       <Filter>Source Files\Xbmc\lib</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\XbmcIncludesFactory.cpp">
+      <Filter>Source Files\Xbmc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\XbmcControlsDialog.cpp">
+      <Filter>Source Files\Xbmc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\PJAImage.cpp">
+      <Filter>Source Files\Xbmc\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MultiClipboardProxy.cpp">
+      <Filter>Unrelated</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\XbmcControlsFactory.cpp">
+      <Filter>Source Files\Xbmc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\MCSubClassWndProc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\MultiClipboardProxy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\MultiClipboardStringType.h">
@@ -243,15 +243,6 @@
     <ClInclude Include="..\..\src\xbmc\XbmcImagePreviewer.h">
       <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\PJAImage.h">
-      <Filter>Source Files\Xbmc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\XbmcControlsDialog.h">
-      <Filter>Source Files\Xbmc\Dialog</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\XbmcControlsFactory.h">
-      <Filter>Source Files\Xbmc\Dialog</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\xbmc\lib\StdString.h">
       <Filter>Source Files\Xbmc\lib</Filter>
     </ClInclude>
@@ -272,6 +263,21 @@
     </ClInclude>
     <ClInclude Include="..\..\src\xbmc\lib\SADirRead.h">
       <Filter>Source Files\Xbmc\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\XbmcIncludesFactory.h">
+      <Filter>Source Files\Xbmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\XbmcControlsDialog.h">
+      <Filter>Source Files\Xbmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\PJAImage.h">
+      <Filter>Source Files\Xbmc\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MultiClipboardProxy.h">
+      <Filter>Unrelated</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\XbmcControlsFactory.h">
+      <Filter>Source Files\Xbmc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -381,6 +387,9 @@
     </Filter>
     <Filter Include="Source Files\Xbmc\Dialog\Controls">
       <UniqueIdentifier>{f32ed512-14a9-4259-9ee8-3d8f4d5e98d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Unrelated">
+      <UniqueIdentifier>{5b0e5f39-1f86-4f88-866f-2f532694fe90}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

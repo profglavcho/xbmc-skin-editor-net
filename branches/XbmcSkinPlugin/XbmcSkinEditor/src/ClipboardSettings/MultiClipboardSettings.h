@@ -27,7 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define SETTINGS_XBMC_LOGIN  TEXT("XbmcLogin")
 #define SETTINGS_XBMC_PASS    TEXT("XbmcPassword")
 #define SETTINGS_WGET_PATH    TEXT("WgetPath")
-
+#define SETTINGS_LOAD_IMAGES TEXT("LoadImages")
+#define SETTINGS_LOAD_INCLUDES TEXT("LoadIncludes")
 /*#define SETTINGS_GROUP_CLIPBOARDLIST    TEXT("ClipboardList")
 #define SETTINGS_MAX_CLIPBOARD_ITEMS    TEXT("MaxClipboardItems")
 #define SETTINGS_SAVE_CLIPBOARD_SESSION    TEXT("SaveClipboardSession")

@@ -33,7 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 extern HINSTANCE g_hInstance;
 extern NppData g_NppData;
-extern MultiClipboardProxy g_ClipboardProxy;
 extern MultiClipboardSettingsDialog OptionsDlg;
 
 
@@ -46,7 +45,9 @@ CXbmcControlsDialog::CXbmcControlsDialog()
 , pDropSource( NULL )
 {
   m_pXbmcControlsFactory = new CXbmcControlsFactory();
+  m_pXbmcIncludesFactory = new CXbmcIncludesFactory();
   m_pStrCurrent = L"";
+  m_pStrCurrentInclude = L"";
   m_pCurrentLine = 0;
   m_pCurrentStartLinePos = -1;
   m_pCurrentEndLinePos = -1;
@@ -57,6 +58,9 @@ CXbmcControlsDialog::~CXbmcControlsDialog()
 {
   if (m_pXbmcControlsFactory)
     delete m_pXbmcControlsFactory;
+  
+  if (m_pXbmcIncludesFactory)
+    delete m_pXbmcIncludesFactory;
 }
 
 
@@ -92,18 +96,15 @@ void CXbmcControlsDialog::ShowDialog( bool Show )
     TBData.uMask      = DWS_DF_CONT_LEFT | DWS_ICONTAB;
     TBData.hIconTab    = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MULTICLIPBOARD), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
     TBData.pszModuleName  = getPluginFileName();
-    TBData.dlgID      = MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX;
+    TBData.dlgID      = DIALOG_CONTROLS;
     ::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
   }
 
+  
   display( Show );
   IsShown = Show;
   ShowXbmcControls();
 }
-
-
-//m_pCurrentLine
-
 
 BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp )
 {
@@ -121,7 +122,6 @@ BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, 
       getClientRect(rc);
       m_pComboBox.Resize(rc);
       m_pDuoTextBox.Resize(rc);
-      //MultiClipViewerPanel.reSizeTo(rc);
       break;
     }
 
@@ -139,13 +139,10 @@ BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, 
     {
       switch ( HIWORD(wp) )
       {
-      /*case EN_UPDATE:
-        OnEditBoxUpdated();
-        return 0;*/
       case CBN_EDITCHANGE:
       case CBN_SELCHANGE:
       case EN_CHANGE:
-        OnEditBoxUpdated();
+        OnEditBoxChange();
         return 0;
       
       }
@@ -229,44 +226,21 @@ void CXbmcControlsDialog::ShowXbmcControls()
 
 std::vector<CStdString> CXbmcControlsDialog::GetTexture()
 {
-  CSADirRead dr;
-  //get media dir
-  TCHAR dirpath[ MAX_PATH];
-  SendMessage(g_NppData._nppHandle, NPPM_GETCURRENTDIRECTORY , MAX_PATH,(LPARAM)dirpath);
-     
-  std::wstring wpath = dirpath;
-    
-  for (;;)
-  {
-    int last = wpath.find_last_of(L"\\");
-    if (wpath.size()-1 == last)
-      break;
-    else
-      wpath.pop_back();
-  }
-  wpath.insert(wpath.size(),L"media\\");
-  CStdStringA convertedpath;
-  convertedpath = g_Scintilla.W_to_A(wpath.c_str());
-
-  dr.GetDirs(convertedpath.c_str(), true);
-  dr.GetFiles("*.png");
-  dr.GetFiles("*.jpg");
-  dr.GetFiles("*.bmp");
-  CSADirRead::SAFileVector &fileVector = dr.Files();
   std::vector<CStdString> returnvec;
-  for (CSADirRead::SAFileVector::const_iterator it = fileVector.begin(); it != fileVector.end(); it++)
-	{
-    CStdString currentFile;
-    currentFile = it->m_sName;
-    if (!it->bIsFolder)
-    {
-      currentFile.Replace(wpath.c_str(),L"");
-      returnvec.push_back(currentFile);
-    }
-    
-
-	}
+  
+  returnvec = m_pXbmcIncludesFactory->GetTextures();
+  if (returnvec.size() == 0)
+    m_pXbmcIncludesFactory->LoadTextures(L"");
+  returnvec = m_pXbmcIncludesFactory->GetTextures();
   return returnvec;
+}
+
+std::vector<CStdString> CXbmcControlsDialog::GetIncludes()
+{
+  std::vector<CStdString> returnvec;
+  returnvec = m_pXbmcIncludesFactory->GetIncludes();
+  return returnvec;
+  
 }
 
 void CXbmcControlsDialog::OnListSelectionChanged()
@@ -282,9 +256,14 @@ void CXbmcControlsDialog::OnListSelectionChanged()
   Attributes attrib = m_pXbmcControlsFactory->GetAttributes(m_pStrCurrent);
   for (AttributesIt it = attrib.begin(); it != attrib.end(); it++)
   {
-    if (it->first.Find(L"texture") != -1)
+    if (it->first.Find(L"texture") != -1 && m_bLoadImages)
     {
       std::vector<CStdString> text = GetTexture();
+      m_pDuoTextBox.AddAttribute((*it).first, text, it->second);//(*it).second);
+    }
+    else if (it->first.Find(L"include") != -1 && m_bLoadIncludes)
+    {
+      std::vector<CStdString> text = GetIncludes();
       m_pDuoTextBox.AddAttribute((*it).first, text, it->second);//(*it).second);
     }
     else
@@ -295,6 +274,24 @@ void CXbmcControlsDialog::OnListSelectionChanged()
   SendMessage(getHSelf(), WM_SIZE, 0, 0);
   IsLoadingControls = false;
   
+}
+
+void CXbmcControlsDialog::OnBufferActivated()
+{
+  if (!m_bLoadIncludes)
+    return;
+  TCHAR dirpath[ MAX_PATH];
+  SendMessage(g_NppData._nppHandle, NPPM_GETCURRENTDIRECTORY , MAX_PATH,(LPARAM)dirpath);
+  CStdString include;
+  include = dirpath;
+  if (include.size() == 0)
+    return;
+  if (!m_pStrCurrentInclude.Equals(include))
+    m_pStrCurrentInclude = include;
+  else
+    return;
+  include.insert(include.size(),L"\\includes.xml");
+  m_pXbmcIncludesFactory->LoadIncludes(include);
 }
 
 void CXbmcControlsDialog::OnNotepadChange()
@@ -387,7 +384,7 @@ void CXbmcControlsDialog::OnEditBoxFocus()
   
 }
 
-void CXbmcControlsDialog::OnEditBoxUpdated()
+void CXbmcControlsDialog::OnEditBoxChange()
 {
   if (IsLoadingControls)
     return;
@@ -432,46 +429,22 @@ void CXbmcControlsDialog::OnEditBoxUpdated()
 }
 
 
-void CXbmcControlsDialog::PasteSelectedItem()
-{
-}
-
-
-void CXbmcControlsDialog::PasteAllItems()
-{
-  
-}
-
-
-void CXbmcControlsDialog::DeleteSelectedItem()
-{
-  
-}
-
-
-void CXbmcControlsDialog::DeleteAllItems()
-{
-  
-}
-
-
-void CXbmcControlsDialog::CopySelectedItemToClipboard()
-{
-  
-}
-
-
 void CXbmcControlsDialog::OnObserverAdded( LoonySettingsManager * SettingsManager )
 {
   SettingsObserver::OnObserverAdded( SettingsManager );
+  
   // Add default settings if it doesn't exists
+  SET_SETTINGS_BOOL( SETTINGS_GROUP_XBMC, SETTINGS_LOAD_INCLUDES, m_bLoadIncludes )
+  SET_SETTINGS_BOOL( SETTINGS_GROUP_XBMC, SETTINGS_LOAD_IMAGES, m_bLoadImages )
+    
 }
 
 
 void CXbmcControlsDialog::OnSettingsChanged( const stringType & GroupName, const stringType & SettingName )
 {
   if ( GroupName != SETTINGS_GROUP_XBMC )
-  {
     return;
-  }
+
+  IF_SETTING_CHANGED_BOOL( SETTINGS_GROUP_XBMC, SETTINGS_LOAD_INCLUDES, m_bLoadIncludes )
+  else IF_SETTING_CHANGED_BOOL( SETTINGS_GROUP_XBMC, SETTINGS_LOAD_IMAGES, m_bLoadImages )
 }

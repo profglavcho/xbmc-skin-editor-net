@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "DialogControls/DuoTextBoxContainer.h"
 #include "MultiClipOLEDragDrop.h"
 #include "XbmcControlsFactory.h"
+#include "XbmcIncludesFactory.h"
 
 #endif
 
@@ -50,15 +51,18 @@ public:
 
   virtual void OnModelModified();
   void OnNotepadChange();
+  void OnBufferActivated();
   void ResetCurrentControl() { m_pStrCurrent = L""; }
+  void SetHidden() { IsShown = false; }
 protected:
+  CStdString m_pStrCurrentInclude;
   // Overload DockingDlgInterface's dialog procedure
   virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );
 
   // Initialise dialog here
   void InitialiseDialog();
   std::vector<CStdString> GetTexture();
-
+  std::vector<CStdString> GetIncludes();
   // Toolbar commands
   void tb_cmd(UINT message);
 private:
@@ -75,21 +79,18 @@ private:
   int m_pCurrentEndLinePos;
   int m_pCurrentLine;
   CXbmcControlsFactory* m_pXbmcControlsFactory;
+  CXbmcIncludesFactory* m_pXbmcIncludesFactory;
   CXBMCComboBox m_pComboBox;
   CDuoTextBoxContainer m_pDuoTextBox;
   void ShowXbmcControls();
   void OnListSelectionChanged();
  
   void OnEditBoxFocus();
-  void OnEditBoxUpdated();
+  void OnEditBoxChange();
 
-
-  void PasteSelectedItem();
-  void PasteAllItems();
-  void DeleteSelectedItem();
-  void DeleteAllItems();
-  void CopySelectedItemToClipboard();
-
+  //settings
+  bool m_bLoadIncludes;
+  bool m_bLoadImages;
   virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
   virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 };

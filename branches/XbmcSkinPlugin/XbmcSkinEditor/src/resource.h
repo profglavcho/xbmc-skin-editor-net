@@ -42,10 +42,11 @@
 #define IDC_EDIT_LOGIN                  1022
 #define IDC_EDIT_PASSWORD               1023
 #define IDC_IMAGE_PREVIEW               1023
-#define IDC_MFCPROPERTYGRID1            1024
 #define IDC_COMBO_CONTROL_LIST          1025
 #define IDC_COMBO1                      1026
 #define IDC_TAB1                        1027
+#define IDC_CHECK_LOAD_INCLUDES         1028
+#define IDC_CHECK_LOAD_IMAGES           1029
 #define IDM_EX_UP                       2001
 #define IDM_EX_DOWN                     2002
 #define IDM_EX_PASTE                    2003
@@ -80,7 +81,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1028
+#define _APS_NEXT_CONTROL_VALUE         1029
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
