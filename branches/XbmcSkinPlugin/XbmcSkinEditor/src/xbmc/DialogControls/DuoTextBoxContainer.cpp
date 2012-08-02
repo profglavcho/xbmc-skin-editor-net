@@ -1,5 +1,5 @@
 /*
-This file is part of MultiClipboard Plugin for Notepad++
+This file is part of Xbmc skin editor for notepad++
 Copyright (C) 2009 LoonyChewy
 
 This program is free software; you can redistribute it and/or
@@ -70,6 +70,8 @@ void CDuoTextBoxContainer::init( HINSTANCE hInst, HWND parent )
       return;
     }
   }
+  
+
   RECT rc;
   GetClientRect(parent, &rc);
   _hSelf = CreateWindowW( DUO_TEXTBOX_CONTAINER_CLASS_NAME, 0, WS_CHILD | WS_VISIBLE | WS_VSCROLL , 0, 45,rc.right,rc.bottom-45, _hParent, 0, _hInst, 0 );
@@ -80,6 +82,7 @@ void CDuoTextBoxContainer::init( HINSTANCE hInst, HWND parent )
     wsprintf( errText, TEXT("Cannot create window class %s, error code (%d)\r\nPlease remove this plugin and contact the plugin developer with this message"), DUO_TEXTBOX_CONTAINER_CLASS_NAME, dwErr );
     ::MessageBox( parent, errText, TEXT("Xbmc Skin Plugin error"), MB_OK );
   }
+  MakeDragList( _hSelf );
 
   // Store the instance pointer within the window user data
   ::SetWindowLongPtr( _hSelf, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this) );
@@ -383,7 +386,8 @@ void CDuoTextBoxContainer::GetXmlControl( CStdString & xmlControl )
       //control[controlname] = controlvalue;
     }
   }
-  
+  if (m_pDuoTextBox.size() == 0)
+    return;
   TiXmlDocument doc;
   TiXmlElement* elements = new TiXmlElement("control");
   doc.LinkEndChild(elements);

@@ -1,6 +1,6 @@
 /*
-This file is part of MultiClipboard Plugin for Notepad++
-Copyright (C) 2009 LoonyChewy
+This file is part of Xbmc skin editor for notepad++
+Copyright (C) 2012 Ti-BEN
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -54,6 +54,8 @@ public:
   void OnBufferActivated();
   void ResetCurrentControl() { m_pStrCurrent = L""; }
   void SetHidden() { IsShown = false; }
+  bool IsShowed() { return IsShown; }
+  void OnFixDragAndDrop(SCNotification *notifyCode, CStdStringA text);
 protected:
   CStdString m_pStrCurrentInclude;
   // Overload DockingDlgInterface's dialog procedure

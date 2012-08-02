@@ -16,6 +16,7 @@ public:
   
   void    beginUndoAction();
   void    endUndoAction();
+  void    deleteRange(int pos, int length);
   int     getCurrentLine() const;
   int     getLineStartPosition(int current_line) const;
   int     getLineEndPosition(int current_line) const;
@@ -37,6 +38,7 @@ public:
   void    goToPos(int pos);
   int     insertLine(int line) const;//return the position in the text of this line
   void    insertText(int position, CStdStringW text);
+  void    insertText(int position, CStdStringA text);
   bool    isModified() const;
   bool    isSelectionRectangle() const;
   void    setCodePage(unsigned int codePage);

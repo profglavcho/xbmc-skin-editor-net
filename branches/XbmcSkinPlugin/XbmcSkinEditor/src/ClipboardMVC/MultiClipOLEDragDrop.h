@@ -3,7 +3,7 @@
  OLE Drag and Drop Tutorial - http://www.catch22.net/node/34
 */
 /*
-This file is part of MultiClipboard Plugin for Notepad++
+This file is part of Xbmc skin editor for notepad++
 Copyright (C) 2010 LoonyChewy
 
 This program is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "afxwin.h"
 #endif
-
+#include "xbmc/lib/StdString.h"
 
 class MultiClipOLEDataObject : public IDataObject
 {
@@ -56,6 +56,7 @@ public:
 
   static HRESULT CreateDataObject( MultiClipOLEDataObject ** ppDataObject );
   static HGLOBAL DuplicateMemory( HGLOBAL hMem );
+  CStdString GetString( HGLOBAL hMem );
 
 private:
   // any private members and functions

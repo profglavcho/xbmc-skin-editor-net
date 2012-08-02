@@ -208,8 +208,22 @@ void CScintillaHelper::insertText(int position, CStdStringW text)
 {
   CStdStringA str = g_Scintilla.W_to_A(text);
   ScintillaMsg( SCI_INSERTTEXT, position, (LPARAM) str.c_str() );
-  
 }
+
+void CScintillaHelper::insertText(int position, CStdStringA text)
+{
+  ScintillaMsg( SCI_INSERTTEXT, position, (LPARAM) text.c_str() );
+}
+
+void CScintillaHelper::deleteRange(int pos, int length)
+{
+  ScintillaMsg( SCI_SETTARGETSTART, pos);
+  ScintillaMsg( SCI_SETTARGETEND, pos+length);
+  ScintillaMsg( SCI_REPLACETARGET, 0U, (LPARAM)"");
+  
+  //ScintillaMsg(SCI_DELETERANGE, pos, notifyCode->length);
+}
+
 //SCI_INSERTTEXT(int pos, const char *text)
 
 bool CScintillaHelper::isModified() const
@@ -249,7 +263,11 @@ void CScintillaHelper::setSelectionStart(int pos)
 
 void CScintillaHelper::setSelText(const char* pText)
 {
-    ScintillaMsg( SCI_REPLACESEL, 0, (LPARAM) pText );
+  LRESULT res = ScintillaMsg( SCI_REPLACESEL, 0, (LPARAM) pText );
+  if (res == SC_STATUS_OK)
+  {
+    printf("ok");
+  }
 }
 
 void CScintillaHelper::setText(const char* pText)

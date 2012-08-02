@@ -1,5 +1,5 @@
 /*
-This file is part of MultiClipboard Plugin for Notepad++
+This file is part of Xbmc skin editor for notepad++
 Copyright (C) 2009 LoonyChewy
 
 This program is free software; you can redistribute it and/or
@@ -202,7 +202,32 @@ extern "C" __declspec(dllexport) FuncItem * getFuncsArray(INT *nbF)
  */
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 {
-  if (notifyCode->nmhdr.code == NPPN_BUFFERACTIVATED)
+
+  if (notifyCode->nmhdr.code == SCN_MODIFIED)
+  {
+    if (theApp.clipXbmcControls.IsShowed())
+    {
+      if (notifyCode->text)
+      {
+        theApp.clipXbmcControls.OnFixDragAndDrop(notifyCode, "");
+
+        /*CStdStringA thetext = notifyCode->text;
+        if (thetext.Left(9).Equals("dragndrop"))
+        {
+          thetext = thetext.Right(thetext.size()-9);
+
+        }
+        else
+        {
+          return;
+        }*/
+        
+      }
+    }
+    
+    
+  }
+  else if (notifyCode->nmhdr.code == NPPN_BUFFERACTIVATED)
   {
     
     theApp.clipXbmcControls.OnBufferActivated();

@@ -3,7 +3,7 @@
  OLE Drag and Drop Tutorial - http://www.catch22.net/node/34
 */
 /*
-This file is part of MultiClipboard Plugin for Notepad++
+This file is part of Xbmc skin editor for notepad++
 Copyright (C) 2010 LoonyChewy
 
 This program is free software; you can redistribute it and/or
@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "MultiClipOLEDragDrop.h"
+#include "xbmc/lib/ScintillaHelper.h"
 #endif
 
 
@@ -62,7 +63,7 @@ void MultiClipOLEDataObject::SetMultiClipDragData( const void * pData, unsigned 
   HGLOBAL hMem = ::GlobalAlloc( GHND, numberOfBytes );
   char * ptr = (char *) ::GlobalLock( hMem );
   // copy the text in the selected list box item
-  ::CopyMemory( ptr, pData, numberOfBytes );
+  ::CopyMemory( ptr, pData, numberOfBytes ); //(destination, src, size)
   ::GlobalUnlock( hMem );
 
   m_StgMedium.hGlobal = hMem;
@@ -125,6 +126,40 @@ int MultiClipOLEDataObject::LookupFormatEtc( FORMATETC * pFormatEtc )
   return -1;
 }
 
+CStdString MultiClipOLEDataObject::GetString( HGLOBAL hMem )
+{
+
+  // lock the source memory object
+  DWORD len = GlobalSize( hMem );
+  PVOID source = GlobalLock( hMem );
+
+  // create a fixed "global" block - i.e. just
+  // a regular lump of our process heap
+  //PVOID dest = GlobalAlloc( GMEM_FIXED, len );
+
+  //GlobalUnlock(hMem);
+
+  char * ptr = (char *) ::GlobalLock( hMem );
+  // copy the text in the selected list box item
+  std::vector< std::string::value_type > data( len + 1, 0 );
+
+  ::CopyMemory( &data[0], source, len ); //(destination, src, size)
+  ::GlobalUnlock( hMem );
+
+  
+    // Get the window text into the vector
+  
+  CStdStringA strPtr;
+    // return the text
+  for (int i = 0; i < len; i++)
+  {
+    
+    if (data[i] != char(0))
+      strPtr.push_back(data[i]);
+  }
+
+  return strPtr;
+}
 
 HGLOBAL MultiClipOLEDataObject::DuplicateMemory( HGLOBAL hMem )
 {
@@ -156,14 +191,13 @@ HRESULT __stdcall MultiClipOLEDataObject::GetData( FORMATETC * pFormatEtc, STGME
   // found a match! transfer the data into the supplied storage-medium
   pMedium->tymed = m_FormatEtc[idx].tymed;
   pMedium->pUnkForRelease = 0;
-
-  switch ( m_FormatEtc[idx].tymed )
+  CStdString value;
+  if (m_FormatEtc[idx].tymed == TYMED_HGLOBAL)
   {
-  case TYMED_HGLOBAL:
     pMedium->hGlobal = DuplicateMemory( m_StgMedium.hGlobal );
-    break;
-
-  default:
+  }
+  else
+  {
     return DV_E_FORMATETC;
   }
 
