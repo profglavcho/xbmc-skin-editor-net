@@ -120,7 +120,7 @@ void CDuoTextBoxContainer::AddAttribute(CStdString name, CStdString value)
   SetupScrollbar();
 }
 
-void CDuoTextBoxContainer::AddAttribute(CStdString name, std::vector<CStdString> value, CStdString currentValue)
+void CDuoTextBoxContainer::AddAttribute(CStdString name, std::vector<CStdString> &value, CStdString currentValue)
 {
   CDuoTextBox* pDuoTextBox = new CDuoTextBox(m_pDuoTextBox.size());
   pDuoTextBox->init(getHinst(), getHSelf());

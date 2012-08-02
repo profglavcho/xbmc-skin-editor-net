@@ -37,7 +37,7 @@ public:
   virtual void destroy();
 
   virtual void SetValue(CStdString name, CStdString value);
-  virtual void SetValue(CStdString name, std::vector<CStdString> value, CStdString currentValue);
+  virtual void SetValue(CStdString name, std::vector<CStdString> &value, CStdString currentValue);
   
   virtual void Resize(RECT rc);
   virtual int GetLastPosition() { return GetTop() + 25;}
