@@ -351,6 +351,14 @@ bool CDuoTextBoxContainer::GetTextBox(CStdString & text, HWND control)
       SendMessage( control, CB_GETLBTEXT, cursel, (LPARAM)&data[0]);
       text.assign( &data[0] );
     }
+    else
+    {
+      INT textLength = ::GetWindowTextLength(control);
+      std::vector< std::wstring::value_type > data( textLength + 1, 0 );
+
+      GetWindowText( control, &data[0], (int)data.capacity());
+      text.assign( &data[0] );
+    }
     return true;
   }
   else

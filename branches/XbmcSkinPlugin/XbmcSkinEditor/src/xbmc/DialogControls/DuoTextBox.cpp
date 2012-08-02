@@ -142,21 +142,21 @@ void CDuoTextBox::SetValue(CStdString name, std::vector<CStdString> &value, CStd
   }
   TCHAR control_name[MAX_PATH];
   UINT nResult;
+
   for (std::vector<CStdString>::iterator it = value.begin(); it != value.end(); it++)
   {
     
     //lstrcpy(control_name, it->c_str());
     nResult = ::SendMessage( m_pTextBox, CB_ADDSTRING, 0, (LPARAM)it->c_str());
-    if (nResult != CB_ERR)
-      ::SendMessage(m_pTextBox, CB_SETITEMDATA, nResult, (LPARAM) nResult+1);
+    //Why calling both?????
+    /*if (nResult != CB_ERR)
+      ::SendMessage(m_pTextBox, CB_SETITEMDATA, nResult, (LPARAM) nResult+1);*/
 
   }
   
   BOOL res = SetWindowText(m_pTextBox, currentValue.c_str());
   if (res)
     printf("yeah");
-  
-
 }
 
 void CDuoTextBox::Resize(RECT rc)
