@@ -87,6 +87,7 @@ private:
  
   void OnEditBoxFocus();
   void OnEditBoxChange();
+  BOOL OnDragListMessage( LPDRAGLISTINFO pDragListInfo );
 
   //settings
   bool m_bLoadIncludes;

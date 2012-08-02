@@ -23,6 +23,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #include <commctrl.h>
 #include "resource.h"
 #include <Richedit.h>
+#include "../XbmcControlsFactory.h"
 #endif
 
 #define DUO_TEXTBOX_CONTAINER_CLASS_NAME TEXT( "DuoTextBoxContainer" )
@@ -300,54 +301,113 @@ void CDuoTextBoxContainer::SetupScrollbar()
   SetScrollPos(getHSelf(), SB_VERT, m_nVscrollPos, TRUE);
 }
 
-void CDuoTextBoxContainer::GetLabel( CStdString & text )
+void CDuoTextBoxContainer::GetLabel(CStdString & text, HWND control)
 {
   // Use stl's vector to store the text from editbox, instead of new and delete array
   // because it is safer against memory leaks
 
   // Get length of text in edit box
-  INT textLength = ::GetWindowTextLength(m_pCurrentLabel);
-  // Use stl's vector to store the text, make sure to reserve space for null terminator
-  std::vector< std::wstring::value_type > data( textLength + 1, 0 );
-  // Get the window text into the vector
-  ::GetWindowText( m_pCurrentLabel, &data[0], (int)data.capacity() );
+  INT textLength;
+  std::vector< std::wstring::value_type > data;
+  if (control != NULL)
+  {
+    textLength = ::GetWindowTextLength(control);
+    data = std::vector< std::wstring::value_type >(textLength + 1, 0);
+    ::GetWindowText( control, &data[0], (int)data.capacity() );
+  }
+  else
+  {
+    textLength = ::GetWindowTextLength(m_pCurrentLabel);
+    data = std::vector< std::wstring::value_type >( textLength + 1, 0 );
+    ::GetWindowText( m_pCurrentLabel, &data[0], (int)data.capacity() );
+  }
 
   // return the text
-  text.assign( &data[0] );
+  text.assign(&data[0]);
 }
 
-bool CDuoTextBoxContainer::GetTextBox( CStdString & text )
+bool CDuoTextBoxContainer::GetTextBox(CStdString & text, HWND control)
 {
   // Use stl's vector to store the text from editbox, instead of new and delete array
   // because it is safer against memory leaks
 
-  // Get length of text in edit box
+  if (control == NULL)
+    control = m_pCurrentTextBox;
   TCHAR szClass[128];
-  RealGetWindowClass(m_pCurrentTextBox, szClass,1228);
+  RealGetWindowClass(control, szClass,1228);
   CStdString classW = szClass;
   if (classW.Equals(L"ComboBox"))
   {
 
-    int cursel = SendMessage( m_pCurrentTextBox, CB_GETCURSEL, 0, 0 );
-    int textLength = SendMessage( m_pCurrentTextBox, CB_GETLBTEXTLEN, cursel,0);
-    std::vector< std::wstring::value_type > data( textLength + 1, 0 );
+    int cursel = SendMessage( control, CB_GETCURSEL, 0, 0 );
+    if (cursel != -1)
+    {
+      int textLength = SendMessage( control, CB_GETLBTEXTLEN, cursel,0);
+      std::vector< std::wstring::value_type > data( textLength + 1, 0 );
 
-    SendMessage( m_pCurrentTextBox, CB_GETLBTEXT, cursel, (LPARAM)&data[0]);
-    text.assign( &data[0] );
+      SendMessage( control, CB_GETLBTEXT, cursel, (LPARAM)&data[0]);
+      text.assign( &data[0] );
+    }
     return true;
   }
   else
   {
-    INT textLength = ::GetWindowTextLength(m_pCurrentTextBox);
+    INT textLength = ::GetWindowTextLength(control);
     // Use stl's vector to store the text, make sure to reserve space for null terminator
     std::vector< std::wstring::value_type > data( textLength + 1, 0 );
     // Get the window text into the vector
-    ::GetWindowText( m_pCurrentTextBox, &data[0], (int)data.capacity() );
+    ::GetWindowText( control, &data[0], (int)data.capacity() );
 
     // return the text
     text.assign( &data[0] );
     return false;
   }
+}
+
+void CDuoTextBoxContainer::GetXmlControl( CStdString & xmlControl )
+{
+  CStdString controlname;
+  CStdString controlvalue;
+  Attributes control;
+  std::pair<std::map<CStdString,CStdString>::iterator,bool> ret; // could be used to verify insertion
+  for (int i  = 0; i < m_pDuoTextBox.size(); i++)
+  {
+    controlname.clear();
+    controlvalue.clear();
+    GetLabel(controlname, m_pDuoTextBox[i]->m_pLabel);
+    GetTextBox(controlvalue, m_pDuoTextBox[i]->m_pTextBox);//we can't use the same due to the fact we use a combobox sometime
+
+    if (controlvalue.size()>0)
+    {
+      control.insert(std::pair<CStdString,CStdString>(controlname,controlvalue));
+      //control[controlname] = controlvalue;
+    }
+  }
+  
+  TiXmlDocument doc;
+  TiXmlElement* elements = new TiXmlElement("control");
+  doc.LinkEndChild(elements);
+  CStdStringA nameA;
+  CStdStringA valueA;
+  valueA = control.find(L"type")->second;
+  elements->SetAttribute("type",valueA.c_str());
+  TiXmlElement* element;
+  for (AttributesIt it = control.begin(); it != control.end(); it++)
+  {
+    if (it->first.Equals(L"type") == false)
+    {
+      nameA = it->first;
+      valueA = it->second;
+      element = new TiXmlElement(nameA.c_str());
+	    element->LinkEndChild( new TiXmlText(valueA.c_str()));
+	    elements->LinkEndChild(element);
+    }
+  }
+  TiXmlPrinter printer;
+  //printer.SetLineBreak("");
+  elements->Accept(&printer);
+  xmlControl = printer.CStr();
+
 }
 
 LRESULT CALLBACK CDuoTextBoxContainer::StaticDuoTextBoxPanelProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )

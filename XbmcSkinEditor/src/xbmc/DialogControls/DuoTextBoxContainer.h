@@ -43,8 +43,9 @@ public:
   virtual void ClearAttributes();
   HWND m_pCurrentLabel;
   HWND m_pCurrentTextBox;
-  virtual void GetLabel( CStdString & text );
-  virtual bool GetTextBox( CStdString & text ); // return yes if is a combobox
+  virtual void GetLabel(CStdString & text, HWND control = NULL);
+  virtual bool GetTextBox(CStdString & text, HWND control = NULL); // return yes if is a combobox
+  virtual void GetXmlControl( CStdString & xmlControl );
 private :
   void ResetScrollbar();
   void SetupScrollbar();

@@ -397,12 +397,9 @@ void CXbmcControlsFactory::LoadCurrentControl(CStdString strControl)
     return;
   theApp.clipXbmcControls.ResetCurrentControl();
   theApp.clipXbmcControls.SetCurrentControl(type);
-  //DeleteFile(m_pTempXmlControlPath.c_str());
-  
 }
 
 #if 1
-
 bool CXbmcControlsFactory::ControlTypeExist(CStdString type)
 {
   for (int i = 0; i < m_pAllControls.size(); i++)
