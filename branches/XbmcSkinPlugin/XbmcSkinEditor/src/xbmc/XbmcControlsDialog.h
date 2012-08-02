@@ -82,7 +82,6 @@ private:
   int m_pCurrentEndLinePos;
   int m_pCurrentLine;
   CXbmcControlsFactory* m_pXbmcControlsFactory;
-  CXbmcIncludesFactory* m_pXbmcIncludesFactory;
   CXBMCComboBox m_pComboBox;
   CDuoTextBoxContainer m_pDuoTextBox;
   void ShowXbmcControls();

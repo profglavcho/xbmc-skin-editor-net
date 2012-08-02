@@ -42,6 +42,7 @@ XbmcImagePreviewer::XbmcImagePreviewer()
 , IsLoading(false)
 , m_pCurrentLine(0)
 {
+  
 }
 
 
@@ -241,7 +242,15 @@ void XbmcImagePreviewer::ShowImage(CStdString image)
   conv.Replace(L"/",L"\\");
   bool res =m_pPicture.Load(conv.c_str());
 
-
+  if (!res)
+  {
+#if 0
+    res = m_pPicture.Load(image);
+    printf("yeah");
+#endif
+    //g_XbmcIncludeFactory->
+  
+  }
   if (res)
   {
     
@@ -270,7 +279,7 @@ void XbmcImagePreviewer::ShowImage(CStdString image)
 
 void XbmcImagePreviewer::ShowImage()
 {
-  if ( !IsShown && IsLoading )
+  if ( !IsShown || IsLoading )
   {
     return;
   }
@@ -337,8 +346,20 @@ void XbmcImagePreviewer::ShowImage()
     ClearWindow();
     CStdString conv = convertedstring;
     conv.Replace(L"/",L"\\");
-    bool res =m_pPicture.Load(conv.c_str());
+    CStdStringA convA = conv;
+    bool res = false;
+    if(fopen(convA.c_str(),"r")!=0)
+      res = m_pPicture.Load(conv.c_str());
 
+    if (!res)
+    {
+#if 0
+      ImageFrame frm = g_XbmcIncludeFactory->GetFrame(conv);
+      res = m_pPicture.Load(frm.memory,frm.size,IMG_PNG);
+      printf("yeah");
+      //g_XbmcIncludeFactory->
+#endif
+    }
 
     if (res)
     {
