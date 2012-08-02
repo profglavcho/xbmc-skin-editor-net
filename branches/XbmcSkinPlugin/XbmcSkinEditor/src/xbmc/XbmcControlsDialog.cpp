@@ -106,8 +106,32 @@ void CXbmcControlsDialog::ShowDialog( bool Show )
   ShowXbmcControls();
 }
 
+BOOL CXbmcControlsDialog::OnDragListMessage( LPDRAGLISTINFO pDragListInfo )
+{
+
+  if ( pDragListInfo->uNotification == DL_BEGINDRAG )
+  {
+    CStdString xmlcontrol;
+    m_pDuoTextBox.GetXmlControl(xmlcontrol);
+    if (xmlcontrol.size()>0)
+    {
+      pDataObject->SetMultiClipDragData( xmlcontrol.c_str(), (xmlcontrol.size()+1)*2, false);
+      DWORD dwEffect = 0;
+      DoDragDrop( pDataObject, pDropSource, DROPEFFECT_COPY, &dwEffect );
+    }
+    // Store the return value in DWL_MSGRESULT. Set to false so we don't receive the rest of the drag messages
+    // http://support.microsoft.com/kb/183115
+    SetWindowLong( getHSelf(), DWL_MSGRESULT, FALSE );
+  }
+  return TRUE;
+}
+
 BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp )
 {
+  if ( msg == DragListMessage )
+  {
+    return OnDragListMessage( (LPDRAGLISTINFO)lp );
+  }
 
   switch ( msg )
   {
