@@ -1,5 +1,5 @@
 /*
-This file is part of MultiClipboard Plugin for Notepad++
+This file is part of Xbmc skin editor for notepad++
 Copyright (C) 2009 LoonyChewy
 
 This program is free software; you can redistribute it and/or

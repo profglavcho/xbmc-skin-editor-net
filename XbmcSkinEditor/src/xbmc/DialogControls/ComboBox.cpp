@@ -26,7 +26,7 @@ void CXBMCComboBox::init(HINSTANCE hInst, HWND parent)
   ::SetWindowLongPtr( _hSelf, GWL_USERDATA, (LONG)this );
 
   // Make items draggable
-  MakeDragList( _hSelf );
+  
 
   hNewFont = (HFONT)::SendMessage( _hSelf, WM_GETFONT, 0, 0 );
   if ( hNewFont == NULL )

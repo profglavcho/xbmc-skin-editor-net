@@ -1,6 +1,6 @@
 /*
-This file is part of MultiClipboard Plugin for Notepad++
-Copyright (C) 2009 LoonyChewy
+This file is part of Xbmc skin editor for notepad++
+Copyright (C) 2012 Ti-BEN
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -115,6 +115,7 @@ BOOL CXbmcControlsDialog::OnDragListMessage( LPDRAGLISTINFO pDragListInfo )
     m_pDuoTextBox.GetXmlControl(xmlcontrol);
     if (xmlcontrol.size()>0)
     {
+      //xmlcontrol.Insert(0,L"dragndrop");
       pDataObject->SetMultiClipDragData( xmlcontrol.c_str(), (xmlcontrol.size()+1)*2, false);
       DWORD dwEffect = 0;
       DoDragDrop( pDataObject, pDropSource, DROPEFFECT_COPY, &dwEffect );
@@ -124,6 +125,18 @@ BOOL CXbmcControlsDialog::OnDragListMessage( LPDRAGLISTINFO pDragListInfo )
     SetWindowLong( getHSelf(), DWL_MSGRESULT, FALSE );
   }
   return TRUE;
+}
+
+void CXbmcControlsDialog::OnFixDragAndDrop(SCNotification *notifyCode, CStdStringA text)
+{
+  //g_Scintilla.deleteRange(notifyCode->position,notifyCode->position+ notifyCode->length);
+  g_Scintilla.setSelectionStart(notifyCode->position);
+  g_Scintilla.setSelectionEnd(notifyCode->position+ notifyCode->length);
+  //g_Scintilla.setSelText(text.c_str());
+  //g_Scintilla.insertText(notifyCode->position, text);
+  //int lineinserted = g_Scintilla.getLineFromPosition(notifyCode->position);
+
+
 }
 
 BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp )
@@ -335,29 +348,37 @@ void CXbmcControlsDialog::OnNotepadChange()
   {
     pStrCurrentLine = g_Scintilla.getTextLine(i);
     //if we find a control end before the start of one we dont keep seeking for the start of this one since we are not in one actually
-    if (pStrCurrentLine.ToLower().Find(L"</control>",0)>0)
+    if (pStrCurrentLine.ToLower().Find(L"</control>",0)> -1 || pStrCurrentLine.ToLower().Find(L"/>",0)> -1)
       break;
     //see if we have control and type= in the same line only getting control type would fuck when the its written control id="" type=""
-    if (pStrCurrentLine.ToLower().Find(L"control",0)>0 && pStrCurrentLine.ToLower().Find(L"type=",0)>0)
+    if (pStrCurrentLine.ToLower().Find(L"control",0)>-1 && pStrCurrentLine.ToLower().Find(L"type=",0)>-1)
     {
       control_start_line = i;
       break;
     }
   }
   if (control_start_line == -1)
+  {
+    m_pCurrentStartLinePos = -1;
+    m_pCurrentEndLinePos = -1;
     return;
+  }
   //get the end line of the control
   for (int i = control_start_line; i < g_Scintilla.getLineCount(); i++)
   {
     pStrCurrentLine = g_Scintilla.getTextLine(i);
-    if (pStrCurrentLine.ToLower().Find(L"</control>",0)>0)
+    if (pStrCurrentLine.ToLower().Find(L"</control>",0)>-1|| pStrCurrentLine.ToLower().Find(L"/>",0)> -1)
     {
       control_end_line = i;
       break;
     }
   }
   if (control_end_line == -1)
+  {
+    m_pCurrentStartLinePos = -1;
+    m_pCurrentEndLinePos = -1;
     return;
+  }
 
   m_pCurrentStartLinePos = control_start_line;
   m_pCurrentEndLinePos = control_end_line;
@@ -366,6 +387,23 @@ void CXbmcControlsDialog::OnNotepadChange()
   
   g_Scintilla.getTextRange(g_Scintilla.getLineStartPosition(control_start_line), g_Scintilla.getLineEndPosition(control_end_line), strControlText);
   m_pStrCurrentControl = strControlText;
+  //check if we have 2 control end on last line
+  if (m_pStrCurrentControl.Find(L"/>",0) > -1 && m_pStrCurrentControl.Find(L"</control>",0) > -1)
+  {
+    int first = m_pStrCurrentControl.Find(L"/>",0);
+    int second = m_pStrCurrentControl.Find(L"</control>",0);
+    if (first < second)
+    {
+      m_pStrCurrentControl.Delete(first,m_pStrCurrentControl.size()-first-2);
+    }
+    else
+    {
+      m_pStrCurrentControl.Delete(second,m_pStrCurrentControl.size()-second-10);
+    }
+
+  }
+
+  
   m_pXbmcControlsFactory->LoadCurrentControl(m_pStrCurrentControl);
 
 }
@@ -421,7 +459,10 @@ void CXbmcControlsDialog::OnEditBoxChange()
   {
     theApp.clipXbmcImage.ShowImage(pTextbox);
   }
-
+  if (m_pCurrentStartLinePos == -1)
+    return;
+  if (m_pCurrentEndLinePos == -1)
+    return;
   // Get length of text in edit box
   bool insertnewline = false;
   if (pLabel.size()>0)
@@ -442,7 +483,7 @@ void CXbmcControlsDialog::OnEditBoxChange()
     nl.append(g_Scintilla.W_to_A(returned_line.strNewLine).c_str());
     
     g_Scintilla.setSelText(nl.c_str());
-
+    m_pCurrentLine = linetomodif-1;
     //Reload the strcurrentcontrol
     OnNotepadChange();
 
