@@ -46,7 +46,7 @@ CXbmcControlsDialog::CXbmcControlsDialog()
 , pDropSource( NULL )
 {
   m_pXbmcControlsFactory = new CXbmcControlsFactory();
-  m_pXbmcIncludesFactory = new CXbmcIncludesFactory();
+  g_XbmcIncludeFactory = new CXbmcIncludesFactory();
   m_pStrCurrent = L"";
   m_pStrCurrentInclude = L"";
   m_pCurrentLine = 0;
@@ -60,8 +60,8 @@ CXbmcControlsDialog::~CXbmcControlsDialog()
   if (m_pXbmcControlsFactory)
     delete m_pXbmcControlsFactory;
   
-  if (m_pXbmcIncludesFactory)
-    delete m_pXbmcIncludesFactory;
+  if (g_XbmcIncludeFactory)
+    delete g_XbmcIncludeFactory;
 }
 
 
@@ -266,22 +266,22 @@ std::vector<CStdString> CXbmcControlsDialog::GetTexture()
 {
   std::vector<CStdString> returnvec;
   
-  returnvec = m_pXbmcIncludesFactory->m_pTextures;
+  returnvec = g_XbmcIncludeFactory->m_pTextures;
   
   
   if (returnvec.size() == 0)
   {
-    m_pXbmcIncludesFactory->LoadTextures(L"");
-    returnvec = m_pXbmcIncludesFactory->m_pTextures;
+    g_XbmcIncludeFactory->LoadTextures(L"");
+    returnvec = g_XbmcIncludeFactory->m_pTextures;
   }
-  //returnvec = m_pXbmcIncludesFactory->GetTextures();
+  //returnvec = g_XbmcIncludeFactory->GetTextures();
   return returnvec;
 }
 
 std::vector<CStdString> CXbmcControlsDialog::GetIncludes()
 {
   std::vector<CStdString> returnvec;
-  returnvec = m_pXbmcIncludesFactory->m_pIncludedNames;//GetIncludes();
+  returnvec = g_XbmcIncludeFactory->m_pIncludedNames;//GetIncludes();
   return returnvec;
   
 }
@@ -333,8 +333,11 @@ void CXbmcControlsDialog::OnBufferActivated()
     m_pStrCurrentInclude = include;
   else
     return;
-  include.insert(include.size(),L"\\includes.xml");
-  m_pXbmcIncludesFactory->LoadIncludes(include);
+  if (g_XbmcIncludeFactory->m_pIncludedNames.size()==0)
+  {
+    include.insert(include.size(),L"\\includes.xml");
+    g_XbmcIncludeFactory->LoadIncludes(include);
+  }
 }
 
 void CXbmcControlsDialog::OnNotepadChange()

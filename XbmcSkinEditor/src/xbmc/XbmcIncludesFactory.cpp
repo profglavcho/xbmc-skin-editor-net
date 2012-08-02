@@ -9,8 +9,10 @@
 #include "XbmcPluginEditor.h"
 #include "lib/SADirRead.h"
 
+CXbmcIncludesFactory* g_XbmcIncludeFactory;
+
 CXbmcIncludesFactory::CXbmcIncludesFactory()
-{ 
+{
 }
 
 CXbmcIncludesFactory::~CXbmcIncludesFactory()
@@ -99,6 +101,7 @@ void CXbmcIncludesFactory::LoadIncludes(CStdString path)
 void CXbmcIncludesFactory::LoadTextures(CStdString path)
 {
   m_pTextures.clear();
+
   CSADirRead dr;
   //get media dir
   TCHAR dirpath[ MAX_PATH];
@@ -117,8 +120,24 @@ void CXbmcIncludesFactory::LoadTextures(CStdString path)
   wpath.insert(wpath.size(),L"media\\");
   CStdStringA convertedpath;
   convertedpath = g_Scintilla.W_to_A(wpath.c_str());
+  
 
   dr.GetDirs(convertedpath.c_str(), true);
+
+  //load xbt files
+  dr.GetFiles("textures.xbt");
+  CSADirRead::SAFileVector &texturevector = dr.Files();
+  for (CSADirRead::SAFileVector::const_iterator it = texturevector.begin(); it != texturevector.end(); it++)
+  {
+    if (!it->bIsFolder)
+    {
+      std::vector<CStdString> list;
+      m_tbXBT.GetTexturesFromPath(it->m_sName, m_pTextures);
+      
+      
+    }
+  }
+  dr.ClearFiles();
   dr.GetFiles("*.png");
   dr.GetFiles("*.jpg");
   dr.GetFiles("*.bmp");
@@ -133,4 +152,14 @@ void CXbmcIncludesFactory::LoadTextures(CStdString path)
       m_pTextures.push_back(currentFile);
     }
 	}
+}
+
+ImageFrame CXbmcIncludesFactory::GetFrame(CStdString file)
+{
+  ImageFrame frm;
+  CXBTFFrame frame;
+  bool res = m_tbXBT.ConvertFrameToTexture(file,frame,frm);
+
+  return frm;
+
 }
