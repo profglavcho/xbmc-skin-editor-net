@@ -71,6 +71,7 @@ private:
   tTbData TBData;
   bool IsShown;
   bool IsLoadingControls;
+  bool AsModifiedTextBox;
   UINT DragListMessage;
   MultiClipOLEDataObject * pDataObject;
   MultiClipOLEDropSource * pDropSource;

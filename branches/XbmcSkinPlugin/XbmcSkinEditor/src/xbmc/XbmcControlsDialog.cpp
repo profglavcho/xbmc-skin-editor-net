@@ -40,6 +40,7 @@ CXbmcControlsDialog::CXbmcControlsDialog()
 : DockingDlgInterface(IDD_DOCK_CONTROLS_XBMC_DLG)
 , IsShown( false )
 , IsLoadingControls( false )
+, AsModifiedTextBox( false )
 , DragListMessage( 0 )
 , pDataObject( NULL )
 , pDropSource( NULL )
@@ -335,6 +336,11 @@ void CXbmcControlsDialog::OnNotepadChange()
 {
   if ( !IsShown )
     return;
+  if (AsModifiedTextBox)
+  {
+    AsModifiedTextBox = false;
+    return;
+  }
   int cur = g_Scintilla.getCurrentLine();
   if (cur != m_pCurrentLine)
     m_pCurrentLine = cur;
@@ -469,23 +475,52 @@ void CXbmcControlsDialog::OnEditBoxChange()
   {
     m_pXbmcControlsFactory->SetAttribute(pLabel,pTextbox);
     newLineString returned_line = m_pXbmcControlsFactory->GetLineModification(m_pStrCurrentControl, pLabel, pTextbox);
+    
     int space = g_Scintilla.getLineIndentation(m_pCurrentEndLinePos-1);
     //insert the new line
     if (returned_line.newline)
+    {
       int pos_in_text = g_Scintilla.insertLine(m_pCurrentEndLinePos-1);
+      m_pCurrentEndLinePos = m_pCurrentEndLinePos+1;
+    }
+    
     int linetomodif = m_pCurrentStartLinePos + returned_line.index;
     //select line to modif
     g_Scintilla.setSelectionStart(g_Scintilla.getLineStartPosition(linetomodif));
     g_Scintilla.setSelectionEnd(g_Scintilla.getLineEndPosition(linetomodif));
+    
+    
+
     CStdStringA nl;
     for (int i = 0; i < space; i++)
       nl.append(" ");
     nl.append(g_Scintilla.W_to_A(returned_line.strNewLine).c_str());
-    
+    AsModifiedTextBox = true;
+
     g_Scintilla.setSelText(nl.c_str());
-    m_pCurrentLine = linetomodif-1;
+
+    char* strControlText = (char*) new CHAR[ g_Scintilla.getLineEndPosition(m_pCurrentEndLinePos) - g_Scintilla.getLineStartPosition(m_pCurrentStartLinePos)+1];
+  
+    g_Scintilla.getTextRange(g_Scintilla.getLineStartPosition(m_pCurrentStartLinePos), g_Scintilla.getLineEndPosition(m_pCurrentEndLinePos), strControlText);
+    m_pStrCurrentControl = strControlText;
+    //check if we have 2 control end on last line
+    if (m_pStrCurrentControl.Find(L"/>",0) > -1 && m_pStrCurrentControl.Find(L"</control>",0) > -1)
+    {
+      int first = m_pStrCurrentControl.Find(L"/>",0);
+      int second = m_pStrCurrentControl.Find(L"</control>",0);
+      if (first < second)
+      {
+        m_pStrCurrentControl.Delete(first,m_pStrCurrentControl.size()-first-2);
+      }
+      else
+      {
+        m_pStrCurrentControl.Delete(second,m_pStrCurrentControl.size()-second-10);
+      }
+
+    }
+    //m_pCurrentLine = linetomodif-1;
     //Reload the strcurrentcontrol
-    OnNotepadChange();
+    //OnNotepadChange();
 
     
 
