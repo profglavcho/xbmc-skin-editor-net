@@ -119,7 +119,7 @@ void CDuoTextBox::SetValue(CStdString name, CStdString value)
  
 }
 
-void CDuoTextBox::SetValue(CStdString name, std::vector<CStdString> value, CStdString currentValue)
+void CDuoTextBox::SetValue(CStdString name, std::vector<CStdString> &value, CStdString currentValue)
 {
   m_bComboBox = true;
   SetWindowText(m_pLabel, name.c_str());

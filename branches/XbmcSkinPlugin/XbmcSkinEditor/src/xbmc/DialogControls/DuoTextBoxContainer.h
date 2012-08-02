@@ -38,7 +38,7 @@ public:
   //use textbox
   virtual void AddAttribute(CStdString name, CStdString value);
   //use combobox
-  virtual void AddAttribute(CStdString name, std::vector<CStdString> value, CStdString currentValue);
+  virtual void AddAttribute(CStdString name, std::vector<CStdString> &value, CStdString currentValue);
   virtual RECT GetContainerRect();
   virtual void ClearAttributes();
   HWND m_pCurrentLabel;

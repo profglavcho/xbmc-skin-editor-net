@@ -266,17 +266,22 @@ std::vector<CStdString> CXbmcControlsDialog::GetTexture()
 {
   std::vector<CStdString> returnvec;
   
-  returnvec = m_pXbmcIncludesFactory->GetTextures();
+  returnvec = m_pXbmcIncludesFactory->m_pTextures;
+  
+  
   if (returnvec.size() == 0)
+  {
     m_pXbmcIncludesFactory->LoadTextures(L"");
-  returnvec = m_pXbmcIncludesFactory->GetTextures();
+    returnvec = m_pXbmcIncludesFactory->m_pTextures;
+  }
+  //returnvec = m_pXbmcIncludesFactory->GetTextures();
   return returnvec;
 }
 
 std::vector<CStdString> CXbmcControlsDialog::GetIncludes()
 {
   std::vector<CStdString> returnvec;
-  returnvec = m_pXbmcIncludesFactory->GetIncludes();
+  returnvec = m_pXbmcIncludesFactory->m_pIncludedNames;//GetIncludes();
   return returnvec;
   
 }

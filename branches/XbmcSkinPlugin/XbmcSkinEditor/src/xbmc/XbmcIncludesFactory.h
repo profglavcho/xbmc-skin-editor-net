@@ -15,12 +15,12 @@ public:
   void LoadTextures(CStdString path);
   std::vector<CStdString> GetIncludes() { return m_pIncludedNames; }
   std::vector<CStdString> GetTextures() { return m_pTextures; }
-
+  std::vector<CStdString> m_pIncludedNames;
+  std::vector<CStdString> m_pTextures;
 protected:
   void LoadInclude(CStdStringA path);
   std::vector<CStdString> m_pIncludedFiles;
-  std::vector<CStdString> m_pIncludedNames;
-  std::vector<CStdString> m_pTextures;
+  
 };
 
 #endif
