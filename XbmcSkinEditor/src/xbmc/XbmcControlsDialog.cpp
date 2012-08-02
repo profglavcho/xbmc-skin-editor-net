@@ -359,7 +359,7 @@ void CXbmcControlsDialog::OnNotepadChange()
   {
     pStrCurrentLine = g_Scintilla.getTextLine(i);
     //if we find a control end before the start of one we dont keep seeking for the start of this one since we are not in one actually
-    if (pStrCurrentLine.ToLower().Find(L"</control>",0)> -1 || pStrCurrentLine.ToLower().Find(L"/>",0)> -1)
+    if ((pStrCurrentLine.ToLower().Find(L"</control>",0)> -1 || pStrCurrentLine.ToLower().Find(L"/>",0)> -1) && !(pStrCurrentLine.ToLower().Find(L"<control",0)>-1) && cur != i)
       break;
     //see if we have control and type= in the same line only getting control type would fuck when the its written control id="" type=""
     if (pStrCurrentLine.ToLower().Find(L"control",0)>-1 && pStrCurrentLine.ToLower().Find(L"type=",0)>-1)
@@ -378,7 +378,7 @@ void CXbmcControlsDialog::OnNotepadChange()
   for (int i = control_start_line; i < g_Scintilla.getLineCount(); i++)
   {
     pStrCurrentLine = g_Scintilla.getTextLine(i);
-    if (pStrCurrentLine.ToLower().Find(L"</control>",0)>-1|| pStrCurrentLine.ToLower().Find(L"/>",0)> -1)
+    if ((pStrCurrentLine.ToLower().Find(L"</control>",0)>-1|| pStrCurrentLine.ToLower().Find(L"/>",0)> -1)&& !(pStrCurrentLine.ToLower().Find(L"<control",0)>-1))
     {
       control_end_line = i;
       break;
@@ -390,7 +390,8 @@ void CXbmcControlsDialog::OnNotepadChange()
     m_pCurrentEndLinePos = -1;
     return;
   }
-
+  if (m_pCurrentStartLinePos == control_start_line && m_pCurrentEndLinePos == control_end_line)
+    return;
   m_pCurrentStartLinePos = control_start_line;
   m_pCurrentEndLinePos = control_end_line;
 
@@ -503,7 +504,7 @@ void CXbmcControlsDialog::OnEditBoxChange()
     AsModifiedTextBox = true;
 
     g_Scintilla.setSelText(nl.c_str());
-
+    //Rewrite the new current control text
     char* strControlText = (char*) new CHAR[ g_Scintilla.getLineEndPosition(m_pCurrentEndLinePos) - g_Scintilla.getLineStartPosition(m_pCurrentStartLinePos)+1];
   
     g_Scintilla.getTextRange(g_Scintilla.getLineStartPosition(m_pCurrentStartLinePos), g_Scintilla.getLineEndPosition(m_pCurrentEndLinePos), strControlText);
@@ -523,11 +524,6 @@ void CXbmcControlsDialog::OnEditBoxChange()
       }
 
     }
-    //m_pCurrentLine = linetomodif-1;
-    //Reload the strcurrentcontrol
-    //OnNotepadChange();
-
-    
 
   }
   
