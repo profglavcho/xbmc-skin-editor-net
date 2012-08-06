@@ -77,11 +77,13 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</LinkIncremental>
     <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</PostBuildEventUseInBuild>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(DXSDK_DIR)Include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(DXSDK_DIR)Lib\x86;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../src/TinyXML;../../../Common/Ccpp;../../../NativeLang/src;J:\SDK\Boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../src/TinyXML;../../../Common/Ccpp;../../../NativeLang/src;../../src/xbmc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -92,11 +94,12 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitDefaultLibName>true</OmitDefaultLibName>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <AdditionalDependencies>shlwapi.lib;comctl32.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(IntDir)XbmcSkinPlugin.dll</OutputFile>
-      <AdditionalLibraryDirectories>../../src/TinyXML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>../../src/TinyXML;../../src/xbmc/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutputPath)XbmcSkinPlugin.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -117,7 +120,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../src/TinyXML;../../../Common/Ccpp;../../../NativeLang/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../src/TinyXML;../../../Common/Ccpp;../../../NativeLang/src;../../src/xbmc/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MultiClipboard_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -205,6 +208,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Common\Ccpp\DockingDlgInterface.cpp" />
     <ClCompile Include="..\..\src\ClipboardMVC\ControlsList.cpp" />
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
@@ -310,23 +314,32 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\TextureRenderer.cpp" />
+    <ClCompile Include="..\..\src\xbmc\D3DResource.cpp" />
     <ClCompile Include="..\..\src\xbmc\DialogControls\ComboBox.cpp" />
     <ClCompile Include="..\..\src\xbmc\DialogControls\DuoTextBox.cpp" />
     <ClCompile Include="..\..\src\xbmc\DialogControls\DuoTextBoxContainer.cpp" />
+    <ClCompile Include="..\..\src\xbmc\lib\EndianSwap.cpp" />
     <ClCompile Include="..\..\src\xbmc\lib\SADirRead.cpp" />
     <ClCompile Include="..\..\src\xbmc\lib\ScintillaHelper.cpp" />
     <ClCompile Include="..\..\src\xbmc\lib\xbmc_communicator.cpp" />
-    <ClCompile Include="..\..\src\xbmc\PJAImage.cpp" />
+    <ClCompile Include="..\..\src\xbmc\Texture.cpp" />
+    <ClCompile Include="..\..\src\xbmc\TextureBundleXBT.cpp" />
+    <ClCompile Include="..\..\src\xbmc\TextureDX.cpp" />
+    <ClCompile Include="..\..\src\xbmc\URIUtils.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcControllerDialog.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcControlsDialog.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcControlsFactory.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcImagePreviewer.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcIncludesFactory.cpp" />
+    <ClCompile Include="..\..\src\xbmc\XBTF.cpp" />
+    <ClCompile Include="..\..\src\xbmc\XBTFReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ClipboardMVC\ControlsList.h" />
     <ClInclude Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.h" />
     <ClInclude Include="..\..\src\MCSubClassWndProc.h" />
+    <ClInclude Include="..\..\src\system.h" />
     <ClInclude Include="..\..\src\XbmcPluginEditor.h" />
     <ClInclude Include="..\..\src\MultiClipboardProxy.h" />
     <ClInclude Include="..\..\src\MultiClipboardStringType.h" />
@@ -364,19 +377,27 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClInclude Include="..\..\src\Scintilla.h" />
     <ClInclude Include="..\..\src\TinyXML\tinystr.h" />
     <ClInclude Include="..\..\src\TinyXML\tinyxml.h" />
+    <ClInclude Include="..\..\src\xbmc\TextureRenderer.h" />
+    <ClInclude Include="..\..\src\xbmc\D3DResource.h" />
     <ClInclude Include="..\..\src\xbmc\DialogControls\ComboBox.h" />
     <ClInclude Include="..\..\src\xbmc\DialogControls\DuoTextBox.h" />
     <ClInclude Include="..\..\src\xbmc\DialogControls\DuoTextBoxContainer.h" />
+    <ClInclude Include="..\..\src\xbmc\lib\EndianSwap.h" />
     <ClInclude Include="..\..\src\xbmc\lib\SADirRead.h" />
     <ClInclude Include="..\..\src\xbmc\lib\ScintillaHelper.h" />
     <ClInclude Include="..\..\src\xbmc\lib\StdString.h" />
     <ClInclude Include="..\..\src\xbmc\lib\xbmc_communicator.h" />
-    <ClInclude Include="..\..\src\xbmc\PJAImage.h" />
+    <ClInclude Include="..\..\src\xbmc\Texture.h" />
+    <ClInclude Include="..\..\src\xbmc\TextureBundleXBT.h" />
+    <ClInclude Include="..\..\src\xbmc\TextureDX.h" />
+    <ClInclude Include="..\..\src\xbmc\URIUtils.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcControllerDialog.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcControlsDialog.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcControlsFactory.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcImagePreviewer.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcIncludesFactory.h" />
+    <ClInclude Include="..\..\src\xbmc\XBTF.h" />
+    <ClInclude Include="..\..\src\xbmc\XBTFReader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\res\background.bmp" />

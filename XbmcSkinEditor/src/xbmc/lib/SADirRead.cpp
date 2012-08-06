@@ -505,14 +505,14 @@ UINT CSADirRead::FindFiles(const CStdStringA & dir, const CStdStringA & filter, 
 
 bool asc_alpha_dir_sort(const CSADirRead::CSADirEntry &a, const CSADirRead::CSADirEntry &b)
 {
-	return (stricmp(a.m_sName, b.m_sName) < 0);
+	return (_stricmp(a.m_sName, b.m_sName) < 0);
 }
 
 //////////////////////////////////////////////////////////////////////
 
 bool asc_alpha_file_sort(const CSADirRead::CSAFileEntry &a, const CSADirRead::CSAFileEntry &b)
 {
-	return (stricmp(a.m_sName, b.m_sName) < 0);
+	return (_stricmp(a.m_sName, b.m_sName) < 0);
 }
 
 //////////////////////////////////////////////////////////////////////

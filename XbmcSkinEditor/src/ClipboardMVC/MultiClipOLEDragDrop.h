@@ -25,10 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define MULTI_CLIP_OLE_DRAG_DROP
 
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "afxwin.h"
-#endif
-#include "xbmc/lib/StdString.h"
+#include "system.h"
 
 class MultiClipOLEDataObject : public IDataObject
 {

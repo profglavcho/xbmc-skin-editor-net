@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XbmcSkinEditor", "XbmcSkinEditor.vcxproj", "{0A9F9D63-C282-4AE8-9F80-A6D5F541AD12}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XbmcSkinPlugin", "XbmcSkinEditor.vcxproj", "{0A9F9D63-C282-4AE8-9F80-A6D5F541AD12}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squish", "..\..\src\xbmc\lib\libsquish\vs7\squish\squish_2010.vcxproj", "{6A8518C3-D81A-4428-BD7F-C37933088AC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +20,14 @@ Global
 		{0A9F9D63-C282-4AE8-9F80-A6D5F541AD12}.Release|Win32.Build.0 = Release|Win32
 		{0A9F9D63-C282-4AE8-9F80-A6D5F541AD12}.ReleaseUnity|Win32.ActiveCfg = ReleaseUnity|Win32
 		{0A9F9D63-C282-4AE8-9F80-A6D5F541AD12}.ReleaseUnity|Win32.Build.0 = ReleaseUnity|Win32
+		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Debug|Win32.Build.0 = Debug|Win32
+		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.DebugUnity|Win32.ActiveCfg = Debug|Win32
+		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.DebugUnity|Win32.Build.0 = Debug|Win32
+		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Release|Win32.ActiveCfg = Release|Win32
+		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Release|Win32.Build.0 = Release|Win32
+		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.ReleaseUnity|Win32.ActiveCfg = Release|Win32
+		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.ReleaseUnity|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

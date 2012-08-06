@@ -72,7 +72,7 @@
 #endif // _MSC_VER > 1000
 
 #include <vector>
-#include "StdString.h"
+#include "system.h"
 using namespace std;
 #pragma warning(disable:4786)
 

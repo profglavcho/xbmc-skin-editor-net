@@ -22,7 +22,8 @@
 #include "lib/libsquish/squish.h"
 
 #include "TextureBundleXBT.h"
-/*#include "Texture.h"
+#include "Texture.h"
+/*
 #include "GraphicContext.h"
 #include "utils/log.h"
 #include "addons/Skin.h"
@@ -136,44 +137,9 @@ void CTextureBundleXBT::GetTexturesFromPath(const CStdString &path, std::vector<
   }
 }
 
-bool CTextureBundleXBT::ConvertFrameToTexture(const CStdString& name, CXBTFFrame& frame, ImageFrame& frm)
+bool CTextureBundleXBT::ConvertFrameToTexture(const CStdString& name, CXBTFFrame& frame, CBaseTexture** ppTexture)
 {
-  CStdStringA path = name;
-  if (!m_XBTFReader.IsOpen())
-  {
-    if (path.Find("\\media\\",0)>0)
-    {
-      //path.Delete(path.Find("/media/",0)+7,path.size()-path.Find("/media/",0)+7);
-      for (int i = 0 ; i < path.Find("\\media\\",0)+6; i++)
-        path.pop_back();
-      path.Insert(path.size(),"\\textures.xbt");
-    }
-    if (!OpenBundle(path))
-      return false;
-    else
-    {
-      
-      
-      strCurrentPath = path;
-    }
-  }
-    
-  //clean it before
-  CStdStringA trimmedname = name;
-  trimmedname.Replace("\\","/");
-  int placementofmedia = trimmedname.Find("/media/",0);
-  trimmedname.Delete(0,placementofmedia+7);
-
-  //start from other function
-  CXBTFFile* file = m_XBTFReader.Find(trimmedname);
-  if (!file)
-    return false;
-
-  if (file->GetFrames().size() == 0)
-    return false;
-
-  frame = file->GetFrames().at(0);
-  //end from other function
+  
 
   // found texture - allocate the necessary buffers
   squish::u8 *buffer = new squish::u8[(size_t)frame.GetPackedSize()];
@@ -214,23 +180,52 @@ bool CTextureBundleXBT::ConvertFrameToTexture(const CStdString& name, CXBTFFrame
     buffer = unpacked;
   }
 
+  /*std::vector<BYTE> pixv;
+  pixv.resize(frame.GetUnpackedSize());
+  memcpy(&pixv.at(0),buffer,frame.GetUnpackedSize());*/
   // create an xbmc texture
-  /**ppTexture = new CTexture();
-  (*ppTexture)->LoadFromMemory(frame.GetWidth(), frame.GetHeight(), 0, frame.GetFormat(), frame.HasAlpha(), buffer);*/
-  frm.memory = malloc(frame.GetUnpackedSize());
-  frm.size = frame.GetUnpackedSize();
+  *ppTexture = new CTexture();
+  (*ppTexture)->LoadFromMemory(frame.GetWidth(), frame.GetHeight(), 0, frame.GetFormat(), frame.HasAlpha(), buffer);
   delete[] buffer;
 
   return true;
 }
 
-#if 0
+
 bool CTextureBundleXBT::LoadTexture(const CStdString& Filename, CBaseTexture** ppTexture,
                                      int &width, int &height)
 {
-  CStdString name = Normalize(Filename);
+  CStdStringA path = Filename;
+  if (path.Find("\\media\\",0)>0)
+    {
+      //path.Delete(path.Find("/media/",0)+7,path.size()-path.Find("/media/",0)+7);
+      for (int i = 0 ; i < path.Find("\\media\\",0)+6; i++)
+        path.pop_back();
+      path.Insert(path.size(),"\\textures.xbt");
+    }
+  CStdString pathW = path;
+  if (!strCurrentPath.Equals(pathW))
+  {
+    m_XBTFReader.Close();
+  }
+  if (!m_XBTFReader.IsOpen())
+  {
+    if (!OpenBundle(path))
+      return false;
+    else
+    {
+      strCurrentPath = path;
+    }
+  }
+    
+  //clean it before
+  CStdStringA trimmedname = Filename;
+  trimmedname.Replace("\\","/");
+  int placementofmedia = trimmedname.Find("/media/",0);
+  trimmedname.Delete(0,placementofmedia+7);
 
-  CXBTFFile* file = m_XBTFReader.Find(name);
+  //start from other function
+  CXBTFFile* file = m_XBTFReader.Find(trimmedname);
   if (!file)
     return false;
 
@@ -238,6 +233,8 @@ bool CTextureBundleXBT::LoadTexture(const CStdString& Filename, CBaseTexture** p
     return false;
 
   CXBTFFrame& frame = file->GetFrames().at(0);
+  //end from other function
+
   if (!ConvertFrameToTexture(Filename, frame, ppTexture))
   {
     return false;
@@ -249,7 +246,7 @@ bool CTextureBundleXBT::LoadTexture(const CStdString& Filename, CBaseTexture** p
   return true;
 }
 
-
+#if 0
 int CTextureBundleXBT::LoadAnim(const CStdString& Filename, CBaseTexture*** ppTextures,
                               int &width, int &height, int& nLoops, int** ppDelays)
 {

@@ -1,7 +1,7 @@
 #ifndef SCINTILLA_HELPER_H
 #define SCINTILLA_HELPER_H
 
-#include "xbmc/lib/StdString.h"
+#include "system.h"
 #include "Scintilla.h"
 class CScintillaHelper
 {

@@ -94,29 +94,56 @@
     <ClCompile Include="..\..\src\xbmc\DialogControls\DuoTextBoxContainer.cpp">
       <Filter>Source Files\Xbmc\Dialog\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\xbmc\lib\ScintillaHelper.cpp">
-      <Filter>Source Files\Xbmc\lib</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\XbmcPluginEditor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\xbmc\lib\SADirRead.cpp">
-      <Filter>Source Files\Xbmc\lib</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\xbmc\XbmcIncludesFactory.cpp">
       <Filter>Source Files\Xbmc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\xbmc\XbmcControlsDialog.cpp">
-      <Filter>Source Files\Xbmc</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\xbmc\PJAImage.cpp">
-      <Filter>Source Files\Xbmc\lib</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MultiClipboardProxy.cpp">
       <Filter>Unrelated</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\xbmc\XbmcControlsFactory.cpp">
       <Filter>Source Files\Xbmc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\TextureBundleXBT.cpp">
+      <Filter>Source Files\Xbmc\lib\XBTF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\XBTFReader.cpp">
+      <Filter>Source Files\Xbmc\lib\XBTF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\XBTF.cpp">
+      <Filter>Source Files\Xbmc\lib\XBTF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\DockingDlgInterface.cpp">
+      <Filter>Header Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\XbmcControlsDialog.cpp">
+      <Filter>Source Files\Xbmc\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\TextureDX.cpp">
+      <Filter>Source Files\Xbmc\Dialog\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\Texture.cpp">
+      <Filter>Source Files\Xbmc\Dialog\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\URIUtils.cpp">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\lib\SADirRead.cpp">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\lib\ScintillaHelper.cpp">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\lib\EndianSwap.cpp">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\D3DResource.cpp">
+      <Filter>Source Files\Xbmc\Dialog\dx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\TextureRenderer.cpp">
+      <Filter>Source Files\Xbmc\lib\XBTF</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -243,9 +270,6 @@
     <ClInclude Include="..\..\src\xbmc\XbmcImagePreviewer.h">
       <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\lib\StdString.h">
-      <Filter>Source Files\Xbmc\lib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\xbmc\DialogControls\ComboBox.h">
       <Filter>Source Files\Xbmc\Dialog\Controls</Filter>
     </ClInclude>
@@ -255,29 +279,59 @@
     <ClInclude Include="..\..\src\xbmc\DialogControls\DuoTextBoxContainer.h">
       <Filter>Source Files\Xbmc\Dialog\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\lib\ScintillaHelper.h">
-      <Filter>Source Files\Xbmc\lib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\XbmcPluginEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\lib\SADirRead.h">
-      <Filter>Source Files\Xbmc\lib</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\xbmc\XbmcIncludesFactory.h">
       <Filter>Source Files\Xbmc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\XbmcControlsDialog.h">
-      <Filter>Source Files\Xbmc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\xbmc\PJAImage.h">
-      <Filter>Source Files\Xbmc\lib</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\MultiClipboardProxy.h">
       <Filter>Unrelated</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\xbmc\XbmcControlsFactory.h">
       <Filter>Source Files\Xbmc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\TextureBundleXBT.h">
+      <Filter>Source Files\Xbmc\lib\XBTF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\XBTF.h">
+      <Filter>Source Files\Xbmc\lib\XBTF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\XBTFReader.h">
+      <Filter>Source Files\Xbmc\lib\XBTF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\XbmcControlsDialog.h">
+      <Filter>Source Files\Xbmc\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\TextureDX.h">
+      <Filter>Source Files\Xbmc\Dialog\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\Texture.h">
+      <Filter>Source Files\Xbmc\Dialog\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\D3DResource.h">
+      <Filter>Source Files\Xbmc\Dialog\dx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\URIUtils.h">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\lib\ScintillaHelper.h">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\lib\SADirRead.h">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\lib\StdString.h">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\lib\EndianSwap.h">
+      <Filter>Source Files\Xbmc\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\TextureRenderer.h">
+      <Filter>Source Files\Xbmc\lib\XBTF</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +444,15 @@
     </Filter>
     <Filter Include="Unrelated">
       <UniqueIdentifier>{5b0e5f39-1f86-4f88-866f-2f532694fe90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Xbmc\lib\XBTF">
+      <UniqueIdentifier>{916518c6-bfed-4ac4-adac-3b0ad063258a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Xbmc\Dialog\dx">
+      <UniqueIdentifier>{68dff550-b493-479b-adc6-cf1954a4dd2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Xbmc\Utils">
+      <UniqueIdentifier>{01475c9a-7d89-4be1-8c2a-0127b7bbd0f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

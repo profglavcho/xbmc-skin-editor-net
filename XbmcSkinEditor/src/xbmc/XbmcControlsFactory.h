@@ -1,7 +1,7 @@
 #ifndef XBMC_CONTROLS_FACTORY
 #define XBMC_CONTROLS_FACTORY
 
-#include "lib/StdString.h"
+#include "system.h"
 #include "tinyxml.h"
 
 /*#define BOOST_NO_USER_CONFIG
