@@ -42,7 +42,7 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 #define VC_EXTRA_LEAN
 
 // Windows headers
-#include <windows.h>
+#include "stdafx.h"
 #include <ShellAPI.h>
 #include <windowsx.h>
 

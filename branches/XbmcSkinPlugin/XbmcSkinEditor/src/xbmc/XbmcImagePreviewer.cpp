@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
+#include "stdafx.h"
 #include "XbmcImagePreviewer.h"
 #include "resource.h"
 #include "NativeLang_def.h"
@@ -34,7 +35,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 extern HINSTANCE g_hInstance;
 extern NppData g_NppData;
 extern MultiClipboardSettingsDialog OptionsDlg;
-
 
 XbmcImagePreviewer::XbmcImagePreviewer()
 : DockingDlgInterface(IDD_DOCK_IMAGE_DLG)
@@ -79,6 +79,9 @@ void XbmcImagePreviewer::ShowDialog( bool Show )
     TBData.pszModuleName  = getPluginFileName();
     TBData.dlgID      = DIALOG_IMAGE_PREVIEWER;
     ::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
+    bool res = g_pBitmapCreator.InitD3d(getHSelf());
+    if (!res)
+      wprintf(L"damn");
   }
 
   display( Show );
@@ -106,7 +109,7 @@ BOOL CALLBACK XbmcImagePreviewer::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, L
     {
       RECT rc;
       getClientRect(rc);
-     
+      g_pBitmapCreator.Resize(rc.right-rc.left,rc.bottom-rc.top);
       break;
     }
 
@@ -276,7 +279,7 @@ void XbmcImagePreviewer::ShowImage(CStdString image)
   IsLoading = false;
 
 }
-
+#define RETURNLOADING IsLoading = false; return;
 void XbmcImagePreviewer::ShowImage()
 {
   if ( !IsShown || IsLoading )
@@ -353,11 +356,16 @@ void XbmcImagePreviewer::ShowImage()
 
     if (!res)
     {
-#if 0
-      ImageFrame frm = g_XbmcIncludeFactory->GetFrame(conv);
-      res = m_pPicture.Load(frm.memory,frm.size,IMG_PNG);
-      printf("yeah");
-      //g_XbmcIncludeFactory->
+      
+#if 1
+      CBaseTexture* text;
+      CXBTFFrame frame;
+      if (!g_XbmcIncludeFactory->GetFrame(conv, frame, &text))
+      {
+        RETURNLOADING;
+      }
+      g_pBitmapCreator.RenderTexture(text);
+      RETURNLOADING;
 #endif
     }
 

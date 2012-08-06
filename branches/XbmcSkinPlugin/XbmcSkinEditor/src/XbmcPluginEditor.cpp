@@ -87,7 +87,7 @@ BOOL CXbmcPluginEditor::InitInstance()
 
 int CXbmcPluginEditor::ExitInstance()
 {
-  delete funcItem[0]._pShKey;
+  //delete funcItem[0]._pShKey;
   //delete funcItem[1]._pShKey;
   delete funcItem[2]._pShKey;
   delete funcItem[3]._pShKey;
@@ -164,11 +164,11 @@ extern "C" __declspec(dllexport) FuncItem * getFuncsArray(INT *nbF)
   lstrcpy( funcItem[5]._itemName, TEXT("&About...") );
 
   // Set shortcuts
-  funcItem[0]._pShKey = new ShortcutKey;
+  /*funcItem[0]._pShKey = new ShortcutKey;
   funcItem[0]._pShKey->_isAlt    = true;
   funcItem[0]._pShKey->_isCtrl  = true;
   funcItem[0]._pShKey->_isShift  = false;
-  funcItem[0]._pShKey->_key    = 'V';
+  funcItem[0]._pShKey->_key    = 'V';*/
   /*funcItem[1]._pShKey = new ShortcutKey;
   funcItem[1]._pShKey->_isAlt    = true;
   funcItem[1]._pShKey->_isCtrl  = true;
@@ -178,7 +178,7 @@ extern "C" __declspec(dllexport) FuncItem * getFuncsArray(INT *nbF)
   funcItem[2]._pShKey->_isAlt    = true;
   funcItem[2]._pShKey->_isCtrl  = true;
   funcItem[2]._pShKey->_isShift  = false;
-  funcItem[2]._pShKey->_key    = 'N';
+  funcItem[2]._pShKey->_key    = 'V';
   funcItem[3]._pShKey = new ShortcutKey;
   funcItem[3]._pShKey->_isAlt    = true;
   funcItem[3]._pShKey->_isCtrl  = true;
@@ -324,10 +324,10 @@ void CXbmcPluginEditor::ShutDownPlugin()
 void ToggleView(void)
 {
   // get menu and test if dockable dialog is open
-  HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
+  /*HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
   UINT state = ::GetMenuState(hMenu, funcItem[0]._cmdID, MF_BYCOMMAND);
 
-  theApp.clipViewerDialog.ShowDialog( state & MF_CHECKED ? false : true );
+  theApp.clipViewerDialog.ShowDialog( state & MF_CHECKED ? false : true );*/
 }
 
 void ToggleXbmcView(void)

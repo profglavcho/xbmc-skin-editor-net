@@ -1,5 +1,5 @@
 #include "xbmc_communicator.h"
-#include <Windows.h>
+#include "stdafx.h"
 #include <locale>
 
 #define WINDOW_HOME                       (L"10000")

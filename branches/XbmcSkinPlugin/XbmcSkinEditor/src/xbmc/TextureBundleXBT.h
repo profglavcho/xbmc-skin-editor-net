@@ -21,7 +21,7 @@
  *
  */
 
-#include "lib/StdString.h"
+#include "system.h"
 #include <map>
 #include "XBTFReader.h"
 
@@ -31,6 +31,12 @@ struct ImageFrame
 {
   void* memory;
   int size;
+};
+
+struct ImageRawFrame
+{
+  ImageFrame image_frame;
+  CXBTFFrame xbtf_frame;
 };
 
 class CTextureBundleXBT
@@ -44,11 +50,11 @@ public:
   bool HasFile(const CStdString& Filename);
   void GetTexturesFromPath(const CStdString &path, std::vector<CStdString> &textures);
   static CStdString Normalize(const CStdString &name);
-  bool ConvertFrameToTexture(const CStdString& name, CXBTFFrame& frame, ImageFrame& frm);
-#if 0
+  bool ConvertFrameToTexture(const CStdString& name, CXBTFFrame& frame, CBaseTexture** ppTexture);
+
   bool LoadTexture(const CStdString& Filename, CBaseTexture** ppTexture,
                        int &width, int &height);
-
+  #if 0
   int LoadAnim(const CStdString& Filename, CBaseTexture*** ppTextures,
                 int &width, int &height, int& nLoops, int** ppDelays);
 #endif

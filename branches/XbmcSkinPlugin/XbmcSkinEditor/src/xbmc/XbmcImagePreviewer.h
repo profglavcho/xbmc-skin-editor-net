@@ -24,8 +24,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "ModelViewController.h"
 #include "DockingDlgInterface.h"
 #include "ImageStone.h"
-#include "lib/StdString.h"
+#include "system.h"
 #include "XbmcIncludesFactory.h"
+#include "TextureRenderer.h"
 #endif
 
 // ID for dockable window
@@ -63,13 +64,13 @@ private:
   bool IsLoading;
   FCObjImage m_pPicture;
   std::wstring m_pCurrentFile;
-
   void ShowImage();
   void ClearWindow();
 
   virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
   virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 };
+
 
 
 #endif

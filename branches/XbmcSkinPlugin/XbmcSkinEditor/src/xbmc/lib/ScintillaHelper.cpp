@@ -1,6 +1,5 @@
-#include "stdafx.h"
 #include "ScintillaHelper.h"
-#include <Windows.h>
+#include "stdafx.h"
 #include "XbmcPluginEditor.h"
 
 

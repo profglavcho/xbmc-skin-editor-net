@@ -18,33 +18,43 @@
  *  http://www.gnu.org/copyleft/gpl.html
  *
  */
-
-#ifndef XBTFREADER_H_
-#define XBTFREADER_H_
+#ifndef BITMAP_CREATOR_H
+#define BITMAP_CREATOR_H
 
 #include <vector>
-#include <map>
+#include <stdint.h>
 #include "system.h"
-#include "XBTF.h"
+#include <d3d9.h>
 
-class CXBTFReader
+#include "TextureBundleXBT.h"
+#include "Texture.h"
+#include "lib/libsquish/squish.h"
+
+
+class CTextureRenderer
 {
 public:
-  CXBTFReader();
-  bool IsOpen() const;
-  bool Open(const CStdString& fileName);
-  void Close();
-  time_t GetLastModificationTimestamp();
-  bool Exists(const CStdString& name);
-  CXBTFFile* Find(const CStdString& name);
-  bool Load(const CXBTFFrame& frame, unsigned char* buffer);
-  std::vector<CXBTFFile>&  GetFiles();
-
-private:
-  CXBTF      m_xbtf;
-  CStdString m_fileName;
-  FILE*      m_file;
-  std::map<CStdString, CXBTFFile> m_filesMap;
+  CTextureRenderer();
+  ~CTextureRenderer();
+  bool InitD3d(HWND hWnd);
+  void Resize(int width, int height);
+  int GetMaxHeight() { return m_pMaxHeight; }
+  int GetMaxWidth() { return m_pMaxWidth; }
+  bool SupportsDXT() { return true; }
+  void RenderTexture(CBaseTexture* texture);
+  IDirect3DDevice9* Get3DDevice() { return m_pD3DDevice; }
+  
+protected:
+  int m_pMaxWidth;
+  int m_pMaxHeight;
+  int m_pBufferWidth;
+  int m_pBufferHeight;
+  IDirect3D9* m_pD3D; // Used to create the D3DDevice
+  IDirect3DDevice9* m_pD3DDevice; // Our rendering device
+  D3DPRESENT_PARAMETERS m_pD3DPP;
 };
+
+extern CTextureRenderer g_pBitmapCreator;
+
 
 #endif

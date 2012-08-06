@@ -23,7 +23,7 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "Window.h"
-#include "../lib/StdString.h"
+#include "system.h"
 #include <vector>
 #endif
 

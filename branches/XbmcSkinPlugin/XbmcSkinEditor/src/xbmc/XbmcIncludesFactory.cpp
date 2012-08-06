@@ -154,12 +154,13 @@ void CXbmcIncludesFactory::LoadTextures(CStdString path)
 	}
 }
 
-ImageFrame CXbmcIncludesFactory::GetFrame(CStdString file)
+bool CXbmcIncludesFactory::GetFrame(CStdString file, CXBTFFrame& frame, CBaseTexture** texture)
 {
-  ImageFrame frm;
-  CXBTFFrame frame;
-  bool res = m_tbXBT.ConvertFrameToTexture(file,frame,frm);
+  int width,height;
+  bool res = m_tbXBT.LoadTexture(file, texture, width,height);
+  if (!res)
+    return false;
 
-  return frm;
+  return true;
 
 }
