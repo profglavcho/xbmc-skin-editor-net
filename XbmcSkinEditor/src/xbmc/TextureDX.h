@@ -38,8 +38,10 @@ public:
   void DestroyTextureObject();
   virtual void LoadToGPU();
   void BindToUnit(unsigned int unit);
+  bool LoadFromFile2(CStdString path);
   LPDIRECT3DTEXTURE9 Get3DTexture() { return m_texture.Get(); };
   LPDIRECT3DTEXTURE9 GetTextureObject() { return m_texture.Get(); };
+
 private:
   CD3DTexture m_texture;
 };

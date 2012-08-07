@@ -85,6 +85,7 @@ public:
   virtual void CreateTextureObject() = 0;
   virtual void DestroyTextureObject() = 0;
   virtual void LoadToGPU() = 0;
+  virtual bool LoadFromFile2(CStdString path) = 0;
   virtual IDirect3DTexture9* Get3DTexture() = 0;
   virtual void BindToUnit(unsigned int unit) = 0;
 

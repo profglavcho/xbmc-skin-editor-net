@@ -207,12 +207,6 @@ void XbmcImagePreviewer::ClearWindow()
     m_pPicture.Draw (hdc, rcWindow) ;
   
   }
-  
-  //IDB_BACKGROUND
-  
-            
-
-  
 }
 
 void XbmcImagePreviewer::ShowImage(CStdString image)
@@ -352,8 +346,17 @@ void XbmcImagePreviewer::ShowImage()
     CStdStringA convA = conv;
     bool res = false;
     if(fopen(convA.c_str(),"r")!=0)
-      res = m_pPicture.Load(conv.c_str());
+    {
+      CBaseTexture* text;
+      text = new CTexture();
+      res = text->LoadFromFile2(conv);
+      if (res)
+      {
+        g_pBitmapCreator.RenderTexture(text);
+        RETURNLOADING;
+      }
 
+    } 
     if (!res)
     {
       CBaseTexture* text;
@@ -365,28 +368,6 @@ void XbmcImagePreviewer::ShowImage()
       g_pBitmapCreator.RenderTexture(text);
       RETURNLOADING;
     }
-
-    if (res)
-    {
-      
-      if (m_pPicture.ColorBits() == 32)
-        m_pPicture.ApplyEffect( FCEffectPremultipleAlpha());
-      RECT    rcWindow;
-      HDC hdc;
-      ::GetClientRect(getHSelf(), &rcWindow);
-      SIZE   img_size = {m_pPicture.Width(), m_pPicture.Height()} ;
-      
-      RECT   rc = FCObjImage::CalcFitWindowSize(img_size, rcWindow) ;
-      hdc = GetWindowDC(getHSelf());
-      
-      ::GetClientRect(getHSelf(), &rcWindow);
-      m_pPicture.Draw (hdc, rc) ;
-      printf("image printed");
-    }
-    else
-      printf("failed to load");
-
-
   }
   IsLoading = false;
 

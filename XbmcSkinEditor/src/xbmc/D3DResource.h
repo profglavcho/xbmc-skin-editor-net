@@ -53,6 +53,7 @@ public:
 
   // Accessors
   LPDIRECT3DTEXTURE9 Get() const { return m_texture; };
+  void Set(LPDIRECT3DTEXTURE9 text) { m_texture = text;}
   UINT GetWidth()  { return m_width; }
   UINT GetHeight() { return m_height; }
 

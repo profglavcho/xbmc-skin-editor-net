@@ -37,13 +37,15 @@ public:
   CTextureRenderer();
   ~CTextureRenderer();
   bool InitD3d(HWND hWnd);
-  void Resize(int width, int height);
+  void Resize(int width = 0, int height = 0);
   int GetMaxHeight() { return m_pMaxHeight; }
   int GetMaxWidth() { return m_pMaxWidth; }
   bool SupportsDXT() { return true; }
   void RenderTexture(CBaseTexture* texture);
   IDirect3DDevice9* Get3DDevice() { return m_pD3DDevice; }
   
+  //Different type of rendering
+  HRESULT AlphaBlt(RECT* pSrc, RECT* pDst, IDirect3DTexture9* pTexture);
 protected:
   int m_pMaxWidth;
   int m_pMaxHeight;
@@ -52,6 +54,8 @@ protected:
   IDirect3D9* m_pD3D; // Used to create the D3DDevice
   IDirect3DDevice9* m_pD3DDevice; // Our rendering device
   D3DPRESENT_PARAMETERS m_pD3DPP;
+  HRESULT m_nDeviceStatus;
+  void ResetViewPort();
 };
 
 extern CTextureRenderer g_pBitmapCreator;

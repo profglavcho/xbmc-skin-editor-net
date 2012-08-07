@@ -25,7 +25,7 @@
 //#pragma comment (lib,"libpngd.lib")
 #endif
 #include <d3d9.h>
-#include <d3dx9tex.h>
+
 
 #define countof(array) (sizeof(array)/sizeof(array[0]))
 
@@ -38,6 +38,30 @@ struct MYD3DVERTEX
     float u, v;
   } t[texcoords];
 };
+
+template<int texcoords>
+static void AdjustQuad(MYD3DVERTEX<texcoords>* v, double dx, double dy)
+{
+  double offset = 0.5;
+
+  for(int i = 0; i < 4; i++)
+  {
+    v[i].x -= (float) offset;
+    v[i].y -= (float) offset;
+    
+    for(int j = 0; j < max(texcoords-1, 1); j++)
+    {
+      v[i].t[j].u -= (float) (offset*dx);
+      v[i].t[j].v -= (float) (offset*dy);
+    }
+
+    if(texcoords > 1)
+    {
+      v[i].t[texcoords-1].u -= (float) offset;
+      v[i].t[texcoords-1].v -= (float) offset;
+    }
+  }
+}
 
 CTextureRenderer g_pBitmapCreator;
 CTextureRenderer::CTextureRenderer()
@@ -101,15 +125,38 @@ bool CTextureRenderer::InitD3d(HWND hWnd)
   return true;
 }
 
+void CTextureRenderer::ResetViewPort()
+{
+  LPDIRECT3DSURFACE9 pBackBuffer = NULL;
+  D3DSURFACE_DESC d3dsd;
+  m_pD3DDevice->GetBackBuffer( 0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer );
+  pBackBuffer->GetDesc( &d3dsd );
+  pBackBuffer->Release();
+  m_pBufferWidth  = d3dsd.Width;
+  m_pBufferHeight = d3dsd.Height;
+  D3DVIEWPORT9 leftViewPort;
+
+  leftViewPort.X      = 0;
+  leftViewPort.Y      = 0;
+  leftViewPort.Width  = m_pBufferWidth;
+  leftViewPort.Height = m_pBufferHeight;
+  leftViewPort.MinZ   = 0.0f;
+  leftViewPort.MaxZ   = 1.0f;
+
+  m_pD3DDevice->SetViewport( &leftViewPort );
+}
+
 void CTextureRenderer::Resize(int width, int height)
 {
   if (!m_pD3DDevice)
     return;
-  m_pD3DPP.BackBufferWidth = width;
-  m_pD3DPP.BackBufferHeight = height;
-  
-  HRESULT hr = m_pD3DDevice->Reset(&m_pD3DPP);
-  if (SUCCEEDED(hr))
+  if (width>0 && height >0)
+  {
+    m_pD3DPP.BackBufferWidth = width;
+    m_pD3DPP.BackBufferHeight = height;
+  }
+  m_nDeviceStatus = m_pD3DDevice->Reset(&m_pD3DPP);
+  if (SUCCEEDED(m_nDeviceStatus))
     printf("yeah");
   else
     printf("damn");
@@ -120,61 +167,53 @@ void CTextureRenderer::Resize(int width, int height)
 void CTextureRenderer::RenderTexture(CBaseTexture* texture)
 {
   if (!m_pD3DDevice)
+    return;
+  m_nDeviceStatus = m_pD3DDevice->TestCooperativeLevel();
+  if (FAILED(m_nDeviceStatus))
   {
-    printf("yeah");
+    Resize();
+    return;
   }
-  LPDIRECT3DSURFACE9 pBackBuffer = NULL;
-  D3DSURFACE_DESC d3dsd;
-  m_pD3DDevice->GetBackBuffer( 0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer );
-  pBackBuffer->GetDesc( &d3dsd );
-  pBackBuffer->Release();
-  m_pBufferWidth  = d3dsd.Width;
-  m_pBufferHeight = d3dsd.Height;
-  D3DVIEWPORT9 leftViewPort;
-
-    leftViewPort.X      = 0;
-    leftViewPort.Y      = 0;
-    leftViewPort.Width  = m_pBufferWidth;
-    leftViewPort.Height = m_pBufferHeight;
-    leftViewPort.MinZ   = 0.0f;
-    leftViewPort.MaxZ   = 1.0f;
-
-    m_pD3DDevice->SetViewport( &leftViewPort );
-
-  int orientation = 0;
-  int m_info_orientation = 0;
-  float x[5];
-  float y[5];
-  float z[5];
-  uint32_t m_col = 4294967295;
-  for (int i = 0; i < 5; i++)
-  {
-    x[i] = 0.0f;
-    y[i] = 0.0f;
-    z[i] = 0.0f;
-  }
-  m_pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET ,
-                         D3DCOLOR_XRGB( 212, 208, 200 ), 1.0f, 0 );
+  ResetViewPort();
+  
+  m_pD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB( 212, 208, 200 ), 1.0f, 0 );// clear with the color of a dialog
 
   HRESULT hr = m_pD3DDevice->BeginScene();
-  
-
-  texture->LoadToGPU();
-  texture->BindToUnit(0);
+  if (texture->GetWidth() > 0)
+  {
+    texture->LoadToGPU();
+    texture->BindToUnit(0);
+  }
+  else
+  {
+    wprintf(L"not using the xbt file");
+    
+  }
   IDirect3DTexture9* pTexture = texture->Get3DTexture();
   hr = m_pD3DDevice->SetTexture( 0, pTexture );
-  /*IDirect3DTexture9* g_pTexture;
-  if( FAILED( D3DXCreateTextureFromFile( m_pD3DDevice, L"J:\\SDK\\DXSDK\\Samples\\C++\\Direct3D\\Tutorials\\Tut05_Textures\\banana.bmp", &g_pTexture ) ) )
-    {
-        // If texture is not in current folder, try parent folder
-        if( FAILED( D3DXCreateTextureFromFile( m_pD3DDevice, L"..\\banana.bmp", &g_pTexture ) ) )
-        {
-            MessageBox( NULL, L"Could not find banana.bmp", L"Textures.exe", MB_OK );
-            return;
-        }
-    }
-  hr = m_pD3DDevice->SetTexture( 0, g_pTexture );*/
-
+  /**/
+  
+#if 0
+  D3DSURFACE_DESC desc;
+  if(!pTexture || FAILED(pTexture->GetLevelDesc(0, &desc)))
+    return;
+  float w = (float)desc.Width;
+  float h = (float)desc.Height;
+  RECT src;
+  RECT dst;
+  src.left = 0; src.top = 0;
+  src.right = w;
+  src.bottom = h;
+  dst.left = 0; dst.top = 0;
+  dst.right = m_pBufferWidth;
+  dst.bottom = m_pBufferHeight;
+  hr = AlphaBlt(&src, &dst, pTexture);
+  hr = m_pD3DDevice->EndScene();
+  hr = m_pD3DDevice->Present(NULL,NULL,NULL,NULL);
+  texture->DestroyTextureObject();
+  return;
+  /**/
+#else
   hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
   hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
   hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
@@ -227,8 +266,92 @@ void CTextureRenderer::RenderTexture(CBaseTexture* texture)
   v[3] = tmp;
 
   hr = m_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, v, sizeof(v[0]));
+  
+
+  
+
+  
   m_pD3DDevice->SetTexture(0, NULL);
   hr = m_pD3DDevice->EndScene();
   hr = m_pD3DDevice->Present(NULL,NULL,NULL,NULL);
   texture->DestroyTextureObject();
+#endif
+}
+
+
+
+
+
+HRESULT CTextureRenderer::AlphaBlt(RECT* pSrc, RECT* pDst, IDirect3DTexture9* pTexture)
+{
+  if(!pSrc || !pDst)
+    return E_POINTER;
+
+  CRect src(*pSrc), dst(*pDst);
+
+  HRESULT hr;
+
+  D3DSURFACE_DESC d3dsd;
+  ZeroMemory(&d3dsd, sizeof(d3dsd));
+  if(FAILED(pTexture->GetLevelDesc(0, &d3dsd)) /*|| d3dsd.Type != D3DRTYPE_TEXTURE*/)
+    return E_FAIL;
+
+  float w = (float)d3dsd.Width;
+  float h = (float)d3dsd.Height;
+
+  MYD3DVERTEX<1> pVertices[] =
+  {
+    {(float)dst.left, (float)dst.top, 0.5f, 2.0f, (float)src.left / w, (float)src.top / h},
+    {(float)dst.right, (float)dst.top, 0.5f, 2.0f, (float)src.right / w, (float)src.top / h},
+    {(float)dst.left, (float)dst.bottom, 0.5f, 2.0f, (float)src.left / w, (float)src.bottom / h},
+    {(float)dst.right, (float)dst.bottom, 0.5f, 2.0f, (float)src.right / w, (float)src.bottom / h},
+  };
+  AdjustQuad(pVertices, 0, 0);
+
+  hr = m_pD3DDevice->SetTexture(0, pTexture);
+  hr = m_pD3DDevice->SetPixelShader(NULL);
+
+  DWORD abe, sb, db;
+  hr = m_pD3DDevice->GetRenderState(D3DRS_ALPHABLENDENABLE, &abe);
+  hr = m_pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &sb);
+  hr = m_pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &db);
+
+  hr = m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+  hr = m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+  hr = m_pD3DDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+  hr = m_pD3DDevice->SetRenderState(D3DRS_STENCILENABLE, FALSE);
+  hr = m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+  hr = m_pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE); 
+  hr = m_pD3DDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, FALSE); 
+  hr = m_pD3DDevice->SetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_ALPHA|D3DCOLORWRITEENABLE_BLUE|D3DCOLORWRITEENABLE_GREEN|D3DCOLORWRITEENABLE_RED); 
+  hr = m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE); // pre-multiplied src and ...
+  hr = m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_SRCALPHA); // ... inverse alpha channel for dst
+
+  hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_COLOROP, D3DTOP_MODULATE );
+  hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+  hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+  hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAOP, D3DTOP_MODULATE );
+  hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+  hr = m_pD3DDevice->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+  hr = m_pD3DDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+  hr = m_pD3DDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+  hr = m_pD3DDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+  hr = m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+  hr = m_pD3DDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+
+  hr = m_pD3DDevice->SetFVF(D3DFVF_XYZRHW | D3DFVF_TEX1);
+
+  MYD3DVERTEX<1> tmp = pVertices[2]; 
+  pVertices[2] = pVertices[3]; 
+  pVertices[3] = tmp;
+  hr = m_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, pVertices, sizeof(pVertices[0]));
+
+  m_pD3DDevice->SetTexture(0, NULL);
+
+  m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, abe);
+  m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, sb);
+  m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, db);
+
+  return S_OK;
 }
