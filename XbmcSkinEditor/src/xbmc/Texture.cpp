@@ -381,7 +381,9 @@ bool CBaseTexture::LoadPaletted(unsigned int width, unsigned int height, unsigne
 
   Allocate(width, height, format);
   //TODO
+#ifdef _DEBUG
   assert(0);
+#endif
   /*for (unsigned int y = 0; y < m_imageHeight; y++)
   {
     unsigned char *dest = m_pixels + y * GetPitch();

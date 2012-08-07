@@ -412,6 +412,9 @@ void XbmcControllerDialog::OnListDoubleClicked()
   }
   else if (thetext.Equals(L"Extract xbt"))
   {
+    //d3d device is required
+    if (!theApp.clipXbmcImage.isCreated())
+      theApp.clipXbmcImage.ShowDialog(false);
     CStdString xbtpath;
     CStdString destfolder;
     CStdString destFile;
