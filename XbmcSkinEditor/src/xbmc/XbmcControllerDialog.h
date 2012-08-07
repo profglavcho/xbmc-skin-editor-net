@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "MultiClipboardListbox.h"
 #include "MultiClipboardEditbox.h"
 #include "MultiClipOLEDragDrop.h"
+#include "ExtractionDialog.h"
 #endif
 
 // ID for dockable window
@@ -78,6 +79,7 @@ private:
   std::wstring m_pXbmcPassword;
   std::wstring m_pWgetPath;
 
+  CExtractionDialog extractDlg;
   SplitterPanel MultiClipViewerPanel;
   ToolbarPanel ListBoxPanel;
   ToolbarPanel EditBoxPanel;
