@@ -389,13 +389,34 @@ CStdString XbmcControllerDialog::ShowFileBrowser()
   return pStrSelectedFile;
 }
 
+void XbmcControllerDialog::CreateDirs(CStdString folder)
+{
+  std::vector<CStdString> folders;
+  
+  size_t found;
+  found=folder.find_first_of(L"\\");
+  while (found!=wstring::npos)
+  {
+    CStdString strTmp = folder.Left(found);
+    folders.push_back(folder.Left(found));
+    found = folder.find_first_of(L"\\",strTmp.size()+1);
+  }
+  //and add also the current folder :P
+  folders.push_back(folder);
+  for (int i = 0; i < folders.size(); i++)
+  {
+    if ((GetFileAttributes(folders[i].c_str())) == INVALID_FILE_ATTRIBUTES)
+    {
+      CreateDirectory(folders[i].c_str(),NULL);
+    }
+  }
+}
 
 void XbmcControllerDialog::OnListDoubleClicked()
 {
   INT Index = MultiClipViewerListbox.GetCurrentSelectionIndex();
   if ( Index == LB_ERR )
     return;
-  
   
   CStdString thetext = MultiClipViewerListbox.GetCurrentSelectionText();
   
@@ -457,42 +478,36 @@ void XbmcControllerDialog::OnListDoubleClicked()
         foldcreateW.Delete(index,foldcreateW.size()-index);
         foldcreateW.Insert(0,destfolder.c_str());
         foldcreate = foldcreateW;
-        if ((GetFileAttributes(foldcreateW.c_str())) == INVALID_FILE_ATTRIBUTES)
-        {
-          foldcreate.Insert(0,"mkdir ");
-          int res = system(foldcreate.c_str());
-        }
-
-        
-        
-      
+        CreateDirs(foldcreateW);
       }
       
       destFile.Insert(0,destfolder.c_str());
       if (g_XbmcIncludeFactory->GetBaseTexture(textures[i], &text))
       {
-        /*CStdString logtext;
-        logtext = L"Extracting:";
-        logtext.Insert(logtext.size(),textures[i]);
-        logtext.Insert(logtext.size(), L" To:");
-        logtext.Insert(logtext.size(), destFile);*/
-        //extractDlg.addLog(logtext);
-        //file don't already exist create it
         if ((GetFileAttributes(destFile.c_str())) == INVALID_FILE_ATTRIBUTES)
-        {
           g_pBitmapCreator.SaveTexture(text, destFile);
-        }
         delete text;
       }
       else
       {
         wprintf(L"wtf");
       }
+      bool cancelextract = extractDlg.isVisible();
+      if (!cancelextract)
+        break;
+    }
+    int res_box = MessageBox(getHParent(), L"Do you want to browse the directory where you extracted the xbt textures", L"yes or no", MB_YESNO);
+    if (res_box == IDYES)
+    {
+      CStdStringA folder = destfolder;
+      folder.Insert(0,"explorer ");
+      system(folder.c_str());
+      //open folder in explorer
+      
     }
     extractDlg.display(false);
 
   }
-
   
 }
 

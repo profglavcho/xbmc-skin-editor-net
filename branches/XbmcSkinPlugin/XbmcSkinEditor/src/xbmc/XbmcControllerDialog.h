@@ -100,6 +100,7 @@ private:
 
   CStdString ShowFolderBrowser();
   CStdString ShowFileBrowser();
+  void CreateDirs(CStdString folder);
   virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
   virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 };
