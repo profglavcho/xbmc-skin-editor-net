@@ -98,6 +98,13 @@ void CXbmcIncludesFactory::LoadIncludes(CStdString path)
 
 }
 
+std::vector<CStdString> CXbmcIncludesFactory::GetTexturesFromXbt(CStdString path)
+{
+  std::vector<CStdString> textures;
+  m_tbXBT.GetTexturesFromPath(path, textures);
+  return textures;
+}
+
 void CXbmcIncludesFactory::LoadTextures(CStdString path)
 {
   m_pTextures.clear();
@@ -152,6 +159,15 @@ void CXbmcIncludesFactory::LoadTextures(CStdString path)
       m_pTextures.push_back(currentFile);
     }
 	}
+}
+
+bool CXbmcIncludesFactory::GetBaseTexture(CStdString file, CBaseTexture** texture)
+{
+  bool res = m_tbXBT.LoadTextureForSaving(file, texture);
+  if (!res)
+    return false;
+
+  return true;
 }
 
 bool CXbmcIncludesFactory::GetFrame(CStdString file, CXBTFFrame& frame, CBaseTexture** texture)

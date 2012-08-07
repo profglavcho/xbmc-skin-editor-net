@@ -43,7 +43,7 @@ public:
   bool SupportsDXT() { return true; }
   void RenderTexture(CBaseTexture* texture);
   IDirect3DDevice9* Get3DDevice() { return m_pD3DDevice; }
-  
+  void SaveTexture(CBaseTexture* texture, CStdString dest);
   //Different type of rendering
   HRESULT AlphaBlt(RECT* pSrc, RECT* pDst, IDirect3DTexture9* pTexture);
 protected:

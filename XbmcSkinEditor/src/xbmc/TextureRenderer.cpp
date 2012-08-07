@@ -21,6 +21,7 @@
 
 #include "TextureRenderer.h"
 #include "stdafx.h"
+#include <d3dx9tex.h>
 #ifdef _DEBUG
 //#pragma comment (lib,"libpngd.lib")
 #endif
@@ -162,6 +163,18 @@ void CTextureRenderer::Resize(int width, int height)
     printf("damn");
   
 
+}
+
+void CTextureRenderer::SaveTexture(CBaseTexture* texture, CStdString dest)
+{
+  texture->LoadToGPU();
+  texture->BindToUnit(0);
+  
+  HRESULT hr = D3DXSaveTextureToFile(dest.c_str(),D3DXIFF_PNG, texture->Get3DTexture(), NULL);
+  if (SUCCEEDED(hr))
+    wprintf(L"yeah");
+  else
+    wprintf(L"oh no");
 }
 
 void CTextureRenderer::RenderTexture(CBaseTexture* texture)

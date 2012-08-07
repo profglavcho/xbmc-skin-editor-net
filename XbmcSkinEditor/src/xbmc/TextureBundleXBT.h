@@ -52,6 +52,7 @@ public:
   static CStdString Normalize(const CStdString &name);
   bool ConvertFrameToTexture(const CStdString& name, CXBTFFrame& frame, CBaseTexture** ppTexture);
 
+  bool LoadTextureForSaving(const CStdString& Filename, CBaseTexture** ppTexture);
   bool LoadTexture(const CStdString& Filename, CBaseTexture** ppTexture,
                        int &width, int &height);
   #if 0
