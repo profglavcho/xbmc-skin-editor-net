@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "MultiClipboardSettingsDialog.h"
 #include "xbmc/lib/xbmc_communicator.h"
 #include "XbmcPluginEditor.h"
+
 #endif
 
 
@@ -205,6 +206,7 @@ void XbmcControllerDialog::InitialiseDialog()
   MultiClipViewerPanel.pChildWin2 = &EditBoxPanel;
   EditBoxPanel.SetChildWindow( &MultiClipViewerEditBox );
   MultiClipViewerEditBox.EnableEditBox( FALSE );
+  extractDlg.Init( theApp.m_hInstance, g_NppData );
 }
 
 
@@ -433,6 +435,10 @@ void XbmcControllerDialog::OnListDoubleClicked()
     if (!destfolder.Right(1).Equals(L"\\"))
       destfolder.append(L"\\");
     std::vector<CStdString> textures = g_XbmcIncludeFactory->GetTexturesFromXbt(xbtpath);
+    //IDD_EXTRACTING
+    
+    extractDlg.doDialog();
+    extractDlg.addLog(L"extracting please wait");
     for (size_t i = 0; i < textures.size(); i++)
     {
       CBaseTexture* text = NULL;
@@ -461,9 +467,16 @@ void XbmcControllerDialog::OnListDoubleClicked()
         
       
       }
+      
       destFile.Insert(0,destfolder.c_str());
       if (g_XbmcIncludeFactory->GetBaseTexture(textures[i], &text))
       {
+        /*CStdString logtext;
+        logtext = L"Extracting:";
+        logtext.Insert(logtext.size(),textures[i]);
+        logtext.Insert(logtext.size(), L" To:");
+        logtext.Insert(logtext.size(), destFile);*/
+        //extractDlg.addLog(logtext);
         //file don't already exist create it
         if ((GetFileAttributes(destFile.c_str())) == INVALID_FILE_ATTRIBUTES)
         {
@@ -476,6 +489,7 @@ void XbmcControllerDialog::OnListDoubleClicked()
         wprintf(L"wtf");
       }
     }
+    extractDlg.display(false);
 
   }
 

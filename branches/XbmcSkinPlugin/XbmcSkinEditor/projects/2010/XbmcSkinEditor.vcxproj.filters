@@ -145,6 +145,9 @@
     <ClCompile Include="..\..\src\xbmc\TextureRenderer.cpp">
       <Filter>Source Files\Xbmc\lib\XBTF</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\ExtractionDialog.cpp">
+      <Filter>Source Files\Xbmc\Dialog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\MCSubClassWndProc.h">
@@ -332,6 +335,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\xbmc\TextureRenderer.h">
       <Filter>Source Files\Xbmc\lib\XBTF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\ExtractionDialog.h">
+      <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

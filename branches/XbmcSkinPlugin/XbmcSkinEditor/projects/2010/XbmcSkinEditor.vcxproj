@@ -316,6 +316,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\ExtractionDialog.cpp" />
     <ClCompile Include="..\..\src\xbmc\TextureRenderer.cpp" />
     <ClCompile Include="..\..\src\xbmc\D3DResource.cpp" />
     <ClCompile Include="..\..\src\xbmc\DialogControls\ComboBox.cpp" />
@@ -379,6 +380,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClInclude Include="..\..\src\Scintilla.h" />
     <ClInclude Include="..\..\src\TinyXML\tinystr.h" />
     <ClInclude Include="..\..\src\TinyXML\tinyxml.h" />
+    <ClInclude Include="..\..\src\xbmc\ExtractionDialog.h" />
     <ClInclude Include="..\..\src\xbmc\TextureRenderer.h" />
     <ClInclude Include="..\..\src\xbmc\D3DResource.h" />
     <ClInclude Include="..\..\src\xbmc\DialogControls\ComboBox.h" />

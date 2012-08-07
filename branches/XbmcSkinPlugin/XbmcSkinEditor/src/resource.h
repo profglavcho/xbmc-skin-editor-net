@@ -16,6 +16,7 @@
 #define IDC_UPDOWN                      121
 #define IDD_OPTIONS_DLG                 122
 #define IDB_BACKGROUND                  128
+#define IDD_EXTRACTING_DLG              130
 #define IDC_OPTION_GROUPS               1000
 #define IDC_OPTION_EXPLANATION          1001
 #define IDC_EDIT_IP_XBMC                1002
@@ -47,6 +48,7 @@
 #define IDC_TAB1                        1027
 #define IDC_CHECK_LOAD_INCLUDES         1028
 #define IDC_CHECK_LOAD_IMAGES           1029
+#define IDC_LIST_LOG_EXTRACT            1030
 #define IDM_EX_UP                       2001
 #define IDM_EX_DOWN                     2002
 #define IDM_EX_PASTE                    2003
@@ -79,9 +81,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        130
+#define _APS_NEXT_RESOURCE_VALUE        131
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1029
+#define _APS_NEXT_CONTROL_VALUE         1030
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
