@@ -89,7 +89,7 @@ public:
   virtual IDirect3DTexture9* Get3DTexture() = 0;
   virtual void BindToUnit(unsigned int unit) = 0;
 
-  unsigned char* GetPixels() const { return m_pixels; }
+  std::vector<unsigned char> GetPixels() const { return m_pixels; }
   unsigned int GetPitch() const { return GetPitch(m_textureWidth); }
   unsigned int GetRows() const { return GetRows(m_textureHeight); }
   unsigned int GetTextureWidth() const { return m_textureWidth; }
@@ -120,7 +120,7 @@ protected:
   unsigned int m_textureWidth;
   unsigned int m_textureHeight;
 
-  unsigned char* m_pixels;
+  std::vector<unsigned char> m_pixels;
   bool m_loadedToGPU;
   unsigned int m_format;
   int m_orientation;
