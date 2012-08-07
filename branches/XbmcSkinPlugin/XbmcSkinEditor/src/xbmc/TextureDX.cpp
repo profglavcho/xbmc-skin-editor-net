@@ -22,7 +22,7 @@
 #include "TextureDX.h"
 //#include "windowing/WindowingFactory.h"
 #include "XbmcImagePreviewer.h"
-
+#include <d3dx9tex.h>
 
 
 /************************************************************************/
@@ -71,6 +71,18 @@ void CDXTexture::CreateTextureObject()
 void CDXTexture::DestroyTextureObject()
 {
   m_texture.Release();
+}
+
+bool CDXTexture::LoadFromFile2(CStdString path)
+{
+  IDirect3DTexture9* pTexture;
+  
+  if( FAILED( D3DXCreateTextureFromFile( g_pBitmapCreator.Get3DDevice(), path.c_str(), &pTexture ) ) )
+  {
+    return false;
+  }
+  m_texture.Set(pTexture);
+  return true;
 }
 
 void CDXTexture::LoadToGPU()

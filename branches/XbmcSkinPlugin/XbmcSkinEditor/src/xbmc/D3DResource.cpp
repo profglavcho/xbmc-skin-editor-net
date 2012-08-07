@@ -77,8 +77,6 @@ bool CD3DTexture::Create(UINT width, UINT height, UINT mipLevels, DWORD usage, D
         wprintf(L"warning");
         //CLog::Log(LOGWARNING, "CD3DTexture::Create - size changed from %ux%u to %ux%u", m_width, m_height, desc.Width, desc.Height);
     }
-
-    //g_Windowing.Register(this);
     return true;
   }
   return false;
@@ -86,7 +84,6 @@ bool CD3DTexture::Create(UINT width, UINT height, UINT mipLevels, DWORD usage, D
 
 void CD3DTexture::Release()
 {
-  //g_Windowing.Unregister(this);
   SAFE_RELEASE(m_texture);
 }
 
