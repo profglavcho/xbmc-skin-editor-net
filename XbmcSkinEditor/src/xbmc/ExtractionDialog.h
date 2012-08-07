@@ -30,8 +30,9 @@ protected :
 private:
   // Handles
   NppData      _nppData;
-    HWND      _HSource;
-    HWND m_pListBoxLog;
+  HWND      _HSource;
+  HWND m_pListBoxLog;
+  HWND m_pOkButton;
 };
 
 #endif
