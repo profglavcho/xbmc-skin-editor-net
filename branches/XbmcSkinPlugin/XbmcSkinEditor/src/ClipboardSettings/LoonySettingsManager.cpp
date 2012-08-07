@@ -7,15 +7,13 @@ This project is dedicated to the public domain
 For details, see http://creativecommons.org/licenses/publicdomain/
 */
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "LoonySettingsManager.h"
 #include "../TinyXML/tinyxml.h"
 #include <vector>
 #include <algorithm>
 #define WIN32_LEAN_AND_MEAN
 #include "stdafx.h"
-#endif
-
 
 void ConvertWCharToChar( const stringType & str, std::vector< char > & buffer )
 {

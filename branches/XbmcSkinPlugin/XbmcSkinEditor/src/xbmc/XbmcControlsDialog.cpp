@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "stdafx.h"
 #include "XbmcControlsDialog.h"
 #include "resource.h"
@@ -28,8 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "xbmc/lib/xbmc_communicator.h"
 #include "xbmc/lib/ScintillaHelper.h"
 #include "lib/SADirRead.h"
-#endif
-
 
 extern HINSTANCE g_hInstance;
 extern NppData g_NppData;
@@ -54,7 +52,6 @@ CXbmcControlsDialog::CXbmcControlsDialog()
   m_pCurrentEndLinePos = -1;
 }
 
-
 CXbmcControlsDialog::~CXbmcControlsDialog()
 {
   if (m_pXbmcControlsFactory)
@@ -63,7 +60,6 @@ CXbmcControlsDialog::~CXbmcControlsDialog()
   if (g_XbmcIncludeFactory)
     delete g_XbmcIncludeFactory;
 }
-
 
 void CXbmcControlsDialog::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
 {
@@ -75,13 +71,11 @@ void CXbmcControlsDialog::Init( IModel * pNewModel, MultiClipboardProxy * pClipb
   MultiClipOLEDropSource::CreateDropSource( &pDropSource );
 }
 
-
 void CXbmcControlsDialog::Shutdown()
 {
   pDataObject->Release();
   pDropSource->Release();
 }
-
 
 void CXbmcControlsDialog::ShowDialog( bool Show )
 {

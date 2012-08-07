@@ -17,12 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "SplitterPanel.h"
 #include <windowsx.h>
 #include <commctrl.h>
 #include "resource.h"
-#endif
 
 #define SPLITTER_PANEL_CLASS_NAME TEXT( "SplitterPanel" )
 

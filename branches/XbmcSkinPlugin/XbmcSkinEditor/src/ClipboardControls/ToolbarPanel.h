@@ -20,11 +20,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #ifndef TOOLBAR_PANEL_H
 #define TOOLBAR_PANEL_H
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "afxwin.h"
 #include "Window.h"
 #include "ToolBar.h"
-#endif
 
 class ToolbarPanel : public Window
 {

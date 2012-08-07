@@ -1,9 +1,9 @@
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "DuoTextBox.h"
 #include <windowsx.h>
 #include <commctrl.h>
 #include "resource.h"
-#endif
+
 #define BOX_HEIGHT 20
 
 CDuoTextBox::CDuoTextBox(int index)

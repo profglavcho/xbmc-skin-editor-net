@@ -17,12 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "Scintilla.h"
 #include "MultiClipboardProxy.h"
 #include <cstdio>
 #include <vector>
-#endif
 
 extern NppData        g_NppData;
 extern SciSubClassWrp    g_ScintillaMain, g_ScintillaSecond;

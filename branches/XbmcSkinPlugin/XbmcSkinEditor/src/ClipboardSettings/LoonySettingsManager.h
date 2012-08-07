@@ -11,11 +11,10 @@ For details, see http://creativecommons.org/licenses/publicdomain/
 #define LOONY_SETTINGS_MANAGER
 
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include <map>
 #include <string>
 #include <list>
-#endif
 
 // Define string types
 #ifdef UNICODE

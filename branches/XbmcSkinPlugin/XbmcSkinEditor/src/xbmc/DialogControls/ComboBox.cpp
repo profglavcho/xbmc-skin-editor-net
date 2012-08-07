@@ -1,8 +1,6 @@
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "ComboBox.h"
 #include <commctrl.h>
-#endif
-
 
 void CXBMCComboBox::init(HINSTANCE hInst, HWND parent)
 {

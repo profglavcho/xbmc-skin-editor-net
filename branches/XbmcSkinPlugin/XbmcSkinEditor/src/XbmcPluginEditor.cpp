@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 // include files
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "stdafx.h"
 
 #include "XbmcPluginEditor.h"
@@ -28,11 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRA_LEAN
-
-
-
-#endif
-
 
 BEGIN_MESSAGE_MAP(CXbmcPluginEditor, CWinApp)
 END_MESSAGE_MAP()

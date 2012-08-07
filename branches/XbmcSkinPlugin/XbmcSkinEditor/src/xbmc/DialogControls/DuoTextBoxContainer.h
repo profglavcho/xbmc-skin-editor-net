@@ -20,12 +20,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #ifndef DUO_TEXTBOX_CONTAINER_H
 #define DUO_TEXTBOX_CONTAINER_H
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "Window.h"
 #include "DuoTextBox.h"
-#endif
-
-
 
 class CDuoTextBoxContainer : public Window
 {

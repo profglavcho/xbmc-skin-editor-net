@@ -17,14 +17,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "DuoTextBoxContainer.h"
 #include <windowsx.h>
 #include <commctrl.h>
 #include "resource.h"
 #include <Richedit.h>
 #include "../XbmcControlsFactory.h"
-#endif
 
 #define DUO_TEXTBOX_CONTAINER_CLASS_NAME TEXT( "DuoTextBoxContainer" )
 #define VERT_PTS 5

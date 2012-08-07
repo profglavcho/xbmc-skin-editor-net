@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "stdafx.h"
 #include "XbmcImagePreviewer.h"
 #include "resource.h"
@@ -27,8 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "xbmc/lib/xbmc_communicator.h"
 #include "lib/Scintillahelper.h"
 #include "XbmcPluginEditor.h"
-#endif
-
 
 //************************ define here your toolbar layout *********************
 
