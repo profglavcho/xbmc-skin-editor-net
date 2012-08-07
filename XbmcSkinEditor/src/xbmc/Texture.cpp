@@ -33,7 +33,7 @@
 CBaseTexture::CBaseTexture(unsigned int width, unsigned int height, unsigned int format)
  : m_hasAlpha( true )
 {
-  m_pixels = NULL;
+  //m_pixels = NULL;
   m_loadedToGPU = false;
   Allocate(width, height, format);
 }
@@ -47,18 +47,19 @@ CBaseTexture::CBaseTexture(const CBaseTexture &copy)
   m_format = copy.m_format;
   m_orientation = copy.m_orientation;
   m_hasAlpha = copy.m_hasAlpha;
-  m_pixels = NULL;
+  //m_pixels = NULL;
   m_loadedToGPU = false;
-  if (copy.m_pixels)
+  if (copy.m_pixels.size()>0)//copy.m_pixels
   {
-    m_pixels = new unsigned char[GetPitch() * GetRows()];
-    memcpy(m_pixels, copy.m_pixels, GetPitch() * GetRows());
+    m_pixels.resize( GetPitch() * GetRows());// = new unsigned char[GetPitch() * GetRows()];
+    memcpy(&m_pixels.at(0), &copy.m_pixels.at(0), GetPitch() * GetRows());
   }
 }
 
 CBaseTexture::~CBaseTexture()
 {
-  delete[] m_pixels;
+  m_pixels.clear();
+  //delete[] m_pixels;
 }
 
 void CBaseTexture::Allocate(unsigned int width, unsigned int height, unsigned int format)
@@ -92,8 +93,10 @@ void CBaseTexture::Allocate(unsigned int width, unsigned int height, unsigned in
   CLAMP(m_textureHeight, g_pBitmapCreator.GetMaxHeight());//g_Windowing.GetMaxTextureSize());
   CLAMP(m_imageWidth, m_textureWidth);
   CLAMP(m_imageHeight, m_textureHeight);
-  delete[] m_pixels;
-  m_pixels = new unsigned char[GetPitch() * GetRows()];
+  int sizerequired = GetPitch() * GetRows();
+  if (m_pixels.size() < sizerequired)
+    m_pixels.resize(sizerequired);
+  //m_pixels = new unsigned char[GetPitch() * GetRows()];
 }
 
 void CBaseTexture::Update(unsigned int width, unsigned int height, unsigned int pitch, unsigned int format, const unsigned char *pixels, bool loadToGPU)
@@ -117,14 +120,15 @@ void CBaseTexture::Update(unsigned int width, unsigned int height, unsigned int 
     unsigned int dstRows = GetRows(m_textureHeight);
 
     if (srcPitch == dstPitch)
-      memcpy(m_pixels, pixels, srcPitch * min(srcRows, dstRows));
+      memcpy(&m_pixels.at(0), pixels, srcPitch * min(srcRows, dstRows));
     else
     {
       const unsigned char *src = pixels;
-      unsigned char* dst = m_pixels;
+      //unsigned char* dst = m_pixels;
+      int dst = 0;
       for (unsigned int y = 0; y < srcRows && y < dstRows; y++)
       {
-        memcpy(dst, src, min(srcPitch, dstPitch));
+        memcpy(&m_pixels.at(dst), src, min(srcPitch, dstPitch));
         src += srcPitch;
         dst += dstPitch;
       }
@@ -145,22 +149,32 @@ void CBaseTexture::ClampToEdge()
   if (imagePitch < texturePitch)
   {
     unsigned int blockSize = GetBlockSize();
-    unsigned char *src = m_pixels + imagePitch - blockSize;
-    unsigned char *dst = m_pixels;
+    /*unsigned char *src = m_pixels + imagePitch - blockSize;
+    unsigned char *dst = m_pixels;*/
+    int src = 0 + imagePitch - blockSize;
+    int dst = 0;
     for (unsigned int y = 0; y < imageRows; y++)
     {
       for (unsigned int x = imagePitch; x < texturePitch; x += blockSize)
-        memcpy(dst + x, src, blockSize);
+      {
+        dst = dst + x;
+        memcpy(&m_pixels.at(dst), &m_pixels.at(src), blockSize);
+        //memcpy(dst + x, src, blockSize);
+      }
       dst += texturePitch;
     }
   }
 
   if (imageRows < textureRows)
   {
-    unsigned char *dst = m_pixels + imageRows * texturePitch;
+    //unsigned char *dst = m_pixels + imageRows * texturePitch;
+    int dst = imageRows * texturePitch;
     for (unsigned int y = imageRows; y < textureRows; y++)
     {
-      memcpy(dst, dst - texturePitch, texturePitch);
+      /*memcpy(dst, dst - texturePitch, texturePitch);
+      dst += texturePitch;*/
+      dst = dst - texturePitch;
+      memcpy(&m_pixels.at(dst), &m_pixels.at(dst), texturePitch);
       dst += texturePitch;
     }
   }
@@ -366,8 +380,9 @@ bool CBaseTexture::LoadPaletted(unsigned int width, unsigned int height, unsigne
     return false;
 
   Allocate(width, height, format);
-
-  for (unsigned int y = 0; y < m_imageHeight; y++)
+  //TODO
+  assert(0);
+  /*for (unsigned int y = 0; y < m_imageHeight; y++)
   {
     unsigned char *dest = m_pixels + y * GetPitch();
     const unsigned char *src = pixels + y * pitch;
@@ -379,7 +394,7 @@ bool CBaseTexture::LoadPaletted(unsigned int width, unsigned int height, unsigne
       *dest++ = col.r;
       *dest++ = col.x;
     }
-  }
+  }*/
   ClampToEdge();
   return true;
 }

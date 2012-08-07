@@ -209,6 +209,9 @@ bool CTextureBundleXBT::LoadTextureForSaving(const CStdString& Filename, CBaseTe
   {
     return false;
   }
+
+  return true;
+    
 }
 bool CTextureBundleXBT::LoadTexture(const CStdString& Filename, CBaseTexture** ppTexture,
                                      int &width, int &height)

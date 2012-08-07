@@ -87,7 +87,7 @@ bool CDXTexture::LoadFromFile2(CStdString path)
 
 void CDXTexture::LoadToGPU()
 {
-  if (!m_pixels)
+  if (m_pixels.size() == 0)
   {
     // nothing to load - probably same image (no change)
     return;
@@ -107,7 +107,8 @@ void CDXTexture::LoadToGPU()
   if (m_texture.LockRect( 0, &lr, NULL, D3DLOCK_DISCARD ))
   {
     unsigned char *dst = (unsigned char *)lr.pBits;
-    unsigned char *src = m_pixels;
+    //unsigned char *src = m_pixels;
+    int src = 0;
     unsigned int dstPitch = lr.Pitch;
     unsigned int srcPitch = GetPitch();
     unsigned int minPitch = min(srcPitch, dstPitch);
@@ -118,12 +119,13 @@ void CDXTexture::LoadToGPU()
       for (unsigned int y = 0; y < rows; y++)
       {
         unsigned char *dst2 = dst;
-        unsigned char *src2 = src;
+        //unsigned char *src2 = src;
+        int src2 = 0;
         for (unsigned int x = 0; x < srcPitch / 3; x++, dst2 += 4, src2 += 3)
         {
-          dst2[0] = src2[2];
-          dst2[1] = src2[1];
-          dst2[2] = src2[0];
+          dst2[0] = m_pixels[src + 2];
+          dst2[1] = m_pixels[src + 1];
+          dst2[2] = m_pixels[src + 0];
           dst2[3] = 0xff;
         }
         src += srcPitch;
@@ -132,13 +134,13 @@ void CDXTexture::LoadToGPU()
     }
     else if (srcPitch == dstPitch)
     {
-      memcpy(dst, src, srcPitch * rows);
+      memcpy(dst, &m_pixels.at(0)/*src*/, srcPitch * rows);
     }
     else
     {
       for (unsigned int y = 0; y < rows; y++)
       {
-        memcpy(dst, src, minPitch);
+        memcpy(dst, &m_pixels.at(src)/*src*/, minPitch);
         src += srcPitch;
         dst += dstPitch;
       }
@@ -149,9 +151,9 @@ void CDXTexture::LoadToGPU()
     //CLog::Log(LOGERROR, __FUNCTION__" - failed to lock texture");
   }
   m_texture.UnlockRect(0);
-
-  delete [] m_pixels;
-  m_pixels = NULL;
+  m_pixels.clear();
+  /*delete [] m_pixels;
+  m_pixels = NULL;*/
 
   m_loadedToGPU = true;
 }

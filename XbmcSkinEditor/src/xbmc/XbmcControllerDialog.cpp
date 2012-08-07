@@ -257,25 +257,43 @@ void XbmcControllerDialog::ShowClipText()
 
 void XbmcControllerDialog::OnListSelectionChanged()
 {
-  TCHAR currentFile[MAX_PATH];
-  ::SendMessage(g_NppData._nppHandle, NPPM_GETFILENAME , MAX_PATH, (LPARAM)currentFile);
-  std::wstring window = currentFile;
-  XbmcCommunicator* com = new XbmcCommunicator();
-  if (window.compare(window.size()-4,4,L".xml")==0)
-  {
-    std::wstring windowid = com->GetWindowId(window);
-    if (windowid.compare(window)!=0)
-    {
-      windowid.insert(0,std::wstring(L"The window id that \r\nis going to be loaded: "));
-      MultiClipViewerEditBox.SetText( windowid.c_str() );
-      // And make it enabled, but read-only
-      MultiClipViewerEditBox.EnableEditBox();
-      MultiClipViewerEditBox.SetEditBoxReadOnly( TRUE );
-      return;
-    }
-  }
   MultiClipViewerEditBox.SetText(L"");
+  INT Index = MultiClipViewerListbox.GetCurrentSelectionIndex();
+  if ( Index == LB_ERR )
+    return;
+  CStdString thetext = MultiClipViewerListbox.GetCurrentSelectionText();
+  
+  if (thetext.Equals(L"Test window"))
+  {
+    TCHAR currentFile[MAX_PATH];
+    ::SendMessage(g_NppData._nppHandle, NPPM_GETFILENAME , MAX_PATH, (LPARAM)currentFile);
+    std::wstring window = currentFile;
+    XbmcCommunicator* com = new XbmcCommunicator();
+    if (window.compare(window.size()-4,4,L".xml")==0)
+    {
+      std::wstring windowid = com->GetWindowId(window);
+      if (windowid.compare(window)!=0)
+      {
+        windowid.insert(0,std::wstring(L"The window id that \r\nis going to be loaded: "));
+        MultiClipViewerEditBox.SetText( windowid.c_str() );
+        // And make it enabled, but read-only
+        MultiClipViewerEditBox.EnableEditBox();
+        MultiClipViewerEditBox.SetEditBoxReadOnly( TRUE );
+        return;
+      }
+    }
+    
+  }
+  else if (thetext.Equals(L"Extract xbt"))
+  {
+    std::wstring desc;
+    desc = L"This command is used if you want to extract a compressed xbt file";
+    MultiClipViewerEditBox.SetText( desc.c_str() );
+    
+    MultiClipViewerEditBox.EnableEditBox();
+    MultiClipViewerEditBox.SetEditBoxReadOnly( TRUE );
 
+  }
 }
 
 static int __stdcall BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM, LPARAM pData)
@@ -398,13 +416,23 @@ void XbmcControllerDialog::OnListDoubleClicked()
     CStdString destfolder;
     CStdString destFile;
     xbtpath = ShowFileBrowser();
+    if (xbtpath.size() == 0)
+    {
+      ::MessageBoxW(getHParent(), L"You most choose a xbt file",L"no input file", MB_OK);
+      return;
+    }
     destfolder = ShowFolderBrowser();
+    if (destfolder.size() == 0)
+    {
+      ::MessageBoxW(getHParent(), L"You most choose an output directory",L"no output dir", MB_OK);
+      return;
+    }
     if (!destfolder.Right(1).Equals(L"\\"))
       destfolder.append(L"\\");
     std::vector<CStdString> textures = g_XbmcIncludeFactory->GetTexturesFromXbt(xbtpath);
     for (size_t i = 0; i < textures.size(); i++)
     {
-      CBaseTexture* text;
+      CBaseTexture* text = NULL;
       CXBTFFrame frame;
       destFile = textures[i];
       
@@ -438,6 +466,7 @@ void XbmcControllerDialog::OnListDoubleClicked()
         {
           g_pBitmapCreator.SaveTexture(text, destFile);
         }
+        delete text;
       }
       else
       {
