@@ -228,11 +228,7 @@ void CTextureRenderer::RenderTexture(CBaseTexture* texture)
 
   hr = m_pD3DDevice->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, v, sizeof(v[0]));
   m_pD3DDevice->SetTexture(0, NULL);
-  texture->RenderToTarget();
-  
   hr = m_pD3DDevice->EndScene();
   hr = m_pD3DDevice->Present(NULL,NULL,NULL,NULL);
   texture->DestroyTextureObject();
-  printf("ok");
-
 }

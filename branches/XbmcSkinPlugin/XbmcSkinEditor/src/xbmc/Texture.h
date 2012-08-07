@@ -87,7 +87,6 @@ public:
   virtual void LoadToGPU() = 0;
   virtual IDirect3DTexture9* Get3DTexture() = 0;
   virtual void BindToUnit(unsigned int unit) = 0;
-  virtual void RenderToTarget() = 0;
 
   unsigned char* GetPixels() const { return m_pixels; }
   unsigned int GetPitch() const { return GetPitch(m_textureWidth); }

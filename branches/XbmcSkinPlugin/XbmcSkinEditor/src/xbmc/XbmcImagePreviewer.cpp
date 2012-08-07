@@ -356,8 +356,6 @@ void XbmcImagePreviewer::ShowImage()
 
     if (!res)
     {
-      
-#if 1
       CBaseTexture* text;
       CXBTFFrame frame;
       if (!g_XbmcIncludeFactory->GetFrame(conv, frame, &text))
@@ -366,7 +364,6 @@ void XbmcImagePreviewer::ShowImage()
       }
       g_pBitmapCreator.RenderTexture(text);
       RETURNLOADING;
-#endif
     }
 
     if (res)

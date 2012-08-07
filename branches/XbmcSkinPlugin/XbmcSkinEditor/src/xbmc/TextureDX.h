@@ -38,15 +38,8 @@ public:
   void DestroyTextureObject();
   virtual void LoadToGPU();
   void BindToUnit(unsigned int unit);
-  void RenderToTarget();
-  LPDIRECT3DTEXTURE9 Get3DTexture()
-  {
-    return m_texture.Get();
-  };
-  LPDIRECT3DTEXTURE9 GetTextureObject()
-  {
-    return m_texture.Get();
-  };
+  LPDIRECT3DTEXTURE9 Get3DTexture() { return m_texture.Get(); };
+  LPDIRECT3DTEXTURE9 GetTextureObject() { return m_texture.Get(); };
 private:
   CD3DTexture m_texture;
 };

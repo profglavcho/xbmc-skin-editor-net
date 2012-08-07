@@ -148,39 +148,8 @@ void CDXTexture::BindToUnit(unsigned int unit)
 {
   LPDIRECT3DDEVICE9 p3DDevice = g_pBitmapCreator.Get3DDevice();
   HRESULT hr = p3DDevice->SetTexture( unit, m_texture.Get() );
-  /*p3DDevice->SetTextureStageState( unit, D3DTSS_COLOROP, D3DTOP_MODULATE );
-  p3DDevice->SetTextureStageState( unit, D3DTSS_COLORARG1, D3DTA_TEXTURE );
-  p3DDevice->SetTextureStageState( unit, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
-  p3DDevice->SetTextureStageState( unit, D3DTSS_ALPHAOP, D3DTOP_DISABLE );*/
-  
   p3DDevice->SetSamplerState( unit, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
   p3DDevice->SetSamplerState( unit, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
   p3DDevice->SetSamplerState( unit, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP );
   p3DDevice->SetSamplerState( unit, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP );
-}
-
-void CDXTexture::RenderToTarget()
-{
-  /*
-  LPDIRECT3DDEVICE9 p3DDevice = g_pBitmapCreator.Get3DDevice();
-  LPDIRECT3DSURFACE9 surf= NULL;
-  LPDIRECT3DSURFACE9 backbuffer= NULL;
-  bool res = m_texture.GetSurfaceLevel(0,&surf);
-  if (res)
-  {
-    HRESULT hr = p3DDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backbuffer);
-    D3DSURFACE_DESC desc, desc2;
-    backbuffer->GetDesc(&desc);
-    surf->GetDesc(&desc2);
-      
-    if (FAILED(hr))
-      return;
-    hr = p3DDevice->StretchRect(surf,NULL,backbuffer,NULL,D3DTEXF_NONE);
-    
-    backbuffer->Release();
-    if (SUCCEEDED(hr))
-      printf("yeah");
-  }
-  else
-    printf("yeah");*/
 }
