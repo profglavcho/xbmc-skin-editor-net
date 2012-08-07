@@ -20,13 +20,9 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #ifndef MULTI_CLIPBOARD_LIST_BOX_H
 #define MULTI_CLIPBOARD_LIST_BOX_H
 
-
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "Window.h"
 #include <string>
 #include <vector>
-#endif
-
 
 // Notification to parent that delete key is pressed
 #define LBN_DELETEITEM LB_MSGMAX+0x100

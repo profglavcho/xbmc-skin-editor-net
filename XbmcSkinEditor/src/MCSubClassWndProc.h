@@ -20,12 +20,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef MC_SUBCLASS_WNDPROC_H
 #define MC_SUBCLASS_WNDPROC_H
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRA_LEAN
 #include "afxwin.h"
-#endif
-
 
 LRESULT CALLBACK MCSubClassNppWndProc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp );
 

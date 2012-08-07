@@ -18,13 +18,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "MCSubClassWndProc.h"
 #include "SciSubClassWrp.h"
 #include "MultiClipboardProxy.h"
 #include "Notepad_plus_rc.h"
-#endif
-
 
 extern SciSubClassWrp    g_ScintillaMain, g_ScintillaSecond;
 extern WNDPROC        g_NppWndProc;

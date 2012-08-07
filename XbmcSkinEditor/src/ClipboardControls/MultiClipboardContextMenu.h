@@ -24,16 +24,11 @@ Direct download of the code is from "FakeMenu.zip"
 http://www.mvps.org/user32/rc/FakeMenu.zip
 */
 
-
 #ifndef MULTI_CLIPBOARD_CONTEXT_MENU_H
 #define MULTI_CLIPBOARD_CONTEXT_MENU_H
 
-
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "Window.h"
 #include <string>
-#endif
-
 
 class MultiClipboardContextMenu : public Window
 {

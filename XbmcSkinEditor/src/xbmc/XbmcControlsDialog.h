@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef XBMC_CONTROLS_DIALOG_H
 #define XBMC_CONTROLS_DIALOG_H
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "ModelViewController.h"
 #include "DockingDlgInterface.h"
 #include "DialogControls/ComboBox.h"
@@ -28,8 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "MultiClipOLEDragDrop.h"
 #include "XbmcControlsFactory.h"
 #include "XbmcIncludesFactory.h"
-
-#endif
 
 // ID for dockable window
 #define  MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0

@@ -20,14 +20,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef XBMC_IMAGE_PREVIEWER_H
 #define XBMC_IMAGE_PREVIEWER_H
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "ModelViewController.h"
 #include "DockingDlgInterface.h"
 #include "ImageStone.h"
 #include "system.h"
 #include "XbmcIncludesFactory.h"
 #include "TextureRenderer.h"
-#endif
 
 // ID for dockable window
 #define  MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0

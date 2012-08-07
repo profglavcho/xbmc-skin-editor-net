@@ -21,12 +21,10 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #define XBMC_COMBOBOX
 
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "Window.h"
 #include "system.h"
 #include <vector>
-#endif
-
 
 class CXBMCComboBox : public Window
 {

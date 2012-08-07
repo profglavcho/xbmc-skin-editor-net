@@ -17,14 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "MultiClipPasteMenu.h"
 #include "ClipboardList.h"
 #include "MultiClipboardProxy.h"
 #include "MultiClipboardSettings.h"
 #include <sstream>
-#endif
-
 
 // ID for popup menu item
 #define MULTI_COPY_MENU_CMD 52000

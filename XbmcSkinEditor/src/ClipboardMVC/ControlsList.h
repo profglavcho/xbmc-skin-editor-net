@@ -20,12 +20,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef CONTROLSLIST_H
 #define CONTROLSLIST_H
 
-#ifndef UNITY_BUILD_SINGLE_INCLUDE
+
 #include "ModelViewController.h"
 #include "MultiClipboardProxy.h"
 #include <list>
 #include <string>
-#endif
 
 
 // Extends from TextItem, so we can store other things we need for the list
