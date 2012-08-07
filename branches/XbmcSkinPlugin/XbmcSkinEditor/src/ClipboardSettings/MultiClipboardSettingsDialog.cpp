@@ -140,6 +140,7 @@ void MultiClipboardSettingsDialog::ShowFolderBrowser()
     delete [] info.pszDisplayName;
   }
 }
+
 BOOL CALLBACK MultiClipboardSettingsDialog::run_dlgProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
   switch ( message )

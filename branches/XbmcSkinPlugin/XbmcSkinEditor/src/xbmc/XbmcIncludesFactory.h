@@ -17,9 +17,11 @@ public:
   void LoadTextures(CStdString path);
   std::vector<CStdString> GetIncludes() { return m_pIncludedNames; }
   std::vector<CStdString> GetTextures() { return m_pTextures; }
+  std::vector<CStdString> GetTexturesFromXbt(CStdString path);
   std::vector<CStdString> m_pIncludedNames;
   std::vector<CStdString> m_pTextures;
   bool GetFrame(CStdString file, CXBTFFrame& frame, CBaseTexture** texture);
+  bool GetBaseTexture(CStdString file, CBaseTexture** texture);
 protected:
   void LoadInclude(CStdStringA path);
   std::vector<CStdString> m_pIncludedFiles;

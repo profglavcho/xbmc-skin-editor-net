@@ -76,9 +76,9 @@ void XbmcControllerDialog::ShowDialog( bool Show )
     create( &TBData );
 
     // define the default docking behaviour
-    if ( !NLGetText( g_hInstance, g_NppData._nppHandle, TEXT("Xbmc Tester"), TBData.pszName, MAX_PATH) )
+    if ( !NLGetText( g_hInstance, g_NppData._nppHandle, TEXT("Xbmc Commands"), TBData.pszName, MAX_PATH) )
     {
-      lstrcpy( TBData.pszName, TEXT("Xbmc Tester") );
+      lstrcpy( TBData.pszName, TEXT("Xbmc Commands") );
     }
     TBData.uMask      = DWS_DF_CONT_LEFT | DWS_ICONTAB;
     TBData.hIconTab    = (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MULTICLIPBOARD), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
@@ -247,14 +247,11 @@ void XbmcControllerDialog::OnModelModified()
 void XbmcControllerDialog::ShowClipText()
 {
   if ( !IsShown )
-  {
     return;
-  }
+
   MultiClipViewerListbox.ClearAll();
-  std::wstring textToAdd = L"Test window";
-  if ( textToAdd.size() > 100 )
-    textToAdd.resize( 100 );
-  MultiClipViewerListbox.AddItem( textToAdd );
+  MultiClipViewerListbox.AddItem(L"Test window");
+  MultiClipViewerListbox.AddItem(L"Extract xbt");
 }
 
 
@@ -281,34 +278,174 @@ void XbmcControllerDialog::OnListSelectionChanged()
 
 }
 
+static int __stdcall BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM, LPARAM pData)
+{
+  if (uMsg == BFFM_INITIALIZED)
+    ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
+  return 0;
+};
+
+CStdString XbmcControllerDialog::ShowFolderBrowser()
+{
+  CStdString pStrSelectedFolder;
+  //Coming from the explorer plugin
+  LPTSTR _pLink = (LPTSTR)new TCHAR[MAX_PATH];
+  LPMALLOC pShellMalloc = 0;
+  if (::SHGetMalloc(&pShellMalloc) == NO_ERROR)
+  {
+    // If we were able to get the shell malloc object,
+    // then proceed by initializing the BROWSEINFO stuct
+    BROWSEINFO info;
+    ZeroMemory(&info, sizeof(info));
+    info.hwndOwner      = _hParent;
+    info.pidlRoot      = NULL;
+    info.pszDisplayName    = (LPTSTR)new TCHAR[MAX_PATH];
+    info.lpszTitle      = _T("Select a folder for extraction:");
+    info.ulFlags      = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+    info.lpfn        = BrowseCallbackProc;
+    info.lParam        = (LPARAM)_pLink;
+
+    // Execute the browsing dialog.
+    LPITEMIDLIST pidl = ::SHBrowseForFolder(&info);
+
+    // pidl will be null if they cancel the browse dialog.
+    // pidl will be not null when they select a folder.
+    if (pidl) 
+    {
+      // Try to convert the pidl to a display string.
+      // Return is true if success.
+      if (::SHGetPathFromIDList(pidl, _pLink))
+      {
+        pStrSelectedFolder = _pLink;
+      }
+      pShellMalloc->Free(pidl);
+    }
+    pShellMalloc->Release();
+    delete [] info.pszDisplayName;
+  }
+  return pStrSelectedFolder;
+}
+
+CStdString XbmcControllerDialog::ShowFileBrowser()
+{
+  InitCommonControls();
+  CStdString pStrSelectedFile;
+  OPENFILENAME info;
+  ZeroMemory(&info, sizeof(info));
+  
+  info.lStructSize = sizeof(info);
+  info.hwndOwner = _hParent;
+  info.hInstance = getHinst();
+  info.lpstrFilter = L"Xbt files\0*.xbt\0\0";
+  info.lpTemplateName = NULL;
+  info.lpfnHook = NULL;
+  info.lpstrCustomFilter = NULL;
+  info.nMaxFile = MAX_PATH;
+  
+  LPTSTR fileout = (LPTSTR)new TCHAR[MAX_PATH];
+  fileout[0] = NULL;
+  info.lpstrFile = fileout;
+  info.lpstrFileTitle = NULL;
+  info.nMaxFileTitle = MAX_PATH;
+  info.lpstrInitialDir = NULL;
+  info.lpstrTitle = NULL;
+  info.nFileOffset = 0;
+  info.nFileExtension = 0;
+  info.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+  BOOL res = GetOpenFileName(&info);
+  DWORD err;
+  if (res)
+  {
+    pStrSelectedFile = info.lpstrFile;
+  }
+  else
+  {
+  err = CommDlgExtendedError();
+  
+  
+  }
+
+
+  return pStrSelectedFile;
+}
+
 
 void XbmcControllerDialog::OnListDoubleClicked()
 {
-  TCHAR currentFile[MAX_PATH];
-  ::SendMessage(g_NppData._nppHandle, NPPM_GETFILENAME , MAX_PATH, (LPARAM)currentFile);
-
-  
-  //gogogogo
   INT Index = MultiClipViewerListbox.GetCurrentSelectionIndex();
   if ( Index == LB_ERR )
     return;
   
-  //MultiClipViewerListbox.AddItem( textToAdd );
-  std::wstring thetext = MultiClipViewerListbox.GetCurrentSelectionText();
   
-  XbmcCommunicator* com = new XbmcCommunicator();
-  std::wstring window = currentFile;
-  for(int i=0; i<window.size();++i)
-   window[i] = tolower(window[i]);
-  if (window.compare(window.size()-4,4,L".xml")==0)
+  CStdString thetext = MultiClipViewerListbox.GetCurrentSelectionText();
+  
+  if (thetext.Equals(L"Test window"))
   {
-    com->SendCommand(m_pXbmcIp,m_pXbmcLogin,m_pXbmcPassword,m_pWgetPath, window);
+    TCHAR currentFile[MAX_PATH];
+    ::SendMessage(g_NppData._nppHandle, NPPM_GETFILENAME , MAX_PATH, (LPARAM)currentFile);
+    XbmcCommunicator* com = new XbmcCommunicator();
+    std::wstring window = currentFile;
+    for(size_t i=0; i<window.size();++i)
+     window[i] = tolower(window[i]);
+    if (window.compare(window.size()-4,4,L".xml")==0)
+    {
+      com->SendCommand(m_pXbmcIp,m_pXbmcLogin,m_pXbmcPassword,m_pWgetPath, window);
+    }
   }
-  /*
-  MultiClipViewerEditBox.EnableEditBox();
-  ClipboardList * pClipboardList = (ClipboardList *)GetModel();
-  g_ClipboardProxy.PasteTextToNpp( pClipboardList->GetText( Index ) );
-  g_ClipboardProxy.SetFocusToDocument();*/
+  else if (thetext.Equals(L"Extract xbt"))
+  {
+    CStdString xbtpath;
+    CStdString destfolder;
+    CStdString destFile;
+    xbtpath = ShowFileBrowser();
+    destfolder = ShowFolderBrowser();
+    if (!destfolder.Right(1).Equals(L"\\"))
+      destfolder.append(L"\\");
+    std::vector<CStdString> textures = g_XbmcIncludeFactory->GetTexturesFromXbt(xbtpath);
+    for (size_t i = 0; i < textures.size(); i++)
+    {
+      CBaseTexture* text;
+      CXBTFFrame frame;
+      destFile = textures[i];
+      
+      destFile.Replace(L"/",L"\\");
+      CStdStringA foldcreate;
+      CStdStringW foldcreateW;
+      if (destFile.Find(L"\\",0)>-1)
+      {
+        
+        //folder might not exist
+        foldcreateW = destFile;
+        int index = foldcreateW.find_last_of(L"\\");
+        foldcreateW.Delete(index,foldcreateW.size()-index);
+        foldcreateW.Insert(0,destfolder.c_str());
+        foldcreate = foldcreateW;
+        if ((GetFileAttributes(foldcreateW.c_str())) == INVALID_FILE_ATTRIBUTES)
+        {
+          foldcreate.Insert(0,"mkdir ");
+          int res = system(foldcreate.c_str());
+        }
+
+        
+        
+      
+      }
+      destFile.Insert(0,destfolder.c_str());
+      if (g_XbmcIncludeFactory->GetBaseTexture(textures[i], &text))
+      {
+        //file don't already exist create it
+        if ((GetFileAttributes(destFile.c_str())) == INVALID_FILE_ATTRIBUTES)
+        {
+          g_pBitmapCreator.SaveTexture(text, destFile);
+        }
+      }
+      else
+      {
+        wprintf(L"wtf");
+      }
+    }
+
+  }
 
   
 }

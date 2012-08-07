@@ -366,6 +366,7 @@ void XbmcImagePreviewer::ShowImage()
         RETURNLOADING;
       }
       g_pBitmapCreator.RenderTexture(text);
+      
       RETURNLOADING;
     }
   }

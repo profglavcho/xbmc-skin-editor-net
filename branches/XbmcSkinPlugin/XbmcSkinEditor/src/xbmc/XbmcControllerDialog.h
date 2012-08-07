@@ -96,6 +96,8 @@ private:
   void DeleteAllItems();
   void CopySelectedItemToClipboard();
 
+  CStdString ShowFolderBrowser();
+  CStdString ShowFileBrowser();
   virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
   virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 };

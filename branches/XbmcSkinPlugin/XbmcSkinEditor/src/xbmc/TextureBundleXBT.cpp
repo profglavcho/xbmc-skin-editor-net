@@ -120,6 +120,9 @@ void CTextureBundleXBT::GetTexturesFromPath(const CStdString &path, std::vector<
 {
   /*if (path.GetLength() > 1 && path[1] == ':')
     return;*/
+  
+  if (!path.Equals(strCurrentPath))
+    m_XBTFReader.Close();
   strCurrentPath = path;
   if (!m_XBTFReader.IsOpen() && !OpenBundle(path))
     return;
@@ -188,7 +191,25 @@ bool CTextureBundleXBT::ConvertFrameToTexture(const CStdString& name, CXBTFFrame
   return true;
 }
 
+bool CTextureBundleXBT::LoadTextureForSaving(const CStdString& Filename, CBaseTexture** ppTexture)
+{
+  if (!m_XBTFReader.IsOpen())
+    return false;
+  CXBTFFile* file = m_XBTFReader.Find(Filename);
+  if (!file)
+    return false;
 
+  if (file->GetFrames().size() == 0)
+    return false;
+
+  CXBTFFrame& frame = file->GetFrames().at(0);
+  //end from other function
+
+  if (!ConvertFrameToTexture(Filename, frame, ppTexture))
+  {
+    return false;
+  }
+}
 bool CTextureBundleXBT::LoadTexture(const CStdString& Filename, CBaseTexture** ppTexture,
                                      int &width, int &height)
 {
