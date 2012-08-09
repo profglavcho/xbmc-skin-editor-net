@@ -49,7 +49,7 @@ MultiClipboardSettingsDialog OptionsDlg;
 CStdString g_configDir;
 
 // menu functions
-void ToggleView();
+void ToggleXbmcControlsList();
 void ToggleXbmcView();
 void ToggleXbmcImage();
 void ToggleXbmcControls();
@@ -132,6 +132,9 @@ extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
   theApp.clipPasteMenu.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
   theApp.cyclicPaste.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
   theApp.autoCopier.Init( &theApp.clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+  theApp.clipXbmcControlsList.Init(&theApp.clipboardList,&g_ClipboardProxy, &g_SettingsManager);
+  g_XbmcControlsFactory = new CXbmcControlsFactory();
+
 }
 
 extern "C" __declspec(dllexport) const TCHAR * getName()
@@ -141,7 +144,7 @@ extern "C" __declspec(dllexport) const TCHAR * getName()
 
 extern "C" __declspec(dllexport) FuncItem * getFuncsArray(INT *nbF)
 {
-  funcItem[0]._pFunc = ToggleView;//ToggleView;
+  funcItem[0]._pFunc = ToggleXbmcControlsList;//ToggleXbmcControlsList;
   funcItem[1]._pFunc = ToggleXbmcView;
   funcItem[2]._pFunc = ToggleXbmcImage;
   funcItem[3]._pFunc = ToggleXbmcControls;
@@ -229,14 +232,13 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
   }
   else if (notifyCode->nmhdr.code == SCN_UPDATEUI)
   {
-    HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
-    UINT state = ::GetMenuState(hMenu, funcItem[DIALOG_IMAGE_PREVIEWER]._cmdID, MF_BYCOMMAND);
-    if (!(state & MF_CHECKED))
+    if (!IsWindowVisible(theApp.clipXbmcControls.getHSelf()))
       theApp.clipXbmcImage.SetHidden();
+
     theApp.clipXbmcImage.UpdateImage();
     
-    state = ::GetMenuState(hMenu, funcItem[DIALOG_CONTROLS]._cmdID, MF_BYCOMMAND);
-    if (!(state & MF_CHECKED))
+    //TODO add better state checking
+    if (!IsWindowVisible(theApp.clipXbmcControls.getHSelf()))
       theApp.clipXbmcControls.SetHidden();
     theApp.clipXbmcControls.OnNotepadChange();
   }
@@ -257,14 +259,10 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam
   return TRUE;
 }
 
-
-#ifdef UNICODE
 extern "C" __declspec(dllexport) BOOL isUnicode()
 {
   return TRUE;
 }
-#endif //UNICODE
-
 
 /***
  *  LoadSettings()
@@ -308,6 +306,8 @@ void CXbmcPluginEditor::ShutDownPlugin()
 {
   clipXbmcDialog.Shutdown();
   clipViewerDialog.Shutdown();
+  clipXbmcControlsList.Shutdown();
+  clipXbmcImage.Shutdown();
   g_ClipboardProxy.Destroy();
   // Shutdown COM for OLE drag drop
   OleUninitialize();
@@ -316,13 +316,14 @@ void CXbmcPluginEditor::ShutDownPlugin()
 /**************************************************************************
  *  Interface functions
  */
-void ToggleView(void)
+void ToggleXbmcControlsList(void)
 {
+  theApp.UpdateHSCI();
   // get menu and test if dockable dialog is open
-  /*HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
+  HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
   UINT state = ::GetMenuState(hMenu, funcItem[0]._cmdID, MF_BYCOMMAND);
 
-  theApp.clipViewerDialog.ShowDialog( state & MF_CHECKED ? false : true );*/
+  theApp.clipXbmcControlsList.ShowDialog( state & MF_CHECKED ? false : true );
 }
 
 void ToggleXbmcView(void)

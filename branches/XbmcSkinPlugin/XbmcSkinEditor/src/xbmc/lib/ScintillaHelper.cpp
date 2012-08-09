@@ -129,6 +129,16 @@ int CScintillaHelper::getSelText(char* pText) const
     return (int) ScintillaMsg( SCI_GETSELTEXT, 0, (LPARAM) pText );
 }
 
+int CScintillaHelper::getEntireText(CStdStringA &pText) const
+{
+  int length = getTextLength();
+  
+  char* text = new CHAR[length+1];
+  int retlength = ScintillaMsg( SCI_GETTEXT, (WPARAM) length+1, (LPARAM) text );
+  pText = text;
+  return retlength;
+}
+
 int CScintillaHelper::getText(int len, char* pText) const
 {
     return (int) ScintillaMsg( SCI_GETTEXT, (WPARAM) len, (LPARAM) pText );

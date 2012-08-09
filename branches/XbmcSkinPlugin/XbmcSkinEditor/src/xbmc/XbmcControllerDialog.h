@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "ExtractionDialog.h"
 
 // ID for dockable window
-#define  MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 0
+#define  MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX 2
 
 
 class XbmcControllerDialog : public DockingDlgInterface, public IController

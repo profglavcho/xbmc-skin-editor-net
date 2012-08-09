@@ -183,35 +183,8 @@ BOOL CALLBACK CXbmcControlsDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, 
 
   case WM_NOTIFY:
     {
-      LPNMHDR nmhdr = (LPNMHDR) lp;
-      if ( nmhdr->hwndFrom == _hParent )
-      {
-        switch ( LOWORD( nmhdr->code ) )
-        {
-        case DMN_FLOAT:
-        case DMN_DOCK:
-          {
-            if ( LOWORD( nmhdr->code ) == DMN_FLOAT )
-            {
-              _isFloating = true;
-            }
-            else
-            {
-              _isFloating = false;
-              _iDockedPos = HIWORD( nmhdr->code );
-            }
-            break;
-          }
-        default:
-          // Parse all other notifications to docking dialog interface
-          return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
-        }
-      }
-      else
-      {
-        // Parse all other notifications to docking dialog interface
-        return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
-      }
+      //pass it by the the base class
+      return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
       break;
     }
   case WM_DESTROY:
@@ -348,6 +321,9 @@ void CXbmcControlsDialog::OnNotepadChange()
     m_pCurrentLine = cur;
   else
     return;
+
+  m_pXbmcControlsFactory->LoadCurrentControls();
+
   CStdString pStrCurrentLine;
   int control_start_line = -1;
   int control_end_line = -1;
