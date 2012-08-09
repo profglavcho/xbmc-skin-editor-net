@@ -210,6 +210,19 @@ static const XBMC_CONTROL control_buttonscrollers[] =
   {L"smoothscrolling"}
 };
 
+static const XBMC_CONTROL control_panel[] =
+{
+  {L"viewtype"},
+  {L"orientation"},
+  {L"pagecontrol"},
+  {L"scrolltime"},
+  {L"itemlayout"},
+  {L"focusedlayout"},
+  {L"content"},
+  {L"preloaditems"}
+};
+CXbmcControlsFactory* g_XbmcControlsFactory;
+
 CXbmcControlsFactory::CXbmcControlsFactory()
 {
   LoadControls();
@@ -225,6 +238,8 @@ void CXbmcControlsFactory::ReloadTempFile()
 {
   CStdString path = g_configDir;
   path.append(L"\\tempcontrol.xml");
+  m_pTempControlsPath = g_configDir;
+  m_pTempControlsPath.append("tempcontrol2.xml");
   m_pTempXmlControlPath = g_Scintilla.W_to_A(path);
 }
 
@@ -267,10 +282,10 @@ void CXbmcControlsFactory::ResetAttributeForType(CStdString type)
 }
 
 
-CStdString CXbmcControlsFactory::GetType(const TiXmlElement *pControlNode)
+CStdString CXbmcControlsFactory::GetType(const TiXmlElement *pControlNode,CStdStringA attrib)
 {
   CStdString type;
-  const char *szType = pControlNode->Attribute("type");
+  const char *szType = pControlNode->Attribute(attrib.c_str());
   if (szType)
     type = szType;
   return type;
@@ -317,7 +332,7 @@ newLineString CXbmcControlsFactory::GetLineModification(CStdString strControl, C
   if (loadOkay)
   {
     TiXmlElement* ele = doc.FirstChildElement("control");
-    type = GetType(ele);
+    type = GetType(ele, "type");
     if (!ControlTypeExist(type))
       return returnline;
     TiXmlNode* pNodeAttribute;
@@ -362,6 +377,185 @@ newLineString CXbmcControlsFactory::GetLineModification(CStdString strControl, C
   
   returnline.strNewLine = g_Scintilla.A_to_W(printer.CStr());
   return returnline;
+}
+
+void CXbmcControlsFactory::LoadControlGroup(TiXmlElement* pControlGroup)
+{
+  TiXmlNode* pNodeAttribute;
+  TiXmlNode* pNodeValue;
+  TiXmlElement *pControl = pControlGroup->FirstChildElement();
+  
+        
+  while (pControl)
+  {
+    if (strcmpi(pControl->Value(), "control") == 0)
+    {
+      CStdString strValue = GetType(pControl,"type");
+     
+      LoadControl(pControl);
+      //if it is a group add it and parse the group within it
+      if (strValue.size()>0 && strValue.Equals(L"group"))
+        LoadControlGroup(pControl);
+
+      
+    }
+    pControl = pControl->NextSiblingElement();
+  }
+}
+
+void CXbmcControlsFactory::LoadControl(TiXmlElement* pControl)
+{
+  Attributes pAttribute;
+  TiXmlNode* pNodeAttribute;
+  TiXmlNode* pNodeValue;
+  pNodeAttribute = pControl->FirstChild();
+  CStdString strAttribute, strValue;
+  strValue = GetType(pControl,"type");
+  if (strValue.size()>0)
+    pAttribute["type"] = strValue;
+
+  strValue = GetType(pControl,"id");
+  if (strValue.size()>0)
+    pAttribute["id"] = strValue;
+  if (pControl->Row()> 0)
+  {
+    CStdString strLine;
+    
+    strLine.Format(L"%i",pControl->Row());
+    pAttribute["line"] = strLine;
+  }
+  while (pNodeAttribute)
+  {
+    strAttribute = pNodeAttribute->Value();
+    
+    pNodeValue = pNodeAttribute->FirstChild();
+    if (pNodeValue && pNodeValue->Value() == "")
+    {
+      strValue = pNodeValue->Value();
+
+      pAttribute[strAttribute] = strValue;
+    }
+    pNodeAttribute = pNodeAttribute->NextSibling();
+  }
+  m_pGuiControls.push_back(pAttribute);
+
+
+}
+
+void CXbmcControlsFactory::LoadCurrentControls()
+{
+  ReloadTempFile();
+  m_pGuiControls.clear();
+  CStdStringA pText;
+  g_Scintilla.getEntireText(pText);
+  //create temporary file for loading the xml with the col and row
+  std::ofstream myfile;
+  myfile.open (m_pTempControlsPath.c_str());
+  pText.Replace("\n","");//stupid line insertion fix
+  myfile.write(pText.c_str(),pText.size());
+  myfile.close();
+
+  m_pCurrentDoc = TiXmlDocument();
+  
+  bool loadOkay = m_pCurrentDoc.LoadFile(m_pTempControlsPath.c_str());
+  if (!loadOkay)
+    return;
+  
+  TiXmlElement* pRootElement = m_pCurrentDoc.RootElement();
+  if (strcmpi(pRootElement->Value(), "window"))
+    return;
+
+  TiXmlElement *pChild = pRootElement->FirstChildElement();
+  while (pChild)
+  {
+    CStdStringA strValue = pChild->Value();
+    if (strValue == "type" && pChild->FirstChild())
+    {
+      // if we have are a window type (ie not a dialog), and we have <type>dialog</type>
+      // then make this window act like a dialog
+      if (strcmpi(pChild->FirstChild()->Value(), "dialog") == 0)
+      {}//m_isDialog = true;
+    }
+    else if (strValue == "previouswindow" && pChild->FirstChild())
+    {
+      //m_previousWindow = CButtonTranslator::TranslateWindow(pChild->FirstChild()->Value());
+    }
+    else if (strValue == "defaultcontrol" && pChild->FirstChild())
+    {
+      /*const char *always = pChild->Attribute("always");
+      if (always && strcmpi(always, "true") == 0)
+        m_defaultAlways = true;
+      m_defaultControl = atoi(pChild->FirstChild()->Value());*/
+    }
+    else if (strValue == "visible" && pChild->FirstChild())
+    {
+      /*CStdString condition;
+      CGUIControlFactory::GetConditionalVisibility(pRootElement, condition);
+      m_visibleCondition = g_infoManager.Register(condition, GetID());*/
+    }
+    else if (strValue == "animation" && pChild->FirstChild())
+    {
+      /*CRect rect(0, 0, (float)m_coordsRes.iWidth, (float)m_coordsRes.iHeight);
+      CAnimation anim;
+      anim.Create(pChild, rect, GetID());
+      m_animations.push_back(anim);*/
+    }
+    else if (strValue == "zorder" && pChild->FirstChild())
+    {
+      //m_renderOrder = atoi(pChild->FirstChild()->Value());
+    }
+    else if (strValue == "coordinates")
+    {
+      /*XMLUtils::GetFloat(pChild, "posx", m_posX);
+      XMLUtils::GetFloat(pChild, "posy", m_posY);
+
+      TiXmlElement *originElement = pChild->FirstChildElement("origin");
+      while (originElement)
+      {
+        COrigin origin;
+        originElement->QueryFloatAttribute("x", &origin.x);
+        originElement->QueryFloatAttribute("y", &origin.y);
+        if (originElement->FirstChild())
+          origin.condition = g_infoManager.Register(originElement->FirstChild()->Value(), GetID());
+        m_origins.push_back(origin);
+        originElement = originElement->NextSiblingElement("origin");
+      }*/
+    }
+    else if (strValue == "camera")
+    { // z is fixed
+      /*pChild->QueryFloatAttribute("x", &m_camera.x);
+      pChild->QueryFloatAttribute("y", &m_camera.y);
+      m_hasCamera = true;*/
+    }
+    else if (strValue == "controls")
+    {
+      TiXmlElement *pControl = pChild->FirstChildElement();
+      while (pControl)
+      {
+        if (strcmpi(pControl->Value(), "control") == 0)
+        {
+          CStdString strValue = GetType(pControl,"type");
+          if (strValue.size()>0 && strValue.Equals(L"group"))
+            LoadControlGroup(pControl);
+          else
+            LoadControl(pControl);
+        }
+        pControl = pControl->NextSiblingElement();
+      }
+    }
+    else if (strValue == "allowoverlay")
+    {
+      /*bool overlay = false;
+      if (XMLUtils::GetBoolean(pRootElement, "allowoverlay", overlay))
+        m_overlayState = overlay ? OVERLAY_STATE_SHOWN : OVERLAY_STATE_HIDDEN;*/
+    }
+
+    pChild = pChild->NextSiblingElement();
+  }
+
+  printf("yeah");
+
+
 
 }
 
@@ -382,7 +576,7 @@ void CXbmcControlsFactory::LoadCurrentControl(CStdString strControl)
   if (loadOkay)
   {
     TiXmlElement* ele = doc.FirstChildElement("control");
-    type = GetType(ele);
+    type = GetType(ele,"type");
     if (!ControlTypeExist(type))
       return;
     else
@@ -531,6 +725,12 @@ void CXbmcControlsFactory::LoadControls()
   m_pAllControls.push_back(pControl);
 
   CLEAR_CONTROL
+  for ( i = 0; i < sizeof(control_panel)/sizeof(XBMC_CONTROL); i++)
+    pControl[control_panel[i].name] = L"";
+  SetAttribute(pControl, "type","panel");
+  m_pAllControls.push_back(pControl);
+
+  CLEAR_CONTROL
   SetAttribute(pControl, "type","buttonsblock");
   m_pAllControls.push_back(pControl);
 
@@ -552,8 +752,7 @@ void CXbmcControlsFactory::LoadControls()
 
   CLEAR_CONTROL
   SetAttribute(pControl, "type","wraplistcontainer");
-  m_pAllControls.push_back(pControl);
-
+  
   CLEAR_CONTROL
   SetAttribute(pControl, "type","fixedlistcontainer");
   m_pAllControls.push_back(pControl);

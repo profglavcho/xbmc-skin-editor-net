@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\src\MCSubClassWndProc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Common\Ccpp\ImageListSet.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
@@ -72,9 +69,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
       <Filter>Source Files\ClipboardMVC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ClipboardMVC\ControlsList.cpp">
-      <Filter>Source Files\Xbmc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\xbmc\XbmcControllerDialog.cpp">
       <Filter>Source Files\Xbmc\Dialog</Filter>
@@ -146,6 +140,15 @@
       <Filter>Source Files\Xbmc\lib\XBTF</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\xbmc\ExtractionDialog.cpp">
+      <Filter>Source Files\Xbmc\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\ControlsList.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MCSubClassWndProc.cpp">
+      <Filter>Unrelated</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\xbmc\XbmcControlsListDialog.cpp">
       <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClCompile>
   </ItemGroup>
@@ -258,9 +261,6 @@
     <ClInclude Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.h">
       <Filter>Header Files\ClipboardMVC</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\ClipboardMVC\ControlsList.h">
-      <Filter>Source Files\Xbmc</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\xbmc\XbmcControllerDialog.h">
       <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClInclude>
@@ -337,6 +337,12 @@
       <Filter>Source Files\Xbmc\lib\XBTF</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\xbmc\ExtractionDialog.h">
+      <Filter>Source Files\Xbmc\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\ControlsList.h">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\xbmc\XbmcControlsListDialog.h">
       <Filter>Source Files\Xbmc\Dialog</Filter>
     </ClInclude>
   </ItemGroup>

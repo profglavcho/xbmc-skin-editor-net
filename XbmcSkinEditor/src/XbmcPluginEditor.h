@@ -20,6 +20,7 @@
 #include "ControlsList.h"
 #include "xbmc/XbmcImagePreviewer.h"
 #include "xbmc/XbmcControlsDialog.h"
+#include "xbmc/XbmcControlsListDialog.h"
 //mvc
 #include "ClipboardList.h"
 #include "OSClipboardController.h"
@@ -86,6 +87,7 @@ ControlsList controlsList;
 XbmcControllerDialog clipXbmcDialog;
 XbmcImagePreviewer clipXbmcImage;
 CXbmcControlsDialog clipXbmcControls;
+CXbmcControlsListDialog clipXbmcControlsList;
 public:
 AFX_MODULE_STATE* modulestate;
 UINT        currentSCI;

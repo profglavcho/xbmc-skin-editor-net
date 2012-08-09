@@ -333,6 +333,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClCompile Include="..\..\src\xbmc\XbmcControllerDialog.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcControlsDialog.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcControlsFactory.cpp" />
+    <ClCompile Include="..\..\src\xbmc\XbmcControlsListDialog.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcImagePreviewer.cpp" />
     <ClCompile Include="..\..\src\xbmc\XbmcIncludesFactory.cpp" />
     <ClCompile Include="..\..\src\xbmc\XBTF.cpp" />
@@ -398,6 +399,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClInclude Include="..\..\src\xbmc\XbmcControllerDialog.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcControlsDialog.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcControlsFactory.h" />
+    <ClInclude Include="..\..\src\xbmc\XbmcControlsListDialog.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcImagePreviewer.h" />
     <ClInclude Include="..\..\src\xbmc\XbmcIncludesFactory.h" />
     <ClInclude Include="..\..\src\xbmc\XBTF.h" />
